@@ -1,0 +1,54 @@
+{% load static %}
+  {% include 'Layout/Partials/Admin/header.html' %}
+    <div class="page-wrapper">
+  <div class="content">
+  <div class="body-wrapper-inner">
+        <div class="container-fluid">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title fw-semibold mb-4">Forms</h5>
+              <div class="card">
+                <div class="card-body">
+                  <form method="POST" action="{% url 'core:editproduct' editp.id %}" enctype="multipart/form-data">
+			{% csrf_token %} 
+                    <div class="mb-3">
+                      <label for="exampleInputdistname" class="form-label">Medicine Category Name</label>
+                      <select name="medicinecategory" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                        <option value="" selected disabled>Select Category</option>
+                        {% for i in list %}
+                        <option value="{{i.id}}"{% if i.id == editt.medicinecategory.id %} selected {% endif %}>{{i.name}}</option>
+                        {% endfor %}
+                      </select>
+                      <div id="nameHelp" class="form-text"></div>
+                    </div> 
+                    </div>
+                     <div class="mb-3">
+                      <label for="exampleInputservice" class="form-label">Product Name</label>
+                      <input type="text" class="form-control" id="exampleInputproduct" name="productname" aria-describedby="nameHelp" value="{{editp.productname}}">
+                      <div id="nameHelp" class="form-text"></div>
+                    </div>                   
+                    <div class="mb-3">
+                      <label for="exampleInputdescription" class="form-label">Description</label>
+                      <input type="text" class="form-control" id="exampleInputdescription" name="description" value={{editp.description}}>
+                    </div>
+
+                    <div class="mb-3">
+                      <img src="/media/{{editp.img}}" alt="" style="width: 100px; height: 100px; object-fit: cover;">
+                      <label for="exampleInputdescription" class="form-label">Image</label>
+                      <input type="file" class="form-control" id="exampleInputdescription" name="img">
+                    <div class="mb-3">
+                      <label for="exampleInputprice" class="form-label">Price</label>
+                      <input type="text" class="form-control" id="exampleInputprice" name="price" aria-describedby="nameHelp" value="{{editp.price}}">
+                      <div id="nameHelp" class="form-text"></div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+</div>
+      {% include 'Layout/Partials/Admin/footer.html' %}

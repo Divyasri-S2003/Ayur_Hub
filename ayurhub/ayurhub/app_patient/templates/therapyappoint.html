@@ -1,0 +1,70 @@
+{% load static %}
+{% include 'Layout/Partials/Patients/header.html' %}
+
+<div class="appointment-form" data-aos="fade-up" data-aos-delay="400" style="margin-top: 100px; margin-bottom: 60px;">
+  
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-6">
+        
+        <div class="card border-0" style="box-shadow: 0 10px 40px rgba(0,0,0,0.08); border-radius: 20px; overflow: hidden;">
+          
+          <div class="card-header text-center" style="background: #1977cc; color: white; padding: 20px;">
+            <h5 style="margin: 0; font-weight: 600; letter-spacing: 1px;">BOOK SESSION</h5>
+          </div>
+
+          <div class="card-body" style="padding: 40px;">
+            
+            <form action="" method="post" class="">
+              {% csrf_token %}
+              <input type="hidden" name="therapy_id" value="{{ therapy.id }}">
+
+              <div class="text-center mb-4">
+                <p style="color: #666; font-size: 0.95rem;">You are requesting</p>
+                <h3 style="color: #2c4964; font-weight: 700;">{{ therapy.servicename }}</h3>
+                <hr style="width: 50px; margin: 15px auto; border-top: 3px solid #1977cc; opacity: 1;">
+              </div>
+
+              <div class="row gy-4 justify-content-center">
+                
+                <div class="col-md-10">
+                  <label class="form-label" style="font-weight: 600; color: #444; margin-bottom: 8px;">
+                    <i class="bi bi-calendar-event me-2 text-primary"></i>Preferred Date
+                  </label>
+                  <div class="input-group">
+                    <input type="date" name="date" class="form-control form-control-lg" style="border-radius: 10px; background-color: #f8f9fa; border: 1px solid #eee;" required>
+                  </div>
+                </div>
+
+                <div class="col-md-10">
+                  <div class="p-3" style="background-color: #f1f7fd; border-radius: 10px; border: 1px dashed #b5d5f5;">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                      <span style="color: #666; font-size: 0.9rem;"><i class="bi bi-flower1 me-2"></i>Therapy</span>
+                      <strong style="color: #2c4964;">{{ therapy.servicename }}</strong>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <span style="color: #666; font-size: 0.9rem;"><i class="bi bi-clock-history me-2"></i>Duration</span>
+                      <strong style="color: #1977cc;">{{ therapy.duration }}</strong>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-md-10 mt-4">
+                  <button type="submit" class="btn btn-primary w-100 py-3" style="border-radius: 50px; font-weight: 600; letter-spacing: 0.5px; box-shadow: 0 4px 15px rgba(25, 119, 204, 0.3);">
+                    Confirm Booking <i class="bi bi-check-circle ms-2"></i>
+                  </button>
+                </div>
+
+              </div>
+            </form>
+            
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+{% include 'Layout/Partials/Patients/footer.html' %}

@@ -1,0 +1,72 @@
+({% load static %}) {% include 'Layout/Partials/Admin/header.html' %}
+
+<div class="page-wrapper">
+  <div class="content">
+<div class="content-body">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-12">
+        <div class="card">
+          <div class="card-body">
+            <div class="d-md-flex align-items-center">
+              <div>
+                <div class="table-responsive mt-4">
+  <table class="table mb-0 varient-table align-middle fs-3"> <thead>
+        <th scope="col" class="px-0 text-muted">SI NO</th>
+        <th scope="col" class="px-0 text-muted">Therapy Name</th>
+        <th scope="col" class="px-0 text-muted">Service Name</th>
+        <th scope="col" class="px-0 text-muted">Short Description</th>
+        <th scope="col" class="px-0 text-muted" style="width: 250px;">Description</th> 
+        <th scope="col" class="px-0 text-muted">Image</th>
+        <th scope="col" class="px-0 text-muted">Duration</th>
+        <th scope="col" class="px-0 text-muted">Price</th>
+        <th scope="col" class="px-0 text-muted">Benefits</th>
+        <th scope="col" class="px-0 text-muted">Product Used</th>
+        <th scope="col" class="px-0 text-muted">Count</th>
+        <th scope="col" class="px-0 text-muted">Delete</th>
+        <th scope="col" class="px-0 text-muted">Update</th>
+      </tr>
+    </thead>
+       <!-- viewthera loop ll kodthadh view inde context -->
+    <tbody>
+      {% for i in viewthera %}
+      <tr>
+
+        <td>{{forloop.counter}}</td>
+        <td>{{ i.therapyname.name }}</td>
+
+        <td>{{i.servicename}}</td>
+        <td>{{i.shortdescription}}</td>
+
+        <td style="max-width: 250px; white-space: normal; word-wrap: break-word;">
+            {{i.description}}
+        </td>
+        <td>
+          <img src="/media/{{i.img}}" style="width: 100px" />
+        </td>
+        <td>{{i.duration}}</td>
+        <td>{{i.price}}</td>
+        <td>{{i.benefits}}</td>
+        <td>{{i.productused}}</td>
+        <td>{{i.count}}</td>
+        <td>
+          <a href="{% url 'core:deletetherapy' i.id %}"><button type="submit" class="btn btn-danger">Delete</button></a>
+        </td>
+        <td>
+          <a href="{% url 'core:edittherapy' i.id %}"><button type="submit" class="btn btn-secondary">Update</button></a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+              </div>
+            </div>
+          </div>
+          {% include 'Layout/Partials/Admin/footer.html' %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

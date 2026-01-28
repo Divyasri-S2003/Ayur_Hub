@@ -1,0 +1,95 @@
+{% load static %}
+{% include 'Layout/Partials/Patients/header.html' %}
+
+<main id="main" style="margin-top: 130px; padding-bottom: 60px; background-color: #fcfdfe;">
+    <div class="container">
+        <div class="row gy-4">
+            
+            <div class="col-lg-7">
+                <div style="background: #fff; padding: 35px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.05);">
+                    <h3 style="color: #2c4964; font-weight: 700; margin-bottom: 25px;">Book Your Appointment</h3>
+                    
+                    <form method="POST" id="bookingForm">
+                        {% csrf_token %}
+                        <div class="mb-4">
+                            <label class="form-label" style="font-weight: 600;">Choose Date</label>
+                            <input type="date" name="date" id="dateInput" class="form-control" required 
+                                   style="padding: 15px; border-radius: 10px; border: 2px solid #e8f2fd;">
+                        </div>
+
+                        <div style="background: #f8f9fa; padding: 20px; border-radius: 10px;">
+                            <h5 style="font-size: 1rem; color: #2c4964; font-weight: 700;">Doctor Availability</h5>
+                            <p class="mb-0 text-muted" style="font-size: 0.9rem;">Schedule: {{ doctor.schedule }}</p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-lg-5">
+                <div style="background: #fff; padding: 35px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-top: 5px solid #1977cc; position: sticky; top: 140px;">
+                    <h4 style="font-weight: 700; color: #2c4964; margin-bottom: 20px;">Booking Summary</h4>
+                    
+                    <div class="mb-4 p-3" style="background: #fcfdfe; border-radius: 10px; border: 1px dashed #1977cc;">
+                        <h6 style="font-weight: 700; color: #1977cc; margin-bottom: 10px; font-size: 0.8rem; text-transform: uppercase;">Patient Information</h6>
+                        <div class="d-flex justify-content-between">
+                            <span class="text-muted">Name:</span>
+                            <span style="font-weight: 600;">{{ request.user.name }} {{ request.user.last_name }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <span class="text-muted">Age:</span>
+                            <span style="font-weight: 600;">{{ patient.age|default:"--" }} Yrs</span>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <div class="d-flex align-items-center mb-4">
+                        <img src="{{ doctor.img.url }}" style="width: 50px; height: 50px; border-radius: 50%; object-fit: cover; margin-right: 15px;">
+                        <div>
+                            <h6 class="mb-0" style="font-weight: 700;"> {{ doctor.user.name }}</h6>
+                            <small class="text-muted">{{ doctor.specialization }}</small>
+                        </div>
+                    </div>
+
+                    <div class="summary-details">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Consultation Fee</span>
+                            <span style="font-weight: 600;">₹ {{ doctor.fee }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Selected Date</span>
+                            <span id="displayDate" style="font-weight: 700; color: #1977cc;">Not Selected</span>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between mb-4">
+                            <span style="font-weight: 700; font-size: 1.1rem;">Total Amount</span>
+                            <span style="font-weight: 800; color: #1977cc; font-size: 1.2rem;">₹ {{ doctor.fee }}</span>
+                        </div>
+                    </div>
+
+                    <button type="submit" form="bookingForm" class="btn btn-primary w-100" style="padding: 15px; border-radius: 10px; font-weight: 700; background: #1977cc; border: none;">
+                        Confirm & Book
+                    </button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</main>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const dateInput = document.getElementById('dateInput');
+        const displayDate = document.getElementById('displayDate');
+
+        dateInput.addEventListener('change', function() {
+            if (this.value) {
+                // Formats the date to a more readable string (e.g., Jan 20, 2026)
+                const options = { year: 'numeric', month: 'short', day: 'numeric' };
+                const dateObj = new Date(this.value);
+                displayDate.innerText = dateObj.toLocaleDateString(undefined, options);
+            } else {
+                displayDate.innerText = 'Not Selected';
+            }
+        });
+    });
+</script>

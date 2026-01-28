@@ -1,0 +1,96 @@
+{% load static %}
+ {% include 'Layout/Partials/Admin/header.html' %}
+ <div class="page-wrapper">
+  <div class="content">
+  <div class="body-wrapper-inner">
+        <div class="container-fluid">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title fw-semibold mb-4">Forms</h5>
+              <div class="card">
+                <div class="card-body">
+                  <form method="POST" action="{% url 'core:product' %}" enctype="multipart/form-data">
+			{% csrf_token %} 
+                    <!-- <div class="mb-3">
+                        <label for="disabledSelect" class="form-label">Therapy Name</label>
+                        <select id="disabledSelect" class="form-select" name="therapyname">
+                          <option>Disabled select</option>
+                          <option value="Ayurvedic Body Massages">Ayurvedic Body Massages</option>
+                          <option value="Muscle & joint pain Treatments">Muscle & joint pain Treatments</option>
+                          <option value="Elderly Care Therapies">Elderly Care Therapies</option>
+                        </select>
+                      </div>  -->
+                    <div class="mb-3">
+                      <label for="exampleInputdistname" class="form-label">Medicine Category Name</label>
+                      <select name="medicinecategory" class="form-control" id="exampleInputmedicinecategory" aria-describedby="emailHelp">
+                        <option value="" selected disabled>Select Category</option>
+                        {% for i in list %}
+                        <option value="{{i.id}}">{{i.name}}</option>
+                        {% endfor %}
+                      </select>
+                      <div id="nameHelp" class="form-text"></div>
+                    </div>
+
+                     <!-- <div class="mb-3">
+                      <label for="exampleInputtherapy" class="form-label">Therapy Name</label>
+                      <input type="text" class="form-control" id="exampleInputservice" name="therapyname" aria-describedby="nameHelp">
+                      <div id="nameHelp" class="form-text"></div>
+                    </div>                      -->
+                      
+                    <div class="mb-3">
+                      <label for="exampleInputservice" class="form-label">Product Name</label>
+                      <input type="text" class="form-control" id="exampleInputproduct" name="productname" aria-describedby="nameHelp">
+                      <div id="nameHelp" class="form-text"></div>
+                    </div>
+
+                    <!-- <div class="mb-3">
+                      <label for="exampleInputservice" class="form-label">Short Desc</label>
+                      <input type="text" class="form-control" id="exampleInputservice" name="shortdescription" aria-describedby="nameHelp">
+                      <div id="nameHelp" class="form-text"></div>
+                    </div> -->
+
+
+                    <div class="mb-3">
+                     <label for="exampleInputDescription" class="form-label">Description</label>
+                     <textarea class="form-control" id="exampleInputDescription" name="description" rows="3"></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                      <label for="exampleInputimg" class="form-label">Image</label>
+                      <input type="file" class="form-control" id="exampleInputimg" name="img">
+                    </div>
+                    <!-- <div class="mb-3">
+                      <label for="exampleInputduration" class="form-label">Duration</label>
+                      <input type="text" class="form-control" id="exampleInputduration" name="duration" aria-describedby="nameHelp">
+                      <div id="nameHelp" class="form-text"></div>
+                    </div> -->
+                    <div class="mb-3">
+                      <label for="exampleInputprice" class="form-label">Price</label>
+                      <input type="text" class="form-control" id="exampleInputprice" name="price" aria-describedby="nameHelp">
+                      <div id="nameHelp" class="form-text"></div>
+                    </div>
+                    <!-- <div class="mb-3">
+                     <label for="exampleInputbenifits" class="form-label">Benifits</label>
+                     <textarea class="form-control" id="exampleInputBenefits" name="benefits" rows="3"></textarea>
+                    </div>
+                    <div class="mb-3"> -->
+                      <!-- <label for="exampleInputproduct" class="form-label">Product Used</label>
+                      <input type="text" class="form-control" id="exampleInputproduct" name="productused" aria-describedby="nameHelp">
+                      <div id="nameHelp" class="form-text"></div>
+                    </div> -->
+                    <!-- <div class="mb-3">
+                      <label for="exampleInputservice" class="form-label">Count</label>
+                      <input type="text" class="form-control" id="exampleInputservice" name="count" aria-describedby="nameHelp">
+                      <div id="nameHelp" class="form-text"></div>
+                    </div> -->
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                  </form>
+                </div>
+              </div>
+                 
+          </div>
+        </div>
+      </div>
+      </div>
+      </div>
+      {% include 'Layout/Partials/Admin/footer.html' %}

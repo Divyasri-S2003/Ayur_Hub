@@ -1,0 +1,122 @@
+{% load static %}
+{% include 'Layout/Partials/Admin/header.html' %}
+<div class="page-wrapper">
+  <div class="content">
+  <div class="body-wrapper-inner">
+        <div class="container-fluid">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title fw-semibold mb-4">Forms</h5>
+              <div class="card">
+                <div class="card-body">
+                  <form method="POST" action="{% url 'core:doctor' %}" enctype="multipart/form-data">
+			{% csrf_token %} 
+                    <div class="mb-3">
+                      <label for="exampleInputname" class="form-label">Name</label>
+                      <input type="text" class="form-control" id="exampleInputname" name="name" aria-describedby="nameHelp">
+                      <div id="nameHelp" class="form-text"></div>
+                    </div>
+                    <div class="mb-3">
+                      <label for="exampleInputusername" class="form-label">Username</label>
+                      <input type="text" class="form-control" id="exampleInputusername" name="username" aria-describedby="nameHelp">
+                      <div id="nameHelp" class="form-text"></div>
+                    </div>
+
+                    <div class="mb-3">
+                      <label for="exampleInputimg" class="form-label">Image</label>
+                      <input type="file" class="form-control" id="exampleInputimg" name="img">
+                    </div>
+                    
+
+                    <div class="mb-3">
+                      <label for="exampleInputemail" class="form-label">Email address</label>
+                      <input type="email" class="form-control" id="exampleInputemail" name="email" aria-describedby="emailHelp">
+                      <div id="emailHelp" class="form-text"></div>
+
+
+                    <div class="mb-3">
+                      <label for="exampleInputcontact" class="form-label">Contact Number</label>
+                      <input type="text" class="form-control" id="exampleInputcontact" name="contact" aria-describedby="nameHelp">
+                      <div id="nameHelp" class="form-text"></div>
+                    </div>
+
+                    <div class="mb-3">
+                      <label for="exampleInputqualification" class="form-label">Qualification</label>
+                      <input type="text" class="form-control" id="exampleInputqualification" name="qualification" aria-describedby="nameHelp">
+                      <div id="nameHelp" class="form-text"></div>
+
+                    <div class="mb-3">
+                      <label for="exampleInputspecialization" class="form-label">Specialization</label>
+                      <input type="text" class="form-control" id="examplespecialization" name="specialization" aria-describedby="nameHelp">
+                      <div id="nameHelp" class="form-text"></div>
+                    </div>
+                    <div class="mb-3">
+                      <label for="exampleInputschedule" class="form-label">Consultation Schedule</label>
+                      <input type="text" class="form-control" id="exampleInputschedule" name="schedule" aria-describedby="nameHelp">
+                      <div id="nameHelp" class="form-text"></div>
+                    </div>
+                    <div class="mb-3">
+                      <label for="exampleInputexperience" class="form-label">Experience</label>
+                      <input type="text" class="form-control" id="exampleInputexperience" name="experience" aria-describedby="nameHelp">
+                      <div id="nameHelp" class="form-text"></div>
+
+                    <div class="mb-3">
+                      <label for="exampleInputfee" class="form-label">Consultation fee</label>
+                      <input type="text" class="form-control" id="exampleInputexperience" name="fee" aria-describedby="nameHelp">
+                      <div id="nameHelp" class="form-text"></div>
+
+                     <div class="mb-3">
+                      <label for="exampleInputmode" class="form-label">Mode</label>
+                      <input type="text" class="form-control" id="exampleInputexperience" name="mode" aria-describedby="nameHelp">
+                      <div id="nameHelp" class="form-text"></div>
+
+                      <div class="mb-3">
+                     <label for="exampleInputabout" class="form-label">About</label>
+                     <textarea class="form-control" id="exampleInputabout" name="about" rows="3"></textarea>
+                    </div>             
+
+
+                    <div class="mb-3">
+                      <label for="exampleInputpassword" class="form-label">Password</label>
+                      <input type="text" class="form-control" id="exampleInputcontact" name="password" aria-describedby="nameHelp">
+                      <div id="nameHelp" class="form-text"></div>
+                    </div>
+                   
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                  </form>
+                </div>
+              </div>
+              <!-- <h5 class="card-title fw-semibold mb-4">Disabled forms</h5>
+              <div class="card mb-0">
+                <div class="card-body">
+                  <form>
+                    <fieldset disabled>
+                      <legend>Disabled fieldset example</legend>
+                      <div class="mb-3">
+                        <label for="disabledTextInput" class="form-label">Disabled input</label>
+                        <input type="text" id="disabledTextInput" class="form-control" placeholder="Disabled input">
+                      </div>
+                      <div class="mb-3">
+                        <label for="disabledSelect" class="form-label">Disabled select menu</label>
+                        <select id="disabledSelect" class="form-select">
+                          <option>Disabled select</option>
+                        </select>
+                      </div> -->
+                      <!-- <div class="mb-3">
+                        <div class="form-check">
+                          <input class="form-check-input" type="checkbox" id="disabledFieldsetCheck" disabled>
+                          <label class="form-check-label" for="disabledFieldsetCheck">
+                            Can't check this
+                          </label>
+                        </div>
+                      </div>
+                      <button type="submit" class="btn btn-primary">Submit</button>
+                    </fieldset> -->
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+{% include 'Layout/Partials/Admin/footer.html' %}
