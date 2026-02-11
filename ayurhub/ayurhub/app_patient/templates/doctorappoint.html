@@ -7,37 +7,83 @@
             
             <div class="col-lg-7">
                 <div style="background: #fff; padding: 35px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.05);">
-                    <h3 style="color: #2c4964; font-weight: 700; margin-bottom: 25px;">Book Your Appointment</h3>
+                    <h3 style="color: #084b0c; font-weight: 700; margin-bottom: 25px;">Book Your Appointment</h3>
                     
                     <form method="POST" id="bookingForm">
                         {% csrf_token %}
+                        
+                        <div class="mb-4">
+                            <label class="form-label" style="font-weight: 600;">Who is this session for?</label>
+                            <div class="d-flex gap-3 p-3" style="background: #f8f9fa; border-radius: 10px; border: 1px solid #e8f2fd;">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="booking_for" id="forSelf" value="self" checked onchange="toggleGuestFields()">
+                                    <label class="form-check-label" for="forSelf" style="font-weight: 500;">Myself</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="booking_for" id="forGuest" value="guest" onchange="toggleGuestFields()">
+                                    <label class="form-check-label" for="forGuest" style="font-weight: 500;">Someone Else (Guest)</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="guestDetails" class="mb-4" style="display: none;">
+                            <div class="p-3" style="background-color: #fff8e1; border-radius: 10px; border: 1px dashed #ffc107;">
+                                <h6 style="color: #856404; font-weight: 700; margin-bottom: 15px;">Guest Information</h6>
+                                
+                                <div class="mb-3">
+                                    <label class="form-label small text-muted">Full Name</label>
+                                    <input type="text" name="guest_name" id="guestName" class="form-control" placeholder="Enter guest's name" style="border-radius: 8px;" oninput="updateSummary()">
+                                </div>
+                                
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label class="form-label small text-muted">Age</label>
+                                        <input type="number" name="guest_age" id="guestAge" class="form-control" placeholder="Age" style="border-radius: 8px;" oninput="updateSummary()">
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label small text-muted">Gender</label>
+                                        <select name="guest_gender" id="guestGender" class="form-select" style="border-radius: 8px;">
+                                            <option value="">Select...</option>
+                                            <option value="Male">Male</option>
+                                            <option value="Female">Female</option>
+                                            <option value="Other">Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                         <div class="mb-4">
                             <label class="form-label" style="font-weight: 600;">Choose Date</label>
                             <input type="date" name="date" id="dateInput" class="form-control" required 
                                    style="padding: 15px; border-radius: 10px; border: 2px solid #e8f2fd;">
                         </div>
 
-                        <div style="background: #f8f9fa; padding: 20px; border-radius: 10px;">
+                        <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
                             <h5 style="font-size: 1rem; color: #2c4964; font-weight: 700;">Doctor Availability</h5>
                             <p class="mb-0 text-muted" style="font-size: 0.9rem;">Schedule: {{ doctor.schedule }}</p>
                         </div>
+
+                        <button type="submit" class="btn btn-primary w-100" style="padding: 15px; border-radius: 10px; font-weight: 700; background: #1977cc; border: none;">
+                            Confirm & Book
+                        </button>
                     </form>
                 </div>
             </div>
 
             <div class="col-lg-5">
                 <div style="background: #fff; padding: 35px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-top: 5px solid #1977cc; position: sticky; top: 140px;">
-                    <h4 style="font-weight: 700; color: #2c4964; margin-bottom: 20px;">Booking Summary</h4>
+                    <h4 style="font-weight: 700; color: #084b0c; margin-bottom: 20px;">Booking Summary</h4>
                     
-                    <div class="mb-4 p-3" style="background: #fcfdfe; border-radius: 10px; border: 1px dashed #1977cc;">
-                        <h6 style="font-weight: 700; color: #1977cc; margin-bottom: 10px; font-size: 0.8rem; text-transform: uppercase;">Patient Information</h6>
+                    <div class="mb-4 p-3" style="background: #fcfdfe; border-radius: 10px; border: 1px dashed #084b0c;">
+                        <h6 style="font-weight: 700; color: #084b0c; margin-bottom: 10px; font-size: 0.8rem; text-transform: uppercase;">Patient Information</h6>
                         <div class="d-flex justify-content-between">
                             <span class="text-muted">Name:</span>
-                            <span style="font-weight: 600;">{{ request.user.name }} {{ request.user.last_name }}</span>
+                            <span id="summaryName" style="font-weight: 600;">{{ request.user.name }} {{ request.user.last_name }}</span>
                         </div>
                         <div class="d-flex justify-content-between">
                             <span class="text-muted">Age:</span>
-                            <span style="font-weight: 600;">{{ patient.age|default:"--" }} Yrs</span>
+                            <span id="summaryAge" style="font-weight: 600;">{{ patient.age|default:"--" }} Yrs</span>
                         </div>
                     </div>
 
@@ -58,32 +104,79 @@
                         </div>
                         <div class="d-flex justify-content-between mb-2">
                             <span>Selected Date</span>
-                            <span id="displayDate" style="font-weight: 700; color: #1977cc;">Not Selected</span>
+                            <span id="displayDate" style="font-weight: 700; color: #084b0c;">Not Selected</span>
                         </div>
                         <hr>
                         <div class="d-flex justify-content-between mb-4">
                             <span style="font-weight: 700; font-size: 1.1rem;">Total Amount</span>
-                            <span style="font-weight: 800; color: #1977cc; font-size: 1.2rem;">₹ {{ doctor.fee }}</span>
+                            <span style="font-weight: 800; color: #084b0c; font-size: 1.2rem;">₹ {{ doctor.fee }}</span>
                         </div>
                     </div>
-
-                    <button type="submit" form="bookingForm" class="btn btn-primary w-100" style="padding: 15px; border-radius: 10px; font-weight: 700; background: #1977cc; border: none;">
-                        Confirm & Book
-                    </button>
                 </div>
             </div>
 
         </div>
     </div>
 </main>
+
 <script>
+    // Store the Logged-in User's default details
+    const userDefaultName = "{{ request.user.first_name }} {{ request.user.last_name }}";
+    const userDefaultAge = "{{ patient.age|default:'--' }} Yrs";
+
+    // 1. Toggle Fields and Update Summary Logic
+    function toggleGuestFields() {
+        const isGuest = document.getElementById('forGuest').checked;
+        const guestDetailsDiv = document.getElementById('guestDetails');
+        
+        const gName = document.getElementById('guestName');
+        const gAge = document.getElementById('guestAge');
+        const gGender = document.getElementById('guestGender');
+
+        if (isGuest) {
+            // SHOW GUEST FIELDS
+            guestDetailsDiv.style.display = 'block';
+            gName.setAttribute('required', 'true');
+            gAge.setAttribute('required', 'true');
+            gGender.setAttribute('required', 'true');
+            
+            // Run update immediately to clear the name or show entered text
+            updateSummary();
+        } else {
+            // HIDE GUEST FIELDS (Restore "Myself")
+            guestDetailsDiv.style.display = 'none';
+            gName.removeAttribute('required');
+            gAge.removeAttribute('required');
+            gGender.removeAttribute('required');
+
+            // Restore User Details in Summary
+            document.getElementById('summaryName').innerText = userDefaultName;
+            document.getElementById('summaryAge').innerText = userDefaultAge;
+        }
+    }
+
+    // 2. Dynamic Update Function (Called on typing)
+    function updateSummary() {
+        // Only run this if "Guest" is selected
+        if (document.getElementById('forGuest').checked) {
+            const guestNameVal = document.getElementById('guestName').value;
+            const guestAgeVal = document.getElementById('guestAge').value;
+
+            // Update Name
+            document.getElementById('summaryName').innerText = guestNameVal ? guestNameVal : "Guest Name...";
+            
+            // Update Age
+            document.getElementById('summaryAge').innerText = guestAgeVal ? guestAgeVal + " Yrs" : "-- Yrs";
+        }
+    }
+
+    // 3. Date Display Logic
     document.addEventListener('DOMContentLoaded', function() {
         const dateInput = document.getElementById('dateInput');
         const displayDate = document.getElementById('displayDate');
 
         dateInput.addEventListener('change', function() {
             if (this.value) {
-                // Formats the date to a more readable string (e.g., Jan 20, 2026)
                 const options = { year: 'numeric', month: 'short', day: 'numeric' };
                 const dateObj = new Date(this.value);
                 displayDate.innerText = dateObj.toLocaleDateString(undefined, options);
@@ -93,3 +186,5 @@
         });
     });
 </script>
+
+{% include 'Layout/Partials/Patients/footer.html' %}

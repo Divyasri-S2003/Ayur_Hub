@@ -1,96 +1,188 @@
 {% load static %}
- {% include 'Layout/Partials/Admin/header.html' %}
- <div class="page-wrapper">
-  <div class="content">
-  <div class="body-wrapper-inner">
-        <div class="container-fluid">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title fw-semibold mb-4">Forms</h5>
-              <div class="card">
-                <div class="card-body">
-                  <form method="POST" action="{% url 'core:therapies' %}" enctype="multipart/form-data">
-			{% csrf_token %} 
-                    <!-- <div class="mb-3">
-                        <label for="disabledSelect" class="form-label">Therapy Name</label>
-                        <select id="disabledSelect" class="form-select" name="therapyname">
-                          <option>Disabled select</option>
-                          <option value="Ayurvedic Body Massages">Ayurvedic Body Massages</option>
-                          <option value="Muscle & joint pain Treatments">Muscle & joint pain Treatments</option>
-                          <option value="Elderly Care Therapies">Elderly Care Therapies</option>
-                        </select>
-                      </div>  -->
-                    <div class="mb-3">
-                      <label for="exampleInputdistname" class="form-label">Therapy Name</label>
-                      <select name="therapyname" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                        <option value="" selected disabled>Select Category</option>
-                        {% for i in list %}
-                        <option value="{{i.id}}">{{i.name}}</option>
-                        {% endfor %}
-                      </select>
-                      <div id="nameHelp" class="form-text"></div>
+{% include 'Layout/Partials/Admin/header.html' %}
+
+<style>
+    /* --- Ayurvedic Theme Variables --- */
+    :root {
+        --ayur-dark-green: #2E5C3E;
+        --ayur-sage: #4A7C59;
+        --ayur-cream: #FAF9F6;
+        --ayur-border: #cddbc4;
+        --ayur-gold: #D4A017;
+    }
+
+    /* Page Background */
+    .page-wrapper {
+        background-color: var(--ayur-cream) !important;
+    }
+
+    /* Card Styling */
+    .card-ayurveda {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(46, 92, 62, 0.1);
+        background-color: #ffffff;
+        overflow: hidden;
+    }
+
+    .card-header-ayurveda {
+        background-color: var(--ayur-dark-green);
+        color: #ffffff;
+        padding: 15px 20px;
+        border-bottom: 3px solid var(--ayur-gold);
+    }
+
+    /* Form Styles */
+    .form-label {
+        color: var(--ayur-dark-green);
+        font-weight: 600;
+        font-size: 0.95rem;
+    }
+
+    .form-control, .form-select {
+        border: 1px solid var(--ayur-border);
+        border-radius: 8px;
+        padding: 10px;
+        background-color: #fafbf9;
+    }
+
+    .form-control:focus, .form-select:focus {
+        border-color: var(--ayur-sage);
+        box-shadow: 0 0 0 0.2rem rgba(74, 124, 89, 0.25);
+        background-color: #fff;
+    }
+
+    /* Input Group Icons */
+    .input-group-text {
+        background-color: #e9f2eb;
+        border-color: var(--ayur-border);
+        color: var(--ayur-sage);
+    }
+
+    /* Button Styling */
+    .btn-ayurveda {
+        background-color: var(--ayur-dark-green);
+        border: none;
+        color: white;
+        padding: 12px 30px;
+        border-radius: 6px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-ayurveda:hover {
+        background-color: var(--ayur-sage);
+        transform: translateY(-2px);
+    }
+</style>
+
+<div class="page-wrapper">
+    <div class="content">
+        <div class="body-wrapper-inner">
+            <div class="container-fluid">
+                
+                <div class="card card-ayurveda mt-4">
+                    
+                    <div class="card-header-ayurveda">
+                        <h5 class="mb-0 fw-bold text-white">
+                            <i class="fa fa-heartbeat me-2"></i> Add New Therapy
+                        </h5>
                     </div>
 
-                     <!-- <div class="mb-3">
-                      <label for="exampleInputtherapy" class="form-label">Therapy Name</label>
-                      <input type="text" class="form-control" id="exampleInputservice" name="therapyname" aria-describedby="nameHelp">
-                      <div id="nameHelp" class="form-text"></div>
-                    </div>                      -->
-                      
-                    <div class="mb-3">
-                      <label for="exampleInputservice" class="form-label">Services Name</label>
-                      <input type="text" class="form-control" id="exampleInputservice" name="servicename" aria-describedby="nameHelp">
-                      <div id="nameHelp" class="form-text"></div>
-                    </div>
+                    <div class="card-body p-4">
+                        <form method="POST" action="{% url 'core:therapies' %}" enctype="multipart/form-data">
+                            {% csrf_token %} 
+                            
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Therapy Category</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fa fa-list-ul"></i></span>
+                                        <select name="therapyname" class="form-select">
+                                            <option value="" selected disabled>Select Category</option>
+                                            {% for i in list %}
+                                            <option value="{{i.id}}">{{i.name}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Service / Therapy Name</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fa fa-medkit"></i></span>
+                                        <input type="text" class="form-control" name="servicename" placeholder="e.g. Abhyangam">
+                                    </div>
+                                </div>
+                            </div>
 
-                    <div class="mb-3">
-                      <label for="exampleInputservice" class="form-label">Short Desc</label>
-                      <input type="text" class="form-control" id="exampleInputservice" name="shortdescription" aria-describedby="nameHelp">
-                      <div id="nameHelp" class="form-text"></div>
-                    </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Short Description</label>
+                                    <input type="text" class="form-control" name="shortdescription" placeholder="Brief summary...">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Duration</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fa fa-clock-o"></i></span>
+                                        <input type="text" class="form-control" name="duration" placeholder="e.g. 60 Minutes">
+                                    </div>
+                                </div>
+                            </div>
 
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Price</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fa fa-money"></i></span>
+                                        <input type="text" class="form-control" name="price" placeholder="0.00">
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Daily Slot Count</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="fa fa-sort-numeric-asc"></i></span>
+                                        <input type="text" class="form-control" name="count" placeholder="Number of slots available">
+                                    </div>
+                                </div>
+                            </div>
 
-                    <div class="mb-3">
-                     <label for="exampleInputDescription" class="form-label">Description</label>
-                     <textarea class="form-control" id="exampleInputDescription" name="description" rows="3"></textarea>
-                    </div>
+                            <div class="mb-3">
+                                <label class="form-label">Products/Oils Used</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fa fa-flask"></i></span>
+                                    <input type="text" class="form-control" name="productused" placeholder="e.g. Dhanwantharam Thailam">
+                                </div>
+                            </div>
 
-                    <div class="mb-3">
-                      <label for="exampleInputimg" class="form-label">Image</label>
-                      <input type="file" class="form-control" id="exampleInputimg" name="img">
+                            <div class="mb-3">
+                                <label class="form-label">Full Description</label>
+                                <textarea class="form-control" name="description" rows="3" placeholder="Detailed explanation of the therapy..."></textarea>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Therapeutic Benefits</label>
+                                <textarea class="form-control" name="benefits" rows="3" placeholder="List the health benefits..."></textarea>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label">Therapy Image</label>
+                                <input type="file" class="form-control" name="img">
+                                <small class="text-muted">Upload a high-quality image of the therapy setup.</small>
+                            </div>
+
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                <button type="submit" class="btn btn-ayurveda">
+                                    <i class="fa fa-check-circle me-1"></i> Save Therapy
+                                </button>
+                            </div>
+
+                        </form>
                     </div>
-                    <div class="mb-3">
-                      <label for="exampleInputduration" class="form-label">Duration</label>
-                      <input type="text" class="form-control" id="exampleInputduration" name="duration" aria-describedby="nameHelp">
-                      <div id="nameHelp" class="form-text"></div>
-                    </div>
-                    <div class="mb-3">
-                      <label for="exampleInputprice" class="form-label">Price</label>
-                      <input type="text" class="form-control" id="exampleInputprice" name="price" aria-describedby="nameHelp">
-                      <div id="nameHelp" class="form-text"></div>
-                    </div>
-                    <div class="mb-3">
-                     <label for="exampleInputbenifits" class="form-label">Benifits</label>
-                     <textarea class="form-control" id="exampleInputBenefits" name="benefits" rows="3"></textarea>
-                    </div>
-                    <div class="mb-3">
-                      <label for="exampleInputproduct" class="form-label">Product Used</label>
-                      <input type="text" class="form-control" id="exampleInputproduct" name="productused" aria-describedby="nameHelp">
-                      <div id="nameHelp" class="form-text"></div>
-                    </div>
-                    <div class="mb-3">
-                      <label for="exampleInputservice" class="form-label">Count</label>
-                      <input type="text" class="form-control" id="exampleInputservice" name="count" aria-describedby="nameHelp">
-                      <div id="nameHelp" class="form-text"></div>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                  </form>
                 </div>
-              </div>
-                 
-          </div>
+
+            </div>
         </div>
-      </div>
-      </div>
-      </div>
-      {% include 'Layout/Partials/Admin/footer.html' %}
+    </div>
+</div>
+
+{% include 'Layout/Partials/Admin/footer.html' %}

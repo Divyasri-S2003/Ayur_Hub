@@ -3,29 +3,7 @@
 
 <main class="main" style="margin-top: 100px;">
 
-  <div class="page-title" style="background-color: #f8f9fa; padding: 40px 0;">
-    <div class="heading">
-      <div class="container">
-        <div class="row d-flex justify-content-center text-center">
-          <div class="col-lg-8">
-            <h1 class="heading-title" style="color: #2c4964; font-weight: 700;">{{ therapy.servicename }}</h1>
-            <p class="mb-0" style="color: #666;">
-              Experience holistic healing and rejuvenation with our specialized ayurvedic treatments tailored to your body type.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <nav class="breadcrumbs">
-      <div class="container">
-        <ol>
-          <li><a href="/">Home</a></li> 
-          <li><a href="">Therapies</a></li>
-          <li class="current">{{ therapy.servicename }}</li>
-        </ol>
-      </div>
-    </nav>
-  </div><section id="service-details-2" class="service-details-2 section" style="padding: 60px 0;"> -->
+  
 
     <div class="container" data-aos="fade-up" data-aos-delay="100">
 
@@ -33,9 +11,9 @@
         <div class="col-lg-8 mx-auto text-center mb-5" data-aos="fade-up" data-aos-delay="150">
           <div class="service-header">
             <div class="service-category">
-              <span style="color: #1977cc; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Ayurvedic Therapy</span>
+              <span style="color: #084b0c; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Ayurvedic Therapy</span>
             </div>
-            <h2 style="font-weight: 700; color: #2c4964; margin-top: 10px;">{{ therapy.servicename }}</h2>
+            <h2 style="font-weight: 700; color: #084b0c; margin-top: 10px;">{{ therapy.servicename }}</h2>
           </div>
         </div>
       </div>
@@ -47,7 +25,7 @@
 
 
     <div class="features-list mt-4 mb-4">
-        <h4 style="font-size: 1.1rem; font-weight: 700; color: #2c4964; margin-bottom: 20px;">
+        <h4 style="font-size: 1.1rem; font-weight: 700; color: #084b0c; margin-bottom: 20px;">
             Service Inclusions
         </h4>
         
@@ -103,11 +81,11 @@
             <div class="visual-overlay" style="position: absolute; bottom: 30px; left: 30px; background: rgba(255, 255, 255, 0.95); padding: 20px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
               <div class="stats-card" style="display: flex; gap: 30px;">
                 <div class="stat">
-                  <span class="number" style="display: block; font-weight: 800; font-size: 1.2rem; color: #1977cc;">100%</span>
+                  <span class="number" style="display: block; font-weight: 800; font-size: 1.2rem; color: #084b0c;">100%</span>
                   <span class="label" style="font-size: 0.9rem; color: #555;">Natural</span>
                 </div>
                 <div class="stat">
-                  <span class="number" style="display: block; font-weight: 800; font-size: 1.2rem; color: #1977cc;">Expert</span>
+                  <span class="number" style="display: block; font-weight: 800; font-size: 1.2rem; color: #084b0c;">Expert</span>
                   <span class="label" style="font-size: 0.9rem; color: #555;">Therapists</span>
                 </div>
               </div>
@@ -124,14 +102,14 @@
                 <i class="bi bi-clock" style="font-size: 1.2rem;"></i>
             </div>
             <small class="text-muted d-block">Duration</small>
-            <strong style="color: #2c4964;">{{ therapy.duration }}</strong>
+            <strong style="color: #084b0c;">{{ therapy.duration }}</strong>
         </div>
         <div class="detail-item text-center">
             <div class="icon-wrapper mx-auto mb-2" style="width: 50px; height: 50px; background: #e8f2fd; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #1977cc;">
                 <i class="bi bi-currency-rupee" style="font-size: 1.2rem;"></i>
             </div>
             <small class="text-muted d-block">Price</small>
-            <strong style="color: #2c4964;">₹ {{ therapy.price }}</strong>
+            <strong style="color: #084b0c;">₹ {{ therapy.price }}</strong>
         </div>
 
         {% if therapy.productused %}
@@ -140,7 +118,7 @@
                 <i class="bi bi-flower1" style="font-size: 1.2rem;"></i>
             </div>
             <small class="text-muted d-block">Products</small>
-            <strong style="color: #2c4964;">{{ therapy.productused }}</strong>
+            <strong style="color: #084b0c;">{{ therapy.productused }}</strong>
         </div>
         {% endif %}
     </div>
@@ -157,7 +135,7 @@
             <div class="row">
 
               <div class="col-lg-6">
-                <h3 style="color: #2c4964; font-weight: 700; margin-bottom: 20px;">About the Therapy</h3>
+                <h3 style="color: #084b0c; font-weight: 700; margin-bottom: 20px;">About the Therapy</h3>
                 <p style="color: #555; line-height: 1.8;">
                   {{ therapy.description }}
                 </p>
@@ -165,7 +143,7 @@
 
               <div class="col-lg-6">
                 <div class="treatment-areas">
-                  <h4 style="color: #2c4964; font-weight: 700; margin-bottom: 20px;">Key Benefits</h4>
+                  <h4 style="color: #084b0c; font-weight: 700; margin-bottom: 20px;">Key Benefits</h4>
                   
                   <div class="condition-tags" style="background: #f8f9fa; padding: 20px; border-radius: 10px;">
                     <p style="color: #555; line-height: 1.8;">
@@ -186,8 +164,8 @@
         <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="100">
           <div class="action-card primary" style="background: #fff; padding: 30px; border-radius: 15px; box-shadow: 0 5px 25px rgba(0,0,0,0.05); text-align: center; border-top: 5px solid #1977cc;">
             <div class="card-header" style="margin-bottom: 15px;">
-              <i class="bi bi-calendar-check" style="font-size: 2rem; color: #1977cc;"></i>
-              <h4 style="margin-top: 10px; font-weight: 700; color: #2c4964;">Book Appointment</h4>
+              <i class="bi bi-calendar-check" style="font-size: 2rem; color: #084b0c;"></i>
+              <h4 style="margin-top: 10px; font-weight: 700; color: #084b0c;">Book Appointment</h4>
             </div>
             <p style="color: #666;">Schedule this therapy session with our experts.</p>
             <div class="card-footer" style="margin-top: 20px;">
@@ -200,7 +178,7 @@
           <div class="action-card tertiary" style="background: #fff; padding: 30px; border-radius: 15px; box-shadow: 0 5px 25px rgba(0,0,0,0.05); text-align: center; border-top: 5px solid #6c757d;">
             <div class="card-header" style="margin-bottom: 15px;">
               <i class="bi bi-arrow-left-circle" style="font-size: 2rem; color: #6c757d;"></i>
-              <h4 style="margin-top: 10px; font-weight: 700; color: #2c4964;">Explore More</h4>
+              <h4 style="margin-top: 10px; font-weight: 700; color: #084b0c;">Explore More</h4>
             </div>
             <p style="color: #666;">View other available ayurvedic therapies.</p>
             <div class="card-footer" style="margin-top: 20px;">

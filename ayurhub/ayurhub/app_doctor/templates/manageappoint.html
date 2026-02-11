@@ -1,0 +1,346 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Manage Appointments</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        /* Force Vertical Layout */
+        body { display: flex; flex-direction: column; min-height: 100vh; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; }
+    
+        /* Theme Colors */
+        :root {
+            --ayur-dark-green: #1a4d2e;
+            --ayur-sage: #4f772d;
+            --ayur-gold: #d4a373;
+            --ayur-red: #bc4749;
+        }
+    
+        .page-wrapper { background-color: #f9f9f7; flex: 1; padding: 20px; }
+        
+        .card-ayurveda {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(26, 77, 46, 0.08);
+            background-color: #ffffff;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+    
+        .card-header-ayurveda {
+            background-color: var(--ayur-dark-green);
+            padding: 20px;
+            border-bottom: 4px solid var(--ayur-gold);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .text-white { color: white; }
+        .m-0 { margin: 0; }
+    
+        /* Table Styles */
+        .table-responsive { overflow-x: auto; }
+        .table-ayurveda { width: 100%; border-collapse: collapse; }
+        
+        .table-ayurveda thead th {
+            background-color: #f0f4ef;
+            color: var(--ayur-dark-green);
+            border-bottom: 2px solid var(--ayur-gold);
+            padding: 15px;
+            font-weight: 700;
+            text-align: left;
+            white-space: nowrap;
+        }
+        
+        .table-ayurveda tbody td { 
+            padding: 15px; 
+            vertical-align: middle; 
+            color: #555; 
+            border-bottom: 1px solid #eee;
+        }
+        
+        .text-center { text-align: center !important; }
+
+        /* Filter Form */
+        .filter-form { display: flex; gap: 10px; align-items: center; }
+        .date-input {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            outline: none;
+            color: var(--ayur-dark-green);
+        }
+        .btn-filter {
+            background-color: var(--ayur-gold);
+            color: #1a4d2e;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            text-decoration: none;
+        }
+        .btn-filter:hover { background-color: #c59666; }
+
+        /* Action Buttons */
+        .btn-complete {
+            background-color: #0d6efd;
+            color: white;
+            padding: 6px 14px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: 0.3s;
+            display: inline-block;
+            border: none;
+            cursor: pointer;
+        }
+        .btn-complete:hover { background-color: #0b5ed7; }
+
+        /* Badges & Text Utilities */
+        .fw-bold { font-weight: 700; }
+        .text-success { color: #198754; }
+        .text-muted { color: #6c757d; }
+        .small { font-size: 0.875em; }
+        .d-flex { display: flex; }
+        .flex-column { flex-direction: column; }
+        .gap-2 { gap: 0.5rem; }
+        
+        .badge-status { padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; text-transform: uppercase; }
+        .badge-completed { background-color: #d1e7dd; color: #0f5132; border: 1px solid #badbcc; }
+        .badge-pending { background-color: #fff3cd; color: #664d03; border: 1px solid #ffecb5; }
+        
+        .patient-meta { font-size: 0.85rem; color: #777; margin-top: 4px; }
+
+        /* View Details Button */
+        .btn-view {
+            background-color: transparent;
+            color: var(--ayur-dark-green);
+            border: 1px solid var(--ayur-dark-green);
+            padding: 6px 14px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+        .btn-view:hover {
+            background-color: var(--ayur-dark-green);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<div class="page-wrapper">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card card-ayurveda">
+                    
+                    <div class="card-header-ayurveda">
+                        <h4 class="text-white m-0">Doctor's Consultation Panel</h4>
+                        
+                        <form method="GET" class="filter-form">
+                            <input type="date" name="search_date" class="date-input" value="{{ search_date }}">
+                            <button type="submit" class="btn-filter">
+                                <i class="fas fa-filter"></i> Filter
+                            </button>
+                            {% if search_date %}
+                                <a href="." class="text-white small" style="text-decoration: underline;">Clear</a>
+                            {% endif %}
+                        </form>
+                    </div>
+
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-ayurveda mb-0">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Patient Details</th>
+                                        <th>Appointment Details</th>
+                                        <th class="text-center">Status</th>
+                                        <th class="text-center">Action</th>
+                                    </tr>
+                                </thead>
+                                <!-- <tbody>
+                                    {% for app in appointments %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        
+                                        <td>
+                                            <div class="d-flex flex-column">
+                                                <span class="fw-bold text-success">
+                                                    {{ app.patient.name }}
+                                                </span>
+                                                
+                                                <div class="patient-meta">
+                                                    {% with profile=app.patient.patientregi %}
+                                                        {% if profile %}
+                                                            <span><i class="fas fa-user-clock"></i> Age: {{ profile.age }}</span> | 
+                                                            <span>{{ profile.gender }}</span>
+                                                        {% else %}
+                                                            <span class="text-muted small">Profile not found</span>
+                                                        {% endif %}
+                                                    {% endwith %}
+                                                </div>
+                                            </div>
+                                        </td>
+
+                                        <td>
+                                            <div class="d-flex flex-column">
+                                                {% if app.doctor %}
+                                                    <span class="fw-bold">Dr. {{ app.doctor.user.name }}</span>
+                                                {% else %}
+                                                    <span class="text-danger">No Doctor Assigned</span>
+                                                {% endif %}
+                                                
+                                                <small class="text-muted">
+                                                    <i class="far fa-calendar-alt"></i> {{ app.appointment_date|date:"M d, Y" }}
+                                                </small>
+                                            </div>
+                                        </td>
+
+                                        <td class="text-center">
+                                            {% if app.status == "Completed" %}
+                                                <span class="badge-status badge-completed">Completed</span>
+                                            {% else %}
+                                                <span class="badge-status badge-pending">Pending</span>
+                                            {% endif %}
+                                        </td>
+
+                                        <td class="text-center">
+                                            {% if app.status == "Completed" %}
+                                                <span class="text-muted" style="font-style: italic;">
+                                                    <i class="fas fa-check-circle"></i> Done
+                                                </span>
+                                            {% else %}
+                                                <a href="{% url 'app_doctor:complete_appointment' app.id %}" 
+                                                class="btn-complete"
+                                                onclick="return confirm('Mark consultation for {{ app.patient.name }} as Completed?');">
+                                                    Mark Completed
+                                                </a>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% empty %}
+                                    <tr>
+                                        <td colspan="5" class="text-center" style="padding: 40px;">
+                                            No appointments found for the selected date.
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody> -->
+<tbody>
+    {% for app in appointments %}
+    <tr>
+        <td>{{ forloop.counter }}</td>
+        
+        <td>
+            <div class="d-flex flex-column">
+                <span class="fw-bold text-success">
+                    {% if app.guest_name %}
+                        {{ app.guest_name }} <span class="badge" style="background-color: #d4a373; color: white; font-size: 0.7em;">GUEST</span>
+                    {% else %}
+                        {{ app.patient.name }}
+                    {% endif %}
+                </span>
+                
+                <div class="patient-meta">
+                    <span><i class="fas fa-user-clock"></i> Age: 
+                        {% if app.guest_name %}
+                            {{ app.guest_age }}
+                        {% elif app.patient.patientregi %}
+                            {{ app.patient.patientregi.age }}
+                        {% else %}
+                            --
+                        {% endif %}
+                    </span> 
+                    
+                    | 
+                    
+                    <span>
+                        {% if app.guest_name %}
+                            {{ app.guest_gender }}
+                        {% elif app.patient.patientregi %}
+                            {{ app.patient.patientregi.gender }}
+                        {% else %}
+                            --
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+        </td>
+
+        <td>
+            <div class="d-flex flex-column">
+                {% if app.doctor %}
+                    <span class="fw-bold">Dr. {{ app.doctor.user.name }}</span>
+                {% else %}
+                    <span class="text-danger">No Doctor Assigned</span>
+                {% endif %}
+                
+                <small class="text-muted">
+                    <i class="far fa-calendar-alt"></i> {{ app.appointment_date|date:"M d, Y" }}
+                </small>
+            </div>
+        </td>
+
+        <td class="text-center">
+            {% if app.status == "Completed" %}
+                <span class="badge-status badge-completed">Completed</span>
+            {% else %}
+                <span class="badge-status badge-pending">Pending</span>
+            {% endif %}
+        </td>
+
+        <td>
+            <div class="d-flex justify-content-center align-items-center gap-2">
+                <a href="{% url 'app_doctor:appointment_details' app.id %}" class="btn-view">
+                    <i class="fas fa-eye"></i> View Details
+                </a>
+
+                {% if app.status == "Completed" %}
+                    <span class="text-muted" style="font-style: italic; padding: 6px 14px;">
+                        <i class="fas fa-check-circle"></i> Done
+                    </span>
+                {% else %}
+                    <a href="{% url 'app_doctor:complete_appointment' app.id %}" 
+                       class="btn-complete"
+                       onclick="return confirm('Mark consultation as Completed?');">
+                        Mark Completed
+                    </a>
+                {% endif %}
+            </div>
+        </td>
+    </tr>
+    {% empty %}
+    <tr>
+        <td colspan="5" class="text-center" style="padding: 40px;">
+            No appointments found for the selected date.
+        </td>
+    </tr>
+    {% endfor %}
+</tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

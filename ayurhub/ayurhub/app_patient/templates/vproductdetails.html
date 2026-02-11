@@ -1,217 +1,77 @@
 {% load static %}
 {% include 'Layout/Partials/Patients/header.html' %}
 
-<main class="main" style="margin-top: 100px;">
-
-  <div class="page-title" style="background-color: #f8f9fa; padding: 40px 0;">
-    <div class="heading">
-      <div class="container">
-        <div class="row d-flex justify-content-center text-center">
-          <div class="col-lg-8">
-            <h1 class="heading-title" style="color: #2c4964; font-weight: 700;">{{ therapy.servicename }}</h1>
-            <p class="mb-0" style="color: #666;">
-              Experience holistic healing and rejuvenation with our specialized ayurvedic treatments tailored to your body type.
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-    <nav class="breadcrumbs">
-      <div class="container">
-        <ol>
-          <li><a href="/">Home</a></li> 
-          <li><a href="">Therapies</a></li>
-          <li class="current">{{ therapy.servicename }}</li>
-        </ol>
-      </div>
-    </nav>
-  </div><section id="service-details-2" class="service-details-2 section" style="padding: 60px 0;">
-
-    <div class="container" data-aos="fade-up" data-aos-delay="100">
-
-      <div class="row">
-        <div class="col-lg-8 mx-auto text-center mb-5" data-aos="fade-up" data-aos-delay="150">
-          <div class="service-header">
-            <div class="service-category">
-              <span style="color: #1977cc; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Ayurvedic Therapy</span>
-            </div>
-            <h2 style="font-weight: 700; color: #2c4964; margin-top: 10px;">{{ therapy.servicename }}</h2>
-          </div>
-        </div>
-      </div>
-
-      <div class="row gy-4 align-items-start">
-        <div class="col-lg-5" data-aos="fade-right" data-aos-delay="200">
-  <div class="service-details">
-
-
-
-    <div class="features-list mt-4 mb-4">
-        <h4 style="font-size: 1.1rem; font-weight: 700; color: #2c4964; margin-bottom: 20px;">
-            Service Inclusions
-        </h4>
+<main class="main" style="margin-top: 120px; background-color: #ffffff;">
+    <div class="container pb-5">
         
-        <div class="d-flex align-items-center mb-3">
-            <i class="bi bi-check-circle-fill text-success me-3" style="font-size: 1.2rem;"></i>
-            <div>
-                <strong style="display: block; color: #444;">Expert Consultation</strong>
-                <span style="font-size: 0.85rem; color: #888;">Pre-therapy assessment by doctor</span>
-            </div>
-        </div>
 
-        <div class="d-flex align-items-center mb-3">
-            <i class="bi bi-check-circle-fill text-success me-3" style="font-size: 1.2rem;"></i>
-            <div>
-                <strong style="display: block; color: #444;">Medicated Oils</strong>
-                <span style="font-size: 0.85rem; color: #888;">100% organic herbal preparations</span>
-            </div>
-        </div>
-
-        <div class="d-flex align-items-center mb-3">
-            <i class="bi bi-check-circle-fill text-success me-3" style="font-size: 1.2rem;"></i>
-            <div>
-                <strong style="display: block; color: #444;">Post-Therapy Steam</strong>
-                <span style="font-size: 0.85rem; color: #888;">Detoxifying steam bath session</span>
-            </div>
-        </div>
-        
-        <div class="d-flex align-items-center">
-            <i class="bi bi-check-circle-fill text-success me-3" style="font-size: 1.2rem;"></i>
-            <div>
-                <strong style="display: block; color: #444;">Hygienic Environment</strong>
-                <span style="font-size: 0.85rem; color: #888;">Sterilized equipment & private rooms</span>
-            </div>
-        </div>
-    </div>
-
-    <div class="info-box" style="background: #fff9e6; border-left: 4px solid #ffc107; padding: 15px; border-radius: 4px;">
-        <h6 style="font-weight: 700; color: #856404; margin-bottom: 5px;">
-            <i class="bi bi-info-circle-fill me-2"></i>Preparation Tip
-        </h6>
-        <p style="margin: 0; font-size: 0.9rem; color: #856404;">
-            Please arrive 15 minutes early. It is recommended to have a light meal 1 hour before the session.
-        </p>
-    </div>
-
-  </div>
-</div>
-
-        <div class="col-lg-7" data-aos="fade-left" data-aos-delay="300">
-          <div class="service-visual" style="position: relative; border-radius: 15px; overflow: hidden;">
-            <img src="{{ therapy.img.url }}" alt="{{ therapy.servicename }}" class="img-fluid" style="width: 100%; object-fit: cover;">
-            
-            <div class="visual-overlay" style="position: absolute; bottom: 30px; left: 30px; background: rgba(255, 255, 255, 0.95); padding: 20px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);">
-              <div class="stats-card" style="display: flex; gap: 30px;">
-                <div class="stat">
-                  <span class="number" style="display: block; font-weight: 800; font-size: 1.2rem; color: #1977cc;">100%</span>
-                  <span class="label" style="font-size: 0.9rem; color: #555;">Natural</span>
+        <div class="row justify-content-center mb-5">
+            <div class="col-12 col-md-8 col-lg-6 text-center position-relative">
+                <div class="p-2">
+                    <img src="{{ prodetails.img.url }}" alt="{{ prodetails.name }}" class="img-fluid" style="max-height: 450px; object-fit: contain;">
                 </div>
-                <div class="stat">
-                  <span class="number" style="display: block; font-weight: 800; font-size: 1.2rem; color: #1977cc;">Expert</span>
-                  <span class="label" style="font-size: 0.9rem; color: #555;">Therapists</span>
-                </div>
-              </div>
             </div>
-
-
-
-
-
-          </div>
-              <div class="d-flex justify-content-between mb-4">
-        <div class="detail-item text-center">
-            <div class="icon-wrapper mx-auto mb-2" style="width: 50px; height: 50px; background: #e8f2fd; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #1977cc;">
-                <i class="bi bi-clock" style="font-size: 1.2rem;"></i>
-            </div>
-            <small class="text-muted d-block">Duration</small>
-            <strong style="color: #2c4964;">{{ therapy.duration }}</strong>
-        </div>
-        <div class="detail-item text-center">
-            <div class="icon-wrapper mx-auto mb-2" style="width: 50px; height: 50px; background: #e8f2fd; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #1977cc;">
-                <i class="bi bi-currency-rupee" style="font-size: 1.2rem;"></i>
-            </div>
-            <small class="text-muted d-block">Price</small>
-            <strong style="color: #2c4964;">₹ {{ therapy.price }}</strong>
         </div>
 
-        {% if therapy.productused %}
-        <div class="detail-item text-center">
-            <div class="icon-wrapper mx-auto mb-2" style="width: 50px; height: 50px; background: #e8f2fd; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #1977cc;">
-                <i class="bi bi-flower1" style="font-size: 1.2rem;"></i>
-            </div>
-            <small class="text-muted d-block">Products</small>
-            <strong style="color: #2c4964;">{{ therapy.productused }}</strong>
-        </div>
-        {% endif %}
-    </div>
-
-
-        </div>
-        
-
-      </div>
-
-      <div class="row gy-4 mt-5">
-        <div class="col-12" data-aos="fade-up" data-aos-delay="100">
-          <div class="service-overview" style="background: #fff; padding: 40px; border-radius: 15px; box-shadow: 0 5px 25px rgba(0,0,0,0.05);">
-            <div class="row">
-
-              <div class="col-lg-6">
-                <h3 style="color: #2c4964; font-weight: 700; margin-bottom: 20px;">About the Therapy</h3>
-                <p style="color: #555; line-height: 1.8;">
-                  {{ therapy.description }}
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                
+                <h1 style="color: #0b2545; font-weight: 700; font-size: 2rem; margin-bottom: 10px;">{{ prodetails.productname }}</h1>
+                
+                <p class="text-muted" style="font-size: 1.1rem; line-height: 1.6; margin-bottom: 30px;">
+                    {{ prodetails.description }}
                 </p>
-              </div>
 
-              <div class="col-lg-6">
-                <div class="treatment-areas">
-                  <h4 style="color: #2c4964; font-weight: 700; margin-bottom: 20px;">Key Benefits</h4>
-                  
-                  <div class="condition-tags" style="background: #f8f9fa; padding: 20px; border-radius: 10px;">
-                    <p style="color: #555; line-height: 1.8;">
-                      {{ therapy.benefits|linebreaks }}
-                    </p>
-                  </div>
+                <!-- <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 style="color: #084b0c; font-weight: 700; margin: 0;">₹ {{ prodetails.price }}</h2>
+                    <button class="btn btn-success px-5 py-2" style="background-color: #084b0c; border: none; border-radius: 10px; font-weight: 600; font-size: 1.1rem;">
+                        Add to cart
+                    </button>
+                </div> -->
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h2 style="color: #2d6a4f; font-weight: 700; margin: 0;">₹ {{ prodetails.price }}</h2>
+                    
+                    <div id="cart-action-container">
+                        <button id="add-to-cart-btn" class="btn btn-success px-4 py-2" 
+                                onclick="showCounter()"
+                                style="background-color: #74c67a; border: none; border-radius: 8px; font-weight: 600;">
+                            Add to cart
+                        </button>
 
+                        <div id="qty-selector" class="d-none align-items-center" style="gap: 15px;">
+                            <button onclick="updateQty(-1)" class="btn btn-outline-success d-flex align-items-center justify-content-center" 
+                                    style="width: 35px; height: 35px; border-radius: 8px; border-color: #2d6a4f; color: #2d6a4f;">
+                                <i class="bi bi-dash-lg"></i>
+                            </button>
+                            
+                            <span id="qty-display" style="font-weight: 700; font-size: 1.2rem; color: #0b2545;">1</span>
+                            
+                            <button onclick="updateQty(1)" class="btn btn-outline-success d-flex align-items-center justify-content-center" 
+                                    style="width: 35px; height: 35px; border-radius: 8px; border-color: #2d6a4f; color: #2d6a4f;">
+                                <i class="bi bi-plus-lg"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
-              </div>
+
+                <hr style="border-top: 1px solid #eeeeee; margin: 40px 0;">
+
+                <div class="mb-5">
+                    <h4 style="color: #0b2545; font-weight: 700; margin-bottom: 20px;">Ingredients</h4>
+                    <p style="color: #4a4a4a; line-height: 1.8; font-size: 1.1rem;">
+                        {{ prodetails.ingredients }}
+                    </p>
+                </div>
+
+                <div class="p-3 text-center" style="background-color: #fcfcfc; border-radius: 12px; border: 1px solid #f0f0f0;">
+                    <p class="mb-0 text-muted" style="font-size: 0.95rem;">
+                        <i class="bi bi-truck me-2"></i> The product will be delivered within 5-7 working days, depending on your location
+                    </p>
+                </div>
 
             </div>
-          </div>
         </div>
-      </div>
-
-      <div class="row gy-4 mt-5 justify-content-center">
-
-        <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="100">
-          <div class="action-card primary" style="background: #fff; padding: 30px; border-radius: 15px; box-shadow: 0 5px 25px rgba(0,0,0,0.05); text-align: center; border-top: 5px solid #1977cc;">
-            <div class="card-header" style="margin-bottom: 15px;">
-              <i class="bi bi-calendar-check" style="font-size: 2rem; color: #1977cc;"></i>
-              <h4 style="margin-top: 10px; font-weight: 700; color: #2c4964;">Book Appointment</h4>
-            </div>
-            <p style="color: #666;">Schedule this therapy session with our experts.</p>
-            <div class="card-footer" style="margin-top: 20px;">
-              <a href="{% url 'app_patient:therapyappoint' therapy.id %}" class="btn btn-primary" style="padding: 10px 30px; border-radius: 50px;">Book Now</a>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-lg-4" data-aos="zoom-in" data-aos-delay="300">
-          <div class="action-card tertiary" style="background: #fff; padding: 30px; border-radius: 15px; box-shadow: 0 5px 25px rgba(0,0,0,0.05); text-align: center; border-top: 5px solid #6c757d;">
-            <div class="card-header" style="margin-bottom: 15px;">
-              <i class="bi bi-arrow-left-circle" style="font-size: 2rem; color: #6c757d;"></i>
-              <h4 style="margin-top: 10px; font-weight: 700; color: #2c4964;">Explore More</h4>
-            </div>
-            <p style="color: #666;">View other available ayurvedic therapies.</p>
-            <div class="card-footer" style="margin-top: 20px;">
-              <a href="#" class="btn btn-outline-secondary" style="padding: 10px 30px; border-radius: 50px;">Back to List</a>
-            </div>
-          </div>
-        </div>
-
-      </div>
-
     </div>
+</main>
 
-  </section></main>
 {% include 'Layout/Partials/Patients/footer.html' %}

@@ -1,0 +1,130 @@
+{% load static %}
+{% include 'Layout/Partials/Admin/header.html' %}
+
+<style>
+    /* Ayurvedic Theme Overrides */
+    .profile-widget {
+        background-color: #fff;
+        border-top: 3px solid #3d6f42; /* Ayu Green */
+        box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        border-radius: 5px;
+        padding: 20px;
+        margin-bottom: 30px;
+        text-align: center;
+        transition: transform 0.2s;
+    }
+    .profile-widget:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 15px rgba(61, 111, 66, 0.15);
+    }
+    .doctor-img {
+        height: 120px;
+        width: 120px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 3px solid #e8f5e9;
+        margin-bottom: 15px;
+    }
+    .doc-name {
+        font-family: 'Georgia', serif;
+        color: #3d6f42;
+        font-weight: bold;
+        font-size: 18px;
+        margin-bottom: 5px;
+        display: block;
+    }
+    .doc-speciality {
+        font-size: 14px;
+        color: #b08d55; /* Gold */
+        font-weight: 600;
+        margin-bottom: 15px;
+    }
+    .schedule-box {
+        background: #f8f9fa;
+        border-radius: 8px;
+        padding: 10px;
+        margin-top: 15px;
+        border: 1px solid #e9ecef;
+    }
+    .schedule-title {
+        font-size: 12px;
+        color: #6c757d;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 5px;
+        display: block;
+    }
+    .schedule-days {
+        color: #333;
+        font-weight: 600;
+        font-size: 14px;
+    }
+    .btn-view-profile {
+        background-color: #3d6f42;
+        color: white;
+        border-radius: 20px;
+        padding: 8px 20px;
+        font-size: 13px;
+        margin-top: 15px;
+        display: inline-block;
+    }
+    .btn-view-profile:hover {
+        background-color: #2e5432;
+        color: white;
+        text-decoration: none;
+    }
+</style>
+
+<div class="page-wrapper">
+    <div class="content">
+        <div class="row">
+            <div class="col-sm-12 mb-4">
+                <h4 class="page-title" style="color: #3d6f42; font-weight: bold;">
+                    <i class="fa fa-calendar"></i> Doctor Schedules
+                </h4>
+            </div>
+        </div>
+
+        <div class="row">
+            {% for doc in doctors %}
+            <div class="col-md-4 col-sm-6 col-lg-3">
+                <div class="profile-widget">
+                    
+                    <div class="doctor-img-wrap">
+                        {% if doc.img %}
+                            <img class="doctor-img" src="{{ doc.img.url }}" alt="{{ doc.user.name }}">
+                        {% else %}
+                            <img class="doctor-img" src="{% static 'Admin/assets/img/user.jpg' %}" alt="Default">
+                        {% endif %}
+                    </div>
+
+                    <div class="dropdown profile-action">
+                        </div>
+                    
+                    <a href="#" class="doc-name">{{ doc.user.name }}</a>
+                    <div class="doc-speciality">{{ doc.specialization }}</div>
+                    
+                    <div class="schedule-box">
+                        <span class="schedule-title"><i class="fa fa-clock-o"></i> Availability</span>
+                        <div class="schedule-days">
+                            {% if doc.schedule %}
+                                {{ doc.schedule }}
+                            {% else %}
+                                <span class="text-danger">Not Scheduled</span>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <a href="#" class="btn btn-view-profile">View Details</a>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-md-12 text-center">
+                <h5 class="text-muted mt-5">No doctors registered yet.</h5>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% include 'Layout/Partials/Admin/footer.html' %}

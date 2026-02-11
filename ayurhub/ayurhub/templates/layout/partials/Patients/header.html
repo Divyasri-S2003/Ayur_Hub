@@ -127,10 +127,11 @@
           <li><a href="#about">About</a></li>
           <li><a href="{% url 'app_patient:viewcategory' %}">Therapies</a></li>
           <li><a href="/patient/viewdoctor/">Doctors</a></li>
+          <li><a href="/patient/viewmedcategory/">Products</a></li>
           <li><a href="/dashboard/loginf/">Login</a></li>
           
           <li style="display: flex; align-items: center;">
-            <a href="#" style="position: relative; display: inline-block;">
+            <a href="{% url 'app_patient:viewcart' %}" style="position: relative; display: inline-block;">
               <i class="bi bi-cart2" style="font-size: 1.8rem; color: #2d6a4f;"></i>
               
               <span style="
@@ -144,7 +145,7 @@
                 padding: 2px 5px; 
                 font-size: 0.7rem; 
                 font-weight: bold;
-              ">0</span>
+              ">{{ global_cart_count }}</span>
             </a>
           </li>
         </ul>

@@ -1,72 +1,196 @@
-({% load static %}) {% include 'Layout/Partials/Admin/header.html' %}
+{% load static %}
+{% include 'Layout/Partials/Admin/header.html' %}
+
+<style>
+    /* --- Ayurvedic Theme Variables --- */
+    :root {
+        --ayur-dark-green: #2E5C3E;
+        --ayur-sage: #4A7C59;
+        --ayur-cream: #FAF9F6;
+        --ayur-gold: #D4A017;
+        --ayur-red: #c0392b;
+    }
+
+    /* Page Background */
+    .page-wrapper {
+        background-color: var(--ayur-cream) !important;
+    }
+
+    /* Table Styles */
+    .table-ayurveda thead th {
+        background-color: var(--ayur-sage) !important;
+        color: #ffffff !important;
+        font-weight: 600;
+        vertical-align: middle;
+        white-space: nowrap;
+        border: none;
+        padding: 15px;
+    }
+
+    .table-ayurveda tbody td {
+        vertical-align: middle;
+        color: #444;
+        padding: 15px;
+        border-bottom: 1px solid #e0e6dd;
+    }
+
+    /* Row Hover Effect */
+    .table-ayurveda tbody tr:hover {
+        background-color: #f1f7f2; /* Very faint green */
+    }
+
+    /* Image Thumbnail */
+    .img-thumbnail-ayur {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 2px solid #ddd;
+        padding: 2px;
+        background: white;
+    }
+
+    /* Description Text Limit */
+    .desc-cell {
+        max-width: 250px;
+        white-space: normal;
+        font-size: 0.9rem;
+        color: #666;
+    }
+
+    /* Action Buttons */
+    .btn-action {
+        width: 35px;
+        height: 35px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        margin: 0 3px;
+        transition: all 0.3s;
+        border: 1px solid transparent;
+    }
+
+    .btn-edit {
+        background-color: #fff;
+        color: var(--ayur-sage);
+        border-color: var(--ayur-sage);
+    }
+    .btn-edit:hover {
+        background-color: var(--ayur-sage);
+        color: #fff;
+    }
+
+    .btn-delete {
+        background-color: #fff;
+        color: var(--ayur-red);
+        border-color: var(--ayur-red);
+    }
+    .btn-delete:hover {
+        background-color: var(--ayur-red);
+        color: #fff;
+    }
+    
+    .card-custom {
+        border-radius: 12px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        border: none;
+    }
+</style>
 
 <div class="page-wrapper">
-  <div class="content">
-<div class="content-body">
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-12">
-        <div class="card">
-          <div class="card-body">
-            <div class="d-md-flex align-items-center">
-              <div>
-                <div class="table-responsive mt-4">
-  <table class="table mb-0 varient-table align-middle fs-3"> <thead>
-        <th scope="col" class="px-0 text-muted">SI NO</th>
-        <th scope="col" class="px-0 text-muted">Therapy Name</th>
-        <th scope="col" class="px-0 text-muted">Service Name</th>
-        <th scope="col" class="px-0 text-muted">Short Description</th>
-        <th scope="col" class="px-0 text-muted" style="width: 250px;">Description</th> 
-        <th scope="col" class="px-0 text-muted">Image</th>
-        <th scope="col" class="px-0 text-muted">Duration</th>
-        <th scope="col" class="px-0 text-muted">Price</th>
-        <th scope="col" class="px-0 text-muted">Benefits</th>
-        <th scope="col" class="px-0 text-muted">Product Used</th>
-        <th scope="col" class="px-0 text-muted">Count</th>
-        <th scope="col" class="px-0 text-muted">Delete</th>
-        <th scope="col" class="px-0 text-muted">Update</th>
-      </tr>
-    </thead>
-       <!-- viewthera loop ll kodthadh view inde context -->
-    <tbody>
-      {% for i in viewthera %}
-      <tr>
-
-        <td>{{forloop.counter}}</td>
-        <td>{{ i.therapyname.name }}</td>
-
-        <td>{{i.servicename}}</td>
-        <td>{{i.shortdescription}}</td>
-
-        <td style="max-width: 250px; white-space: normal; word-wrap: break-word;">
-            {{i.description}}
-        </td>
-        <td>
-          <img src="/media/{{i.img}}" style="width: 100px" />
-        </td>
-        <td>{{i.duration}}</td>
-        <td>{{i.price}}</td>
-        <td>{{i.benefits}}</td>
-        <td>{{i.productused}}</td>
-        <td>{{i.count}}</td>
-        <td>
-          <a href="{% url 'core:deletetherapy' i.id %}"><button type="submit" class="btn btn-danger">Delete</button></a>
-        </td>
-        <td>
-          <a href="{% url 'core:edittherapy' i.id %}"><button type="submit" class="btn btn-secondary">Update</button></a>
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-</div>
-
-              </div>
+    <div class="content">
+        <div class="container-fluid mt-4">
+            
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h3 class="fw-bold" style="color: #2E5C3E;">
+                        <i class="fa fa-pagelines me-2"></i> Therapy Management
+                    </h3>
+                </div>
             </div>
-          </div>
-          {% include 'Layout/Partials/Admin/footer.html' %}
+
+            <div class="row">
+                <div class="col-12">
+                    <div class="card card-custom">
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-ayurveda mb-0">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Image</th>
+                                            <th>Therapy Name</th>
+                                            <th>Service Name</th>
+                                            <th>Short Desc</th>
+                                            <th>Full Description</th>
+                                            <th>Duration</th>
+                                            <th>Price</th>
+                                            <th>Benefits</th>
+                                            <th>Product</th>
+                                            <th>Count</th>
+                                            <th class="text-center">Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for i in viewthera %}
+                                        <tr>
+                                            <td>{{forloop.counter}}</td>
+                                            
+                                            <td>
+                                                {% if i.img %}
+                                                    <img src="/media/{{i.img}}" class="img-thumbnail-ayur" alt="Therapy Image" />
+                                                {% else %}
+                                                    <span class="text-muted">No Image</span>
+                                                {% endif %}
+                                            </td>
+
+                                            <td class="fw-bold text-dark">{{ i.therapyname.name }}</td>
+                                            <td>{{i.servicename}}</td>
+                                            
+                                            <td><small>{{i.shortdescription|truncatechars:30}}</small></td>
+                                            <td class="desc-cell">
+                                                {{i.description|truncatechars:100}}
+                                            </td>
+
+                                            <td><span class="badge bg-light text-dark border">{{i.duration}}</span></td>
+                                            <td class="fw-bold text-success">₹{{i.price}}</td>
+                                            
+                                            <td><small>{{i.benefits|truncatechars:30}}</small></td>
+                                            <td>{{i.productused}}</td>
+                                            <td class="text-center">
+                                                <span class="badge bg-secondary">{{i.count}}</span>
+                                            </td>
+
+                                            <td class="text-center">
+                                                <div class="d-flex justify-content-center">
+                                                    <a href="{% url 'core:edittherapy' i.id %}" class="btn-action btn-edit" title="Update">
+                                                        <i class="fa fa-pencil"></i>
+                                                    </a>
+                                                    <a href="{% url 'core:deletetherapy' i.id %}" class="btn-action btn-delete" title="Delete" onclick="return confirm('Are you sure you want to delete this therapy?');">
+                                                        <i class="fa fa-trash-o"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {% empty %}
+                                        <tr>
+                                            <td colspan="12" class="text-center py-5">
+                                                <i class="fa fa-leaf fa-3x text-muted mb-3"></i>
+                                                <h5 class="text-muted">No Therapies Added Yet</h5>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
-      </div>
     </div>
-  </div>
 </div>
+
+{% include 'Layout/Partials/Admin/footer.html' %}

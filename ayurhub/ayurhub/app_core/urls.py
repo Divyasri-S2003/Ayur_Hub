@@ -39,6 +39,9 @@ urlpatterns = [
     path("viewproduct/",views.viewproduct,name='viewproduct'),
     path("deletproduct/<int:id>/",views.deletproduct,name='deletproduct'),
     path("editproduct/<int:id>/", views.editproduct, name="editproduct"),
+    
+    path('viewappointments/', views.view_appointments, name='view_appointments'),
+    path('doctorschedule/', views.view_doctor_schedule, name='view_doctor_schedule'),
 
 
    

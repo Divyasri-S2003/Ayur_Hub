@@ -1,64 +1,227 @@
-({% load static %}) {% include 'Layout/Partials/Admin/header.html' %}
+{% load static %}
+{% include 'Layout/Partials/Admin/header.html' %}
+
+<style>
+    /* --- Ayurvedic Theme Palette --- */
+    :root {
+        --ayur-dark-green: #1a4d2e;  /* Deep Forest Green */
+        --ayur-sage: #4f772d;        /* Lighter Leaf Green */
+        --ayur-gold: #d4a373;        /* Earthy Gold/Wood */
+        --ayur-cream: #fefae0;       /* Parchment/Cream Background */
+        --ayur-danger: #bc4749;      /* Muted Red */
+        --ayur-text: #2c3e50;
+    }
+
+    /* Page Background */
+    .page-wrapper {
+        background-color: #f9f9f7 !important;
+    }
+
+    /* Card Styling */
+    .card-ayurveda {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(26, 77, 46, 0.08);
+        background-color: #ffffff;
+        overflow: hidden;
+    }
+
+    .card-header-ayurveda {
+        background-color: var(--ayur-dark-green);
+        padding: 20px;
+        border-bottom: 4px solid var(--ayur-gold);
+    }
+
+    .card-title-ayurveda {
+        color: #fff;
+        font-weight: 600;
+        margin: 0;
+        font-size: 1.2rem;
+        letter-spacing: 0.5px;
+    }
+
+    /* Table Styling */
+    .table-responsive {
+        padding: 0;
+    }
+
+    .table-ayurveda {
+        width: 100%;
+        margin-bottom: 0;
+        vertical-align: middle;
+        border-color: #e2e8f0;
+    }
+
+    .table-ayurveda thead th {
+        background-color: #f0f4ef; /* Very light green background */
+        color: var(--ayur-dark-green);
+        font-weight: 700;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        border-bottom: 2px solid var(--ayur-gold);
+        padding: 15px;
+        white-space: nowrap;
+    }
+
+    .table-ayurveda tbody td {
+        padding: 15px;
+        color: #4a5568;
+        font-size: 0.95rem;
+        border-bottom: 1px solid #edf2f7;
+        vertical-align: middle;
+    }
+
+    .table-ayurveda tbody tr:hover {
+        background-color: #fefcf5; /* Subtle cream hover effect */
+    }
+
+    /* Image Styling */
+    .product-img {
+        width: 80px;
+        height: 80px;
+        object-fit: cover;
+        border-radius: 8px;
+        border: 1px solid #e2e8f0;
+        padding: 3px;
+        background: #fff;
+    }
+
+    /* Description Styling */
+    .desc-cell {
+        max-width: 250px;
+        font-size: 0.9rem;
+        color: #718096;
+        line-height: 1.5;
+    }
+
+    /* Button Styling */
+    .btn-ayur {
+        padding: 8px 16px;
+        border-radius: 6px;
+        font-weight: 500;
+        font-size: 0.85rem;
+        transition: all 0.3s ease;
+        border: none;
+        text-decoration: none;
+        display: inline-block;
+        text-align: center;
+        cursor: pointer;
+    }
+
+    .btn-ayur-update {
+        background-color: var(--ayur-sage);
+        color: white;
+    }
+    .btn-ayur-update:hover {
+        background-color: var(--ayur-dark-green);
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .btn-ayur-delete {
+        background-color: var(--ayur-danger);
+        color: white;
+    }
+    .btn-ayur-delete:hover {
+        background-color: #9b2226;
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    /* Badge for Quantity */
+    .badge-qty {
+        background-color: #e9f5ec;
+        color: var(--ayur-dark-green);
+        padding: 5px 10px;
+        border-radius: 15px;
+        font-weight: 600;
+    }
+</style>
 
 <div class="page-wrapper">
-  <div class="content">
-<div class="content-body">
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-12">
-        <div class="card">
-          <div class="card-body">
-            <div class="d-md-flex align-items-center">
-              <div>
-                <div class="table-responsive mt-4">
-  <table class="table mb-0 varient-table align-middle fs-3"> <thead>
-        <th scope="col" class="px-0 text-muted">SI NO</th>
-        <th scope="col" class="px-0 text-muted">Medicine Category Name</th>
-        <th scope="col" class="px-0 text-muted">Product Name</th>
-        <th scope="col" class="px-0 text-muted" style="width: 250px;">Description</th> 
-        <th scope="col" class="px-0 text-muted">Image</th>
-        <th scope="col" class="px-0 text-muted">Price</th>
-        <th scope="col" class="px-0 text-muted">Count</th>
-        <th scope="col" class="px-0 text-muted">Delete</th>
-        <th scope="col" class="px-0 text-muted">Update</th>
-      </tr>
-    </thead>
-       <!-- viewthera loop ll kodthadh view inde context -->
-    <tbody>
-      {% for i in viewprod %}
-      <tr>
+    <div class="content">
+        <div class="container-fluid">
+            
+            <div class="row">
+                <div class="col-12">
+                    
+                    <div class="card card-ayurveda mt-4">
+                        <div class="card-header-ayurveda">
+                            <h4 class="card-title-ayurveda">
+                                <i class="fa fa-leaf me-2"></i> Product Inventory
+                            </h4>
+                        </div>
 
-        <td>{{forloop.counter}}</td>
-        <td>{{ i.medicinecategory.name }}</td>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-ayurveda">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" class="text-center">SI NO</th>
+                                            <th scope="col">Category</th>
+                                            <th scope="col">Product Name</th>
+                                            <th scope="col">Description</th>
+                                            <th scope="col" class="text-center">Image</th>
+                                            <th scope="col">Price</th>
+                                            <th scope="col" class="text-center">Quantity</th>
+                                            <th scope="col" class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% for i in viewprod %}
+                                        <tr>
+                                            <td class="text-center fw-bold text-muted">{{forloop.counter}}</td>
+                                            
+                                            <td style="color: var(--ayur-dark-green); font-weight: 600;">
+                                                {{ i.medicinecategory.name }}
+                                            </td>
 
-        <td>{{i.productname}}</td>
+                                            <td class="fw-bold">{{i.productname}}</td>
 
-        <td style="max-width: 250px; white-space: normal; word-wrap: break-word;">
-            {{i.description}}
-        </td>
-        <td>
-          <img src="/media/{{i.img}}" style="width: 100px" />
-        </td>
-        <td>{{i.price}}</td>
-        <td>{{i.count}}</td>
-        <td>
-          <a href="{% url 'core:deletproduct' i.id %}"><button type="submit" class="btn btn-danger">Delete</button></a>
-        </td>
-        <td>
-          <a href="{% url 'core:editproduct' i.id %}"><button type="submit" class="btn btn-secondary">Update</button></a>
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
-</div>
+                                            <td class="desc-cell">
+                                                {{i.description|truncatechars:100}}
+                                            </td>
 
-              </div>
+                                            <td class="text-center">
+                                                {% if i.img %}
+                                                <img src="/media/{{i.img}}" class="product-img" alt="{{i.productname}}">
+                                                {% else %}
+                                                <span class="text-muted">No Image</span>
+                                                {% endif %}
+                                            </td>
+
+                                            <td style="font-family: 'Courier New', monospace; font-weight: bold;">
+                                                ₹ {{i.price}}
+                                            </td>
+
+                                            <td class="text-center">
+                                                <span class="badge-qty">{{i.quantity}}</span>
+                                            </td>
+
+                                            <td class="text-center">
+                                                <div class="d-flex gap-2 justify-content-center">
+                                                    <a href="{% url 'core:editproduct' i.id %}" class="btn-ayur btn-ayur-update" title="Update">
+                                                        Update
+                                                    </a>
+                                                    
+                                                    <a href="{% url 'core:deletproduct' i.id %}" class="btn-ayur btn-ayur-delete" title="Delete" onclick="return confirm('Are you sure you want to delete this item?');">
+                                                        Delete
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
             </div>
-          </div>
-          {% include 'Layout/Partials/Admin/footer.html' %}
+            
         </div>
-      </div>
     </div>
-  </div>
 </div>
+
+{% include 'Layout/Partials/Admin/footer.html' %}

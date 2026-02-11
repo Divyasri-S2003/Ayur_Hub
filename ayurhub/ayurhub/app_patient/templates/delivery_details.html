@@ -1,0 +1,40 @@
+{% load static %}
+{% include 'Layout/Partials/Patients/header.html' %}
+
+<main id="main" style="margin-top: 130px; padding-bottom: 60px; background-color: #fcfdfe;">
+    <div class="container">
+        <div class="row gy-4">
+            <div class="col-lg-7">
+                <div style="background: #fff; padding: 35px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.05);">
+                    <h3 style="color: #084b0c; font-weight: 700; margin-bottom: 25px;">Delivery Address</h3> 
+                    <form action="" method="POST">
+                        {% csrf_token %}
+                        <label for="">Name</label>
+                        <input type="text" name="name" class="form-control mb-2" required>
+                        
+                        <label for="">Contact</label>
+                        <input type="text" name="contact" class="form-control mb-2" required>
+                        
+                        <label for="">Address</label>
+                        <textarea name="address" class="form-control mb-2" rows="3" required></textarea>
+                        
+                        <label for="">Country</label>
+                        <input type="text" name="country" class="form-control mb-2" required>
+                        
+                        <label for="">State</label>
+                        <input type="text" name="state" class="form-control mb-2" required>
+                        
+                        <label for="">City</label>
+                        <input type="text" name="city" class="form-control mb-2" required>
+                        
+                        <label for="">Postal Code</label>
+                        <input type="text" name="postal_code" class="form-control mb-2" required>
+                        
+                        <button class="btn btn-dark mt-3">Continue</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% include 'Layout/Partials/Patients/footer.html' %}

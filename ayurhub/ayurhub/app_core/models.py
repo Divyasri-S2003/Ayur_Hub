@@ -18,7 +18,7 @@ class Category(models.Model):
     img=models.ImageField(upload_to="media/",null=True,blank=True)
 
 class Doctor(models.Model):
-    user=models.ForeignKey(User,on_delete=models.CASCADE,default=1)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     name=models.CharField(max_length=255, null=True, blank=True)
     contact=models.CharField()
     specialization=models.CharField()
@@ -57,4 +57,6 @@ class Product(models.Model):
     description=models.TextField()
     img=models.ImageField(upload_to="media/",null=True,blank=True)
     price=models.CharField(max_length=50)
+    quantity=models.CharField(max_length=50)
+    
     

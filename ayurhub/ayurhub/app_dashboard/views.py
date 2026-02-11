@@ -1,6 +1,7 @@
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.contrib.auth import authenticate,login
+from django.core.mail import send_mail
 
 
 from app_dashboard.models import Patientregi
@@ -65,14 +66,66 @@ def patientregist(request):
         user.save()
 
         Patientregi.objects.create(user=user,age=age,gender=gender,contact=contact,address=address)
+        send_mail(
+        subject="Welcome to Our Platform",
+        message=f"Hi {name},\n\nYour account has been successfully created.",
+        from_email=None,  
+        recipient_list=[email],
+    )
         return HttpResponse("<script>alert('Patient Registered Successfully');window.location='/dashboard/loginf/';</script>")
     else:   
         return render(request,"PatientRegistration.html")
 
 
     
+from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from app_patient.models import DoctorAppointment, TherapyAppointment
+from app_core.models import Doctor
 
+@login_required(login_url='login')
 def doctordashboard(request):
-    return render(request, "Doctortemplate.html")
+    try:
+        doctor_profile = request.user.doctor
+    except AttributeError:
+        return redirect('index') 
 
+    # 1. Standard Appointments (For Everyone)
+    appointments = DoctorAppointment.objects.filter(doctor=doctor_profile).order_by('-appointment_date')
+    
+    search_date = request.GET.get('search_date')
+    if search_date:
+        appointments = appointments.filter(appointment_date=search_date)
 
+    # ---------------------------------------------------------
+    # 2. THERAPY LOGIC (UPDATED FOR BPT QUALIFICATION)
+    # ---------------------------------------------------------
+    # Default: Create an empty QuerySet for doctors without a BPT qualification
+    therapy_appointments = TherapyAppointment.objects.none() 
+    is_therapy_admin = False 
+
+    # Check if the logged-in doctor has the 'BPT' qualification
+    if doctor_profile.qualification == 'BPT':
+        is_therapy_admin = True
+        
+        # Fetch all therapy appointments for BPT doctors
+        therapy_appointments = TherapyAppointment.objects.all().order_by('-appointment_date')
+        
+        if search_date:
+            therapy_appointments = therapy_appointments.filter(appointment_date=search_date)
+
+    # 3. Stats
+    total_appointments = appointments.count()
+    pending_appointments = appointments.filter(status="Pending").count()
+
+    context = {
+        'doctor': doctor_profile,
+        'appointments': appointments,
+        'therapy_appointments': therapy_appointments, 
+        'is_therapy_admin': is_therapy_admin,         
+        'search_date': search_date,
+        'total_count': total_appointments,
+        'pending_count': pending_appointments,
+    }
+
+    return render(request, "Doctortemplate.html", context)

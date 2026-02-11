@@ -11,12 +11,10 @@ urlpatterns = [
     path("core/", include("ayurhub.app_core.urls",namespace="core")),
 
     path("patient/", include("ayurhub.app_patient.urls", namespace="app_patient")),
+    path("doctor/", include("ayurhub.app_doctor.urls", namespace="app_doctor")),
+    
     path("", TemplateView.as_view(template_name="pages/home.html"), name="home"),
-    path(
-        "about/",
-        TemplateView.as_view(template_name="pages/about.html"),
-        name="about",
-    ),
+    path("about/",TemplateView.as_view(template_name="pages/about.html"),name="about",),
     # Django Admin, use {% url 'admin:index' %}
     path(settings.ADMIN_URL, admin.site.urls),
     # User management

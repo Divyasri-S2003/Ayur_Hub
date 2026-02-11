@@ -1,0 +1,191 @@
+{% load static %}
+{% include 'Layout/Partials/Patients/header.html' %}
+{% if messages %}
+    {% for message in messages %}
+        <script>
+            alert("{{ message }}");
+        </script>
+    {% endfor %}
+{% endif %}
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+<style>
+    body, .main, h4, h5, h6, span, p, a { 
+        font-family: 'Crimson Pro', 'Times New Roman', serif; 
+    }
+
+    .main { background-color: #fcfcf9 !important; }
+
+    .cart-card {
+        border-radius: 12px;
+        border: 1px solid #e8e8e1;
+    }
+
+    .item-row {
+        transition: all 0.2s ease;
+        border-bottom: 1px solid #f0f0e8 !important;
+    }
+
+    .quantity-selector {
+        background: #ffffff;
+        border: 1px solid #2d6a4f;
+        border-radius: 6px;
+        padding: 4px 10px;
+        font-size: 1.1rem;
+    }
+
+    .text-navy { color: #1b4332 !important; }
+
+    .btn-checkout {
+        font-family: 'Crimson Pro', serif;
+        font-size: 1.2rem;
+        background: #2d6a4f !important;
+        border: none;
+        border-radius: 8px !important;
+        transition: 0.3s;
+    }
+
+    .price-text {
+        font-weight: 700;
+        letter-spacing: -0.5px;
+    }
+
+    /* Increased Image Container Style */
+    .product-img-container {
+        background: #ffffff; 
+        border: 1px solid #f0f0e8; 
+        border-radius: 12px; 
+        padding: 15px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 160px; /* Increased height */
+        width: 100%;
+        overflow: hidden;
+    }
+
+    .product-img-container img {
+        max-height: 100%;
+        width: auto;
+        object-fit: contain;
+    }
+</style>
+
+<main class="main" style="margin-top: 100px; min-height: 100vh; padding-bottom: 50px;">
+    <div class="container py-4">
+        
+        <div class="d-flex align-items-center justify-content-between mb-4 p-4" style="background: white; border-radius: 12px; border: 1px solid #e8e8e1;">
+            <div class="d-flex align-items-center">
+                <a href="javascript:history.back()" class="btn btn-light rounded-circle me-3 border">
+                    <i class="bi bi-arrow-left"></i>
+                </a>
+                <h4 class="mb-0 fw-bold text-navy" style="font-size: 1.8rem;">Shopping Bag</h4>
+            </div>
+            <span class="badge text-success px-3 py-2" style="background-color: #f0f7f0; border: 1px solid #74c67a; border-radius: 6px; font-size: 1rem;">
+                {{ cart_items|length }} Items
+            </span>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-lg-8">
+                <div class="card cart-card border-0 shadow-sm">
+                    <div class="card-body p-4">
+                        {% for item in cart_items %}
+                        <div class="row align-items-center mb-4 pb-4 border-bottom item-row">
+                            <div class="col-4 col-md-3">
+                                <div class="product-img-container">
+                                    <img src="{{ item.product.img.url }}" alt="{{ item.product.productname }}" style="mix-blend-mode: multiply;">
+                                </div>
+                            </div>
+                            
+                            <!-- <div class="col-8 col-md-9">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <div>
+                                        <h6 class="fw-bold mb-1 text-navy" style="font-size: 1.4rem;">{{ item.product.productname }}</h6>
+                                        <p class="text-muted mb-2" style="font-size: 1.1rem;">Unit Price: <span class="price-text">₹{{ item.product.price }}</span></p>
+                                        <h5 class="fw-bold text-success price-text" style="font-size: 1.3rem;">Total: ₹{{ item.subtotal }}</h5>
+                                    </div> -->
+                                    <div class="col-8 col-md-9">
+                                        <div class="d-flex justify-content-between align-items-start">
+                                            
+                                            <div>
+                                                <h6 class="fw-bold mb-1 text-navy" style="font-size: 1.4rem;">{{ item.product.productname }}</h6>
+                                                <p class="text-muted mb-1" style="font-size: 1.1rem;">Unit Price: <span class="price-text">₹{{ item.product.price }}</span></p>
+                                                
+                                                <p class="mb-2" style="font-size: 0.9rem; color: #d9534f;">
+                                                    {% if item.product.quantity|add:"0" > 0 %}
+                                                        Only {{ item.product.quantity }} left in stock
+                                                    {% else %}
+                                                        Out of stock
+                                                    {% endif %}
+                                                </p>
+                                                
+                                                <h5 class="fw-bold text-success price-text" style="font-size: 1.3rem;">Total: ₹{{ item.subtotal }}</h5>
+                                            </div>
+                                            <a href="{% url 'app_patient:removefromcart' item.id %}" class="text-danger p-2" title="Remove Item">
+                                                <i class="bi bi-trash3" style="font-size: 1.3rem;"></i>
+                                            </a>
+                                        </div>
+                                    <!-- <a href="{% url 'app_patient:removefromcart' item.id %}" class="text-danger p-2" title="Remove Item">
+                                        <i class="bi bi-trash3" style="font-size: 1.3rem;"></i>
+                                    </a>
+                                </div> -->
+
+                                <div class="d-flex justify-content-end mt-3">
+                                    <div class="quantity-selector d-flex align-items-center gap-4">
+                                        <a href="{% url 'app_patient:updatecart' item.id 'decrement' %}" class="text-secondary text-decoration-none">
+                                            <i class="bi bi-dash-lg"></i>
+                                        </a>
+                                        <span class="fw-bold px-2 text-navy" style="font-size: 1.2rem;">{{ item.quantity }}</span>
+                                        <a href="{% url 'app_patient:updatecart' item.id 'increment' %}" class="text-success text-decoration-none">
+                                            <i class="bi bi-plus-lg"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <div class="text-center py-5">
+                            <img src="https://cdn-icons-png.flaticon.com/512/11329/11329060.png" width="100" class="mb-3 opacity-50">
+                            <h5 class="text-muted" style="font-style: italic;">Your cart is feeling light</h5>
+                            <a href="{% url 'app_patient:viewmedcategory' %}" class="btn btn-success mt-3 px-4 btn-checkout">Explore Medicines</a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            {% if cart_items %}
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm" style="border-radius: 12px; border: 1px solid #e8e8e1; position: sticky; top: 120px;">
+                    <div class="card-body p-4">
+                        <h5 class="fw-bold text-navy mb-4" style="font-size: 1.5rem; border-bottom: 1px solid #eee; padding-bottom: 10px;">Order Summary</h5>
+                        <div class="d-flex justify-content-between mb-3 text-muted" style="font-size: 1.1rem;">
+                            <span>Subtotal</span>
+                            <span class="price-text">₹{{ total }}</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-3 text-muted" style="font-size: 1.1rem;">
+                            <span>Delivery Fee</span>
+                            <span class="text-success" style="font-style: italic;">FREE</span>
+                        </div>
+                        <hr class="my-4">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h5 class="fw-bold text-navy mb-0" style="font-size: 1.4rem;">Total Amount</h5>
+                            <h4 class="fw-bold text-navy mb-0 price-text" style="font-size: 1.6rem;">₹ {{ total }}</h4>
+                        </div>
+                        
+                        <a href="{% url 'app_patient:checkout' %}" class="btn btn-checkout btn-success w-100 py-3 fw-bold mb-3">
+                            Proceed to Checkout
+                        </a>
+                        <a href="{% url 'app_patient:viewmedcategory' %}" class="btn btn-link w-100 text-decoration-none text-muted" style="font-size: 1rem;">
+                            <i class="bi bi-arrow-left me-2"></i>Continue Shopping
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</main>
+
+{% include 'Layout/Partials/Patients/footer.html' %}

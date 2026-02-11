@@ -1,122 +1,185 @@
 {% load static %}
 {% include 'Layout/Partials/Admin/header.html' %}
+
+<style>
+    /* --- Ayurvedic Theme Variables --- */
+    :root {
+        --ayur-dark-green: #2E5C3E;
+        --ayur-sage: #4A7C59;
+        --ayur-cream: #FAF9F6;
+        --ayur-border: #cddbc4;
+        --ayur-gold: #D4A017;
+    }
+
+    /* Page Background */
+    .page-wrapper {
+        background-color: var(--ayur-cream) !important;
+    }
+
+    /* Card Styling */
+    .card-ayurveda {
+        border: none;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(46, 92, 62, 0.1);
+        background-color: #ffffff;
+        overflow: hidden;
+    }
+
+    .card-header-ayurveda {
+        background-color: var(--ayur-dark-green);
+        color: #ffffff;
+        padding: 15px 20px;
+        border-bottom: 3px solid var(--ayur-gold);
+    }
+
+    /* Form Styles */
+    .form-label {
+        color: var(--ayur-dark-green);
+        font-weight: 600;
+        font-size: 0.95rem;
+    }
+
+    .form-control {
+        border: 1px solid var(--ayur-border);
+        border-radius: 8px;
+        padding: 10px;
+        background-color: #fafbf9;
+    }
+
+    .form-control:focus {
+        border-color: var(--ayur-sage);
+        box-shadow: 0 0 0 0.2rem rgba(74, 124, 89, 0.25);
+        background-color: #fff;
+    }
+
+    /* Section Divider */
+    .form-section-title {
+        color: var(--ayur-sage);
+        font-size: 1.1rem;
+        font-weight: bold;
+        border-bottom: 2px solid #e9f2eb;
+        padding-bottom: 5px;
+        margin-bottom: 20px;
+        margin-top: 10px;
+    }
+
+    /* Button Styling */
+    .btn-ayurveda {
+        background-color: var(--ayur-dark-green);
+        border: none;
+        color: white;
+        padding: 12px 30px;
+        border-radius: 6px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+    }
+
+    .btn-ayurveda:hover {
+        background-color: var(--ayur-sage);
+        transform: translateY(-2px);
+    }
+</style>
+
 <div class="page-wrapper">
-  <div class="content">
-  <div class="body-wrapper-inner">
-        <div class="container-fluid">
-          <div class="card">
-            <div class="card-body">
-              <h5 class="card-title fw-semibold mb-4">Forms</h5>
-              <div class="card">
-                <div class="card-body">
-                  <form method="POST" action="{% url 'core:doctor' %}" enctype="multipart/form-data">
-			{% csrf_token %} 
-                    <div class="mb-3">
-                      <label for="exampleInputname" class="form-label">Name</label>
-                      <input type="text" class="form-control" id="exampleInputname" name="name" aria-describedby="nameHelp">
-                      <div id="nameHelp" class="form-text"></div>
-                    </div>
-                    <div class="mb-3">
-                      <label for="exampleInputusername" class="form-label">Username</label>
-                      <input type="text" class="form-control" id="exampleInputusername" name="username" aria-describedby="nameHelp">
-                      <div id="nameHelp" class="form-text"></div>
-                    </div>
-
-                    <div class="mb-3">
-                      <label for="exampleInputimg" class="form-label">Image</label>
-                      <input type="file" class="form-control" id="exampleInputimg" name="img">
-                    </div>
+    <div class="content">
+        <div class="body-wrapper-inner">
+            <div class="container-fluid">
+                
+                <div class="card card-ayurveda mt-4">
                     
-
-                    <div class="mb-3">
-                      <label for="exampleInputemail" class="form-label">Email address</label>
-                      <input type="email" class="form-control" id="exampleInputemail" name="email" aria-describedby="emailHelp">
-                      <div id="emailHelp" class="form-text"></div>
-
-
-                    <div class="mb-3">
-                      <label for="exampleInputcontact" class="form-label">Contact Number</label>
-                      <input type="text" class="form-control" id="exampleInputcontact" name="contact" aria-describedby="nameHelp">
-                      <div id="nameHelp" class="form-text"></div>
+                    <div class="card-header-ayurveda">
+                        <h5 class="mb-0 fw-bold text-white">
+                            <i class="fa fa-user-md me-2"></i> Register New Doctor
+                        </h5>
                     </div>
 
-                    <div class="mb-3">
-                      <label for="exampleInputqualification" class="form-label">Qualification</label>
-                      <input type="text" class="form-control" id="exampleInputqualification" name="qualification" aria-describedby="nameHelp">
-                      <div id="nameHelp" class="form-text"></div>
+                    <div class="card-body p-4">
+                        <form method="POST" action="{% url 'core:doctor' %}" enctype="multipart/form-data">
+                            {% csrf_token %} 
+                            
+                            <div class="form-section-title"><i class="fa fa-info-circle me-2"></i>Personal Details</div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Full Name</label>
+                                    <input type="text" class="form-control" name="name" placeholder="Dr. John Doe">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Contact Number</label>
+                                    <input type="text" class="form-control" name="contact" placeholder="+91 9876543210">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Email Address</label>
+                                    <input type="email" class="form-control" name="email" placeholder="doctor@example.com">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Profile Image</label>
+                                    <input type="file" class="form-control" name="img">
+                                </div>
+                            </div>
 
-                    <div class="mb-3">
-                      <label for="exampleInputspecialization" class="form-label">Specialization</label>
-                      <input type="text" class="form-control" id="examplespecialization" name="specialization" aria-describedby="nameHelp">
-                      <div id="nameHelp" class="form-text"></div>
+                            <div class="form-section-title mt-4"><i class="fa fa-stethoscope me-2"></i>Professional Details</div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Qualification</label>
+                                    <input type="text" class="form-control" name="qualification" placeholder="BAMS, MD (Ayur)">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Specialization</label>
+                                    <input type="text" class="form-control" name="specialization" placeholder="Panchakarma, Kayachikitsa">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Experience (Years)</label>
+                                    <input type="text" class="form-control" name="experience" placeholder="e.g. 5 Years">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Consultation Fee (₹)</label>
+                                    <input type="text" class="form-control" name="fee" placeholder="e.g. 500">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Consultation Schedule</label>
+                                    <input type="text" class="form-control" name="schedule" placeholder="e.g. Mon-Fri, 9AM - 1PM">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Mode of Consultation</label>
+                                    <input type="text" class="form-control" name="mode" placeholder="Online / Offline / Hybrid">
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">About Doctor</label>
+                                <textarea class="form-control" name="about" rows="3" placeholder="Brief bio..."></textarea>
+                            </div>
+
+                            <div class="form-section-title mt-4"><i class="fa fa-lock me-2"></i>Account Credentials</div>
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Username</label>
+                                    <input type="text" class="form-control" name="username" placeholder="Create a username">
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label class="form-label">Password</label>
+                                    <input type="password" class="form-control" name="password" placeholder="Create a password">
+                                </div>
+                            </div>
+                            
+                            <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                                <button type="submit" class="btn btn-ayurveda">
+                                    <i class="fa fa-check-circle me-1"></i> Register Doctor
+                                </button>
+                            </div>
+
+                        </form>
                     </div>
-                    <div class="mb-3">
-                      <label for="exampleInputschedule" class="form-label">Consultation Schedule</label>
-                      <input type="text" class="form-control" id="exampleInputschedule" name="schedule" aria-describedby="nameHelp">
-                      <div id="nameHelp" class="form-text"></div>
-                    </div>
-                    <div class="mb-3">
-                      <label for="exampleInputexperience" class="form-label">Experience</label>
-                      <input type="text" class="form-control" id="exampleInputexperience" name="experience" aria-describedby="nameHelp">
-                      <div id="nameHelp" class="form-text"></div>
-
-                    <div class="mb-3">
-                      <label for="exampleInputfee" class="form-label">Consultation fee</label>
-                      <input type="text" class="form-control" id="exampleInputexperience" name="fee" aria-describedby="nameHelp">
-                      <div id="nameHelp" class="form-text"></div>
-
-                     <div class="mb-3">
-                      <label for="exampleInputmode" class="form-label">Mode</label>
-                      <input type="text" class="form-control" id="exampleInputexperience" name="mode" aria-describedby="nameHelp">
-                      <div id="nameHelp" class="form-text"></div>
-
-                      <div class="mb-3">
-                     <label for="exampleInputabout" class="form-label">About</label>
-                     <textarea class="form-control" id="exampleInputabout" name="about" rows="3"></textarea>
-                    </div>             
-
-
-                    <div class="mb-3">
-                      <label for="exampleInputpassword" class="form-label">Password</label>
-                      <input type="text" class="form-control" id="exampleInputcontact" name="password" aria-describedby="nameHelp">
-                      <div id="nameHelp" class="form-text"></div>
-                    </div>
-                   
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                  </form>
                 </div>
-              </div>
-              <!-- <h5 class="card-title fw-semibold mb-4">Disabled forms</h5>
-              <div class="card mb-0">
-                <div class="card-body">
-                  <form>
-                    <fieldset disabled>
-                      <legend>Disabled fieldset example</legend>
-                      <div class="mb-3">
-                        <label for="disabledTextInput" class="form-label">Disabled input</label>
-                        <input type="text" id="disabledTextInput" class="form-control" placeholder="Disabled input">
-                      </div>
-                      <div class="mb-3">
-                        <label for="disabledSelect" class="form-label">Disabled select menu</label>
-                        <select id="disabledSelect" class="form-select">
-                          <option>Disabled select</option>
-                        </select>
-                      </div> -->
-                      <!-- <div class="mb-3">
-                        <div class="form-check">
-                          <input class="form-check-input" type="checkbox" id="disabledFieldsetCheck" disabled>
-                          <label class="form-check-label" for="disabledFieldsetCheck">
-                            Can't check this
-                          </label>
-                        </div>
-                      </div>
-                      <button type="submit" class="btn btn-primary">Submit</button>
-                    </fieldset> -->
-                  </form>
-                </div>
-              </div>
+
             </div>
-          </div>
         </div>
-      </div>
+    </div>
+</div>
+
 {% include 'Layout/Partials/Admin/footer.html' %}

@@ -9,10 +9,60 @@ class TherapyAppointment(models.Model):
     patient=models.ForeignKey(User, on_delete=models.CASCADE,related_name='appointments_patient')
     appointment_date=models.DateField()
     created_at=models.DateTimeField(auto_now_add=True)
+    patient_name = models.CharField(max_length=100, null=True, blank=True)
+    patient_age = models.IntegerField(null=True, blank=True)
+    patient_gender = models.CharField(max_length=20, null=True, blank=True)
+    guest_name = models.CharField(max_length=100, blank=True, null=True)
+    guest_age = models.IntegerField(blank=True, null=True)
+    guest_gender = models.CharField(max_length=20, blank=True, null=True)
+    status = models.CharField(max_length=20, default='Pending')
 
 class DoctorAppointment(models.Model):
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
     patient = models.ForeignKey(User, on_delete=models.CASCADE)
     appointment_date = models.DateField()
     status = models.CharField(max_length=20, default="Pending")
+    patient_name = models.CharField(max_length=100, null=True, blank=True)
+    patient_age = models.IntegerField(null=True, blank=True)
+    patient_gender = models.CharField(max_length=20, null=True, blank=True)
+    guest_name = models.CharField(max_length=100, blank=True, null=True)
+    guest_age = models.IntegerField(blank=True, null=True)
+    guest_gender = models.CharField(max_length=20, blank=True, null=True)
     # Add other fields like created_at, symptoms, etc.
+    
+class Cart(models.Model):
+    patient = models.ForeignKey(User, on_delete=models.CASCADE)
+    product = models.ForeignKey('app_core.Product', on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=1)
+    added_at = models.DateTimeField(auto_now_add=True)
+    
+class Booking_Master(models.Model):
+    patient = models.ForeignKey(User, on_delete=models.CASCADE)
+    booking_date = models.DateField()
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    
+    
+class Booking_details(models.Model):
+    booking_master = models.ForeignKey(Booking_Master, on_delete=models.CASCADE)
+    product = models.ForeignKey('app_core.Product', on_delete=models.CASCADE)
+    quantity = models.IntegerField()
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    
+class Payment(models.Model):
+    booking_master = models.ForeignKey(Booking_Master, on_delete=models.CASCADE, null=True, blank=True)
+    doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE, null=True, blank=True)
+    therapy=models.ForeignKey(Therapy, on_delete=models.CASCADE, null=True, blank=True)
+    payment_date = models.DateField(auto_now_add=True)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    payment_method = models.CharField(max_length=50)
+    
+class deliveryaddress(models.Model):
+    patient = models.ForeignKey(User, on_delete=models.CASCADE)
+    address_line1 = models.CharField(max_length=255)
+    city = models.CharField(max_length=100)
+    state = models.CharField(max_length=100)
+    postal_code = models.CharField(max_length=20, null=True, blank=True)
+    country = models.CharField(max_length=100)
+    contact=models.CharField(max_length=15,null=True,blank=True)
+    name=models.CharField(max_length=100,null=True,blank=True)
+    

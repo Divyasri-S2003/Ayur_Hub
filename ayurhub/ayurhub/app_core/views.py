@@ -1,7 +1,8 @@
-from django.http import HttpResponse
-from django.shortcuts import render
+from django.http import HttpResponse # pyright: ignore[reportMissingModuleSource]
+from django.shortcuts import render # type: ignore
 from app_core.models import Category, District, Doctor, Location, Medicine_Category, Product, Therapy
 from app_dashboard.models import Patientregi
+from app_patient.models import DoctorAppointment, TherapyAppointment
 from ayurhub.users.models import User
 
 
@@ -49,6 +50,7 @@ def editdis(request,id):
 #  return HttpResponse("<script>alert('Deleted Successfully');window.location='/home/vcat';</script>" )
     return render(request,'editdis.html',{'editdis':s})
    
+
 
 
 def location(request):
@@ -347,6 +349,7 @@ def product(request):
         pr.img=img
         pr.price=price
         pr.medicinecategory=Medicine_Category.objects.get(id=medicinecategory)
+        pr.quantity=request.POST.get('quantity')    
         pr.save()
         return HttpResponse("<script>alert('Inserted Successfully');window.location='/core/product/';</script>")
     else:
@@ -371,6 +374,7 @@ def editproduct(request,id):
           productname= request.POST.get('productname')
           description= request.POST.get('description')
           price= request.POST.get('price')
+          quantity=request.POST.get('quantity')
     
           if Product.objects.filter(medicinecategory=medicinecategory, productname=productname).exclude(id=id).exists():
                 return HttpResponse("<script>alert('Already Exists');window.location='/core/viewproduct/';</script>")
@@ -382,9 +386,39 @@ def editproduct(request,id):
                 img = request.FILES['img']
                 s.img=img
           s.price=price
+          s.quantity=quantity
           s.save()
           return HttpResponse("<script>alert('Edited Successfully');window.location='/core/viewproduct/';</script>" )
     else:
          s=Product.objects.get(id=id)
          c=Medicine_Category.objects.all()
          return render(request,'editproduct.html',{'editp':s,'list':c})
+     
+     
+   
+
+
+def view_appointments(request):
+    # Fetch all Doctor appointments (newest first)
+    doc_appointments = DoctorAppointment.objects.select_related('doctor', 'patient').all().order_by('-appointment_date')
+    
+    # Fetch all Therapy appointments (newest first)
+    therapy_appointments = TherapyAppointment.objects.select_related('therapy', 'patient').all().order_by('-appointment_date')
+
+    context = {
+        'doc_appointments': doc_appointments,
+        'therapy_appointments': therapy_appointments,
+    }
+    return render(request, 'view_appointments.html', context)
+
+
+
+
+def view_doctor_schedule(request):
+    # Fetch all doctors and their user details
+    doctors = Doctor.objects.select_related('user').all()
+    
+    context = {
+        'doctors': doctors
+    }
+    return render(request, 'view_doctor_schedule.html', context)
