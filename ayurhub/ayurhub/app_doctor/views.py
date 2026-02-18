@@ -1,6 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from app_patient.models import DoctorAppointment
+from app_core.models import Doctor
+from app_doctor.models import Prescription
+
 # Import your specific Patient profile model if needed
 # from app_patient.models import PatientProfile 
 
@@ -29,9 +32,9 @@ def manage_appointments(request):
     return render(request, 'manageappoint.html', context)
 
 @login_required
-def complete_appointment(request, id):
+def complete_appointment(request, app_id):
     try:
-        appointment = DoctorAppointment.objects.get(id=id)
+        appointment = DoctorAppointment.objects.get(id=app_id)
         # Update status to "Completed" (String)
         appointment.status = "Completed"
         appointment.save()
@@ -81,22 +84,28 @@ def complete_therapy_appointment(request, id):
     return redirect('app_doctor:doctordashboard')
 
 
-from django.shortcuts import render, get_object_or_404, redirect
-from django.contrib import messages
-from app_core.models import  Doctor, User # Adjust imports based on your app names
-from .models import Prescription 
+
+
+
 
 def appointment_details(request, app_id):
-    # Fetch the specific appointment
+    # Fetch the current appointment
     appointment = get_object_or_404(DoctorAppointment, id=app_id)
-    
-    # Get the logged-in doctor
     doctor = get_object_or_404(Doctor, user=request.user) 
 
-    # Fetch previous prescriptions for this patient (excluding the current appointment if it already has one)
-    previous_prescriptions = Prescription.objects.filter(
-        patient=appointment.patient
-    ).exclude(appointment=appointment).order_by('-created_at')
+    # Filter previous prescriptions based on whether it is a guest or registered patient
+    if appointment.guest_name:
+        # Filter by the same user account AND the same guest name
+        previous_prescriptions = Prescription.objects.filter(
+            patient=appointment.patient,
+            appointment__guest_name=appointment.guest_name
+        ).exclude(appointment=appointment).order_by('-created_at')
+    else:
+        # Filter by the registered patient account and ensure guest_name is null/empty
+        previous_prescriptions = Prescription.objects.filter(
+            patient=appointment.patient,
+            appointment__guest_name__isnull=True
+        ).exclude(appointment=appointment).order_by('-created_at')
 
     # Handle form submission for new prescription
     if request.method == 'POST':

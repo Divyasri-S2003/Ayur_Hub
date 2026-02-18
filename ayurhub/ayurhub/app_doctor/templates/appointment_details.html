@@ -1,125 +1,48 @@
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Appointment Details</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        /* Reusing your Theme Colors & base styles */
-        body { display: flex; flex-direction: column; min-height: 100vh; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background-color: #f9f9f7;}
-        :root {
-            --ayur-dark-green: #1a4d2e;
-            --ayur-sage: #4f772d;
-            --ayur-gold: #d4a373;
-            --ayur-red: #bc4749;
-        }
-        .page-wrapper { flex: 1; padding: 20px; max-width: 1200px; margin: 0 auto; width: 100%; }
-        
-        .card-ayurveda { border: none; border-radius: 12px; box-shadow: 0 4px 20px rgba(26, 77, 46, 0.08); background-color: #ffffff; overflow: hidden; margin-top: 20px; }
-        .card-header-ayurveda { background-color: var(--ayur-dark-green); padding: 15px 20px; border-bottom: 4px solid var(--ayur-gold); color: white; display: flex; justify-content: space-between; align-items: center;}
-        .card-body { padding: 25px; }
-        
-        /* Grid Layout */
-        .content-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        @media (max-width: 768px) { .content-grid { grid-template-columns: 1fr; } }
-        
-        /* Patient Details Box */
-        .info-box { background-color: #f0f4ef; padding: 20px; border-radius: 8px; border-left: 4px solid var(--ayur-sage); margin-bottom: 20px;}
-        .info-box h5 { margin-top: 0; color: var(--ayur-dark-green); margin-bottom: 15px;}
-        .info-row { display: flex; margin-bottom: 10px; color: #555;}
-        .info-row strong { width: 120px; color: #333;}
-        
-        /* Prescriptions History */
-        .history-card { border: 1px solid #eee; padding: 15px; border-radius: 8px; margin-bottom: 15px; background-color: #fafafa; }
-        .history-date { font-size: 0.85rem; color: #777; margin-bottom: 8px; }
-        .history-doc { font-weight: bold; color: var(--ayur-dark-green); margin-bottom: 10px; }
-        
-        /* Form Styles */
-        .prescription-form textarea { width: 100%; padding: 15px; border: 1px solid #ccc; border-radius: 8px; font-family: inherit; resize: vertical; min-height: 150px; outline-color: var(--ayur-sage); margin-bottom: 15px; box-sizing: border-box;}
-        .btn-submit { background-color: var(--ayur-dark-green); color: white; border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .btn-submit:hover { background-color: var(--ayur-sage); }
-        .btn-back { background-color: #6c757d; color: white; padding: 8px 15px; border-radius: 6px; text-decoration: none; font-size: 0.9rem;}
-        
-        .current-prescription { background-color: #e8f5e9; border: 1px solid #c8e6c9; padding: 20px; border-radius: 8px; }
-    </style>
-</head>
-<body>
+{% include 'Layout/Partials/Doctor/header.html' %}
 
-<div class="page-wrapper">
-    <div class="card-ayurveda">
-        <div class="card-header-ayurveda">
-            <h4 style="margin: 0;">Consultation Details</h4>
-            <a href="{% url 'app_doctor:manage_appointments' %}" class="btn-back"><i class="fas fa-arrow-left"></i> Back to List</a>
+<div class="main-content">
+    <div class="card card-ayurveda" style="border-radius: 12px; background: white; box-shadow: 0 4px 20px rgba(0,0,0,0.05);">
+        <div style="background: #1a4d2e; padding: 15px 20px; color: white; display: flex; justify-content: space-between; align-items: center; border-bottom: 4px solid #d4a373;">
+            <h4 class="m-0">Consultation Details</h4>
+            <a href="{% url 'app_doctor:manage_appointments' %}" style="background: #6c757d; color: white; padding: 8px 15px; border-radius: 6px; text-decoration: none;">Back</a>
         </div>
-        
-        <div class="card-body">
-            <div class="info-box">
-                <h5><i class="fas fa-user-injured"></i> Patient Information</h5>
-                <div class="info-row">
-                    <strong>Name:</strong> 
-                    <span>
-                        {% if appointment.guest_name %}
-                            {{ appointment.guest_name }} <span style="background-color: var(--ayur-gold); color: white; padding: 2px 6px; border-radius: 4px; font-size: 0.7em;">GUEST</span>
-                        {% else %}
-                            {{ appointment.patient.name }}
-                        {% endif %}
-                    </span>
-                </div>
-                <div class="info-row">
-                    <strong>Age / Gender:</strong> 
-                    <span>
-                        {% if appointment.guest_name %}
-                            {{ appointment.guest_age }} / {{ appointment.guest_gender }}
-                        {% elif appointment.patient.patientregi %}
-                            {{ appointment.patient.patientregi.age }} / {{ appointment.patient.patientregi.gender }}
-                        {% else %}
-                            --
-                        {% endif %}
-                    </span>
-                </div>
-                <div class="info-row">
-                    <strong>Date:</strong> <span>{{ appointment.appointment_date|date:"M d, Y" }}</span>
-                </div>
+
+        <div style="padding: 25px;">
+            <div style="background: #f0f4ef; padding: 15px; border-radius: 8px; border-left: 4px solid #4f772d; margin-bottom: 20px;">
+                <h5>Patient: {% if appointment.guest_name %}{{ appointment.guest_name }}{% else %}{{ appointment.patient.name }}{% endif %}</h5>
+                <p>Date: {{ appointment.appointment_date|date:"M d, Y" }}</p>
             </div>
 
-            <div class="content-grid">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
                 <div>
-                    <h5 style="color: var(--ayur-dark-green); border-bottom: 2px solid #eee; padding-bottom: 10px;">Current Prescription</h5>
-                    
+                    <h5 style="color: #1a4d2e;">Add Prescription</h5>
                     {% if appointment.prescription %}
-                        <div class="current-prescription">
+                        <div style="background: #e8f5e9; padding: 15px; border-radius: 8px; border: 1px solid #c8e6c9;">
                             <p style="white-space: pre-wrap;">{{ appointment.prescription.prescription_text }}</p>
-                            <small class="text-muted">Prescribed on: {{ appointment.prescription.created_at|date:"M d, Y H:i" }}</small>
                         </div>
                     {% else %}
-                        <form method="POST" class="prescription-form">
+                        <form method="POST">
                             {% csrf_token %}
-                            <textarea name="prescription_text" placeholder="Enter medicines, dosages, and notes here..." required></textarea>
-                            <button type="submit" class="btn-submit"><i class="fas fa-save"></i> Save Prescription</button>
+                            <textarea name="prescription_text" style="width: 100%; min-height: 150px; padding: 10px; border-radius: 8px; border: 1px solid #ccc;" required></textarea>
+                            <button type="submit" style="margin-top: 10px; background: #1a4d2e; color: white; border: none; padding: 10px 20px; border-radius: 6px; cursor: pointer;">Save Prescription</button>
                         </form>
                     {% endif %}
                 </div>
 
                 <div>
-                    <h5 style="color: var(--ayur-dark-green); border-bottom: 2px solid #eee; padding-bottom: 10px;">Previous History</h5>
-                    
-                    {% if previous_prescriptions %}
-                        {% for hist in previous_prescriptions %}
-                            <div class="history-card">
-                                <div class="history-date"><i class="far fa-calendar-alt"></i> {{ hist.created_at|date:"M d, Y" }}</div>
-                                <div class="history-doc"><i class="fas fa-user-md"></i> Dr. {{ hist.doctor.user.name }}</div>
-                                <p style="margin-bottom: 0; font-size: 0.95rem; white-space: pre-wrap;">{{ hist.prescription_text }}</p>
-                            </div>
-                        {% endfor %}
-                    {% else %}
-                        <p style="color: #777; font-style: italic;">No previous prescriptions found for this patient.</p>
-                    {% endif %}
+                    <h5 style="color: #1a4d2e;">Medical History</h5>
+                    {% for hist in previous_prescriptions %}
+                        <div style="border-bottom: 1px solid #eee; padding-bottom: 10px; margin-bottom: 10px;">
+                            <small class="text-muted">{{ hist.created_at|date:"M d, Y" }}</small>
+                            <p style="white-space: pre-wrap; margin: 0;">{{ hist.prescription_text }}</p>
+                        </div>
+                    {% empty %}
+                        <p class="text-muted">No history available.</p>
+                    {% endfor %}
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-</body>
-</html>

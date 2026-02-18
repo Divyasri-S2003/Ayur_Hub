@@ -18,293 +18,117 @@
             --text-grey: #6c757d;
         }
 
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--bg-light);
-            overflow-x: hidden;
-        }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--bg-light); overflow-x: hidden; margin: 0; }
 
-        /* --- Sidebar --- */
         .sidebar {
-            height: 100vh;
-            width: 260px;
-            position: fixed;
-            top: 0;
-            left: 0;
-            background-color: #ffffff;
-            box-shadow: 2px 0 10px rgba(0,0,0,0.05);
-            padding-top: 20px;
-            z-index: 1000;
+            height: 100vh; width: 260px; position: fixed; top: 0; left: 0;
+            background-color: #ffffff; box-shadow: 2px 0 10px rgba(0,0,0,0.05);
+            padding-top: 20px; z-index: 1000;
         }
 
-        .sidebar-brand {
-            padding: 0 25px 30px;
-            display: flex;
-            align-items: center;
-            color: var(--ayur-green);
-            font-weight: 700;
-            font-size: 24px;
-        }
-
+        .sidebar-brand { padding: 0 25px 30px; display: flex; align-items: center; color: var(--ayur-green); font-weight: 700; font-size: 24px; }
         .sidebar-brand i { color: var(--ayur-gold); margin-right: 10px; }
 
-        .nav-link {
-            color: #555;
-            padding: 15px 25px;
-            font-size: 15px;
-            display: flex;
-            align-items: center;
-            transition: 0.3s;
-            border-left: 4px solid transparent;
-        }
-
+        .nav-link { color: #555; padding: 15px 25px; font-size: 15px; display: flex; align-items: center; transition: 0.3s; border-left: 4px solid transparent; text-decoration: none; }
         .nav-link i { width: 30px; font-size: 18px; }
+        .nav-link:hover, .nav-link.active { background-color: #f0f7f2; color: var(--ayur-green); border-left-color: var(--ayur-green); }
 
-        .nav-link:hover, .nav-link.active {
-            background-color: #f0f7f2;
-            color: var(--ayur-green);
-            border-left-color: var(--ayur-green);
-        }
+        .main-content { margin-left: 260px; padding: 30px; min-height: 100vh; }
 
-        /* --- Main Content --- */
-        .main-content {
-            margin-left: 260px;
-            padding: 30px;
-        }
+        .dashboard-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+        .date-badge { background: #fff; padding: 8px 15px; border-radius: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); font-size: 14px; color: var(--ayur-green); font-weight: 500; }
 
-        /* --- Header --- */
-        .dashboard-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-
-        .date-badge {
-            background: #fff;
-            padding: 8px 15px;
-            border-radius: 20px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            font-size: 14px;
-            color: var(--ayur-green);
-            font-weight: 500;
-        }
-
-        /* --- Stats Cards --- */
-        .stat-card {
-            background: #fff;
-            border-radius: 15px;
-            padding: 25px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-            transition: 0.3s;
-            border-bottom: 4px solid transparent;
-        }
-
+        .stat-card { background: #fff; border-radius: 15px; padding: 25px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.03); transition: 0.3s; border-bottom: 4px solid transparent; margin-bottom: 20px; }
         .stat-card:hover { transform: translateY(-5px); }
-
-        .stat-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-        }
-
+        .stat-icon { width: 50px; height: 50px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
         .stat-info h3 { margin: 0; font-weight: 700; color: #333; }
         .stat-info p { margin: 0; color: var(--text-grey); font-size: 14px; }
 
         .card-green { border-color: var(--ayur-green); }
         .card-green .stat-icon { background: rgba(46, 92, 62, 0.1); color: var(--ayur-green); }
-
         .card-gold { border-color: var(--ayur-gold); }
         .card-gold .stat-icon { background: rgba(212, 160, 23, 0.1); color: var(--ayur-gold); }
 
-        /* --- Appointments Table Section --- */
-        .table-container {
-            background: #fff;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-            padding: 0;
-            overflow: hidden;
-            margin-top: 30px;
-        }
-
-        .table-header {
-            padding: 20px 25px;
-            border-bottom: 1px solid #eee;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
+        .table-container { background: #fff; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); overflow: hidden; margin-top: 20px; }
+        .table-header { padding: 20px 25px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between; align-items: center; }
         .table-title { font-size: 18px; font-weight: 600; color: var(--ayur-dark); }
+        .custom-table th { background-color: #f8f9fa; padding: 15px 25px; font-size: 13px; color: var(--text-grey); text-transform: uppercase; }
+        .custom-table td { padding: 15px 25px; vertical-align: middle; border-bottom: 1px solid #f2f2f2; }
 
-        .custom-table { width: 100%; }
-        .custom-table thead { background-color: #f8f9fa; }
-        .custom-table th {
-            padding: 15px 25px;
-            font-weight: 600;
-            color: var(--text-grey);
-            font-size: 13px;
-            text-transform: uppercase;
-            border: none;
-        }
-        .custom-table td {
-            padding: 20px 25px;
-            vertical-align: middle;
-            border-bottom: 1px solid #f2f2f2;
-        }
-        .custom-table tr:hover { background-color: #fafafa; }
-
-        /* --- Badges --- */
-        .badge-status { padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 500; }
+        .badge-status { padding: 6px 12px; border-radius: 6px; font-size: 12px; font-weight: 500; text-transform: capitalize; }
         .badge-completed { background: #e6f7ed; color: #2E5C3E; }
         .badge-pending { background: #fff8e1; color: #D4A017; }
         
-        .btn-action {
-            padding: 6px 12px;
-            border-radius: 6px;
-            font-size: 12px;
-            text-decoration: none;
-            transition: 0.2s;
-            background: var(--ayur-green);
-            color: #fff;
-            border: none;
-        }
-        .btn-action:hover { background: var(--ayur-dark); color: #fff; }
+        .btn-action { padding: 6px 12px; border-radius: 6px; font-size: 12px; text-decoration: none; background: var(--ayur-green); color: #fff; border: none; }
+        .btn-therapy { background: var(--ayur-gold); }
 
-        /* Style for the special Therapy button */
-        .btn-therapy {
-            background: var(--ayur-gold);
-            color: white;
-        }
-        .btn-therapy:hover {
-            background: #b58912;
-            color: white;
-        }
-
-        .filter-input {
-            border: 1px solid #ddd;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 13px;
-            outline: none;
-        }
-        .filter-btn {
-            background: var(--ayur-gold);
-            color: white;
-            border: none;
-            padding: 6px 15px;
-            border-radius: 20px;
-            font-size: 13px;
-            margin-left: 5px;
-        }
-
+        @media (max-width: 768px) { .sidebar { width: 0; overflow: hidden; } .main-content { margin-left: 0; } }
     </style>
 </head>
 <body>
 
     <div class="sidebar">
-        <div class="sidebar-brand">
-            <i class="fas fa-leaf"></i> AyurHub
-        </div>
+        <div class="sidebar-brand"><i class="fas fa-leaf"></i> AyurHub</div>
         <nav class="nav flex-column">
-            <a class="nav-link active" href="#">
-                <i class="fas fa-th-large"></i> Dashboard
-            </a>
-            <a class="nav-link" href="#">
-                <i class="fas fa-user-injured"></i> Patients
-            </a>
-            <a class="nav-link" href="/doctor/manageappointments/">
-                <i class="fas fa-calendar-check"></i> Appointments
-            </a>
-        
-            {% if is_therapy_admin %}
-            <a class="nav-link" href="/doctor/manage-therapy/">
-                <i class="fas fa-spa"></i> Therapy Appointments
-            </a>
-            {% endif %}
+            <a class="nav-link active" href="/dashboard/doctordashboard/"><i class="fas fa-th-large"></i> Dashboard</a>
+            <a class="nav-link" href="#"><i class="fas fa-user-injured"></i> Patients</a>
+            <a class="nav-link" href="/doctor/manageappointments/"><i class="fas fa-calendar-check"></i> Appointments</a>
+            <a class="nav-link" href="/doctor/appointment-details/"><i class="fas fa-file-prescription"></i> Prescriptions</a>
             
-
-            <a class="nav-link" href="#">
-                <i class="fas fa-file-prescription"></i> Prescriptions
-            </a>
-            <a class="nav-link" href="#">
-                <i class="fas fa-cog"></i> Settings
-            </a>
+            {% if is_therapy_admin %}
+            <a class="nav-link" href="/doctor/manage-therapy/"><i class="fas fa-spa"></i> Therapy</a>
+            {% endif %}
+            <a class="nav-link" href="#"><i class="fas fa-cog"></i> Settings</a>
         </nav>
     </div>
 
     <div class="main-content">
-        
         <div class="dashboard-header">
             <div>
-                <h3 style="font-weight: 700; color: var(--ayur-dark);">
-                    Good Morning,  {{ doctor.user.name }}
-                </h3>
-                <p class="text-muted m-0">Here is your daily appointment summary.</p>
+                <h3 style="font-weight: 700; color: var(--ayur-dark);">Welcome,  {{ doctor.user.name }}</h3>
+                <p class="text-muted m-0">Here is your daily clinical overview.</p>
             </div>
-            <div class="date-badge">
-                <i class="far fa-calendar-alt"></i> {{ "now"|date:"l, d F Y" }}
-            </div>
+            <div class="date-badge"><i class="far fa-calendar-alt"></i> {{ "now"|date:"l, d F Y" }}</div>
         </div>
 
         <div class="row">
             <div class="col-md-4">
                 <div class="stat-card card-green">
                     <div class="stat-info">
-                        <h3>{{ appointments.count }}</h3>
+                        <h3>{{ list_count|default:"0" }}</h3>
                         <p>Appointments List</p>
                     </div>
-                    <div class="stat-icon">
-                        <i class="fas fa-calendar-day"></i>
-                    </div>
+                    <div class="stat-icon"><i class="fas fa-calendar-day"></i></div>
                 </div>
             </div>
-
             <div class="col-md-4">
                 <div class="stat-card card-gold">
                     <div class="stat-info">
-                        <h3>{{ total_count }}</h3>
+                        <h3>{{ total_count|default:"0" }}</h3>
                         <p>Total Visits</p>
                     </div>
-                    <div class="stat-icon">
-                        <i class="fas fa-users"></i>
-                    </div>
+                    <div class="stat-icon"><i class="fas fa-users"></i></div>
                 </div>
             </div>
-
             <div class="col-md-4">
                 <div class="stat-card" style="border-color: #bc4749;">
                     <div class="stat-info">
-                        <h3>{{ pending_count }}</h3>
+                        <h3>{{ pending_count|default:"0" }}</h3>
                         <p>Pending Actions</p>
                     </div>
-                    <div class="stat-icon" style="background: rgba(188, 71, 73, 0.1); color: #bc4749;">
-                        <i class="fas fa-clock"></i>
-                    </div>
+                    <div class="stat-icon" style="background: rgba(188, 71, 73, 0.1); color: #bc4749;"><i class="fas fa-clock"></i></div>
                 </div>
             </div>
         </div>
 
         <div class="table-container">
             <div class="table-header">
-                <div class="table-title">Appointments List</div>
-                
+                <div class="table-title">Recent Doctor Appointments</div>
                 <form method="GET" class="d-flex align-items-center">
-                    <input type="date" name="search_date" class="filter-input" value="{{ search_date }}">
-                    <button type="submit" class="filter-btn">Filter</button>
-                    {% if search_date %}
-                        <a href="." class="ms-2 text-danger small" style="text-decoration: none;">Clear</a>
-                    {% endif %}
+                    <input type="date" name="search_date" style="padding: 5px 10px; border-radius: 20px; border: 1px solid #ddd; font-size: 13px;" value="{{ search_date }}">
+                    <button type="submit" style="background: var(--ayur-gold); color: white; border: none; padding: 5px 15px; border-radius: 20px; font-size: 13px; margin-left: 5px;">Filter</button>
                 </form>
             </div>
-
             <div class="table-responsive">
                 <table class="table custom-table mb-0">
                     <thead>
@@ -312,7 +136,7 @@
                             <th>#</th>
                             <th>Patient Name</th>
                             <th>Age / Gender</th>
-                            <th>Time / Date</th>
+                            <th>Date</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -321,78 +145,29 @@
                         {% for app in appointments %}
                         <tr>
                             <td>{{ forloop.counter }}</td>
-                            
                             <td>
                                 <div class="d-flex align-items-center">
-                                    <div style="width: 35px; height: 35px; background: #eee; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 10px; color: #777;">
-                                        <i class="fas fa-user"></i>
-                                    </div>
-                                    <div>
-                                        {% if app.guest_name %}
-                                            <span style="font-weight: 600;">{{ app.guest_name }}</span>
-                                            <span style="font-size: 10px; background: #D4A017; color: white; padding: 1px 4px; border-radius: 4px; margin-left: 5px;">GUEST</span>
-                                        {% else %}
-                                            <span style="font-weight: 600;">{{ app.patient.name }}</span>
-                                        {% endif %}
-                                        <div style="font-size: 11px; color: #999;">ID: #{{ app.id }}</div>
-                                    </div>
+                                    <div style="width: 30px; height: 30px; background: #eee; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 10px;"><i class="fas fa-user" style="font-size: 12px; color: #777;"></i></div>
+                                    <span style="font-weight: 600;">{% if app.guest_name %}{{ app.guest_name }}{% else %}{{ app.patient.name }}{% endif %}</span>
                                 </div>
                             </td>
-
+                            <td>{% if app.guest_name %}{{ app.guest_age }}{% else %}{{ app.patient.patientregi.age|default:"--" }}{% endif %} Yrs | {% if app.guest_name %}{{ app.guest_gender }}{% else %}{{ app.patient.patientregi.gender|default:"--" }}{% endif %}</td>
+                            <td>{{ app.appointment_date|date:"M d, Y" }}</td>
                             <td>
-                                <span style="color: #555;">
-                                    {% if app.guest_name %}
-                                        {{ app.guest_age }} Yrs
-                                    {% elif app.patient.patientregi %}
-                                        {{ app.patient.patientregi.age }} Yrs
-                                    {% else %}
-                                        --
-                                    {% endif %}
-                                </span>
-                                <span style="color: #ccc; margin: 0 5px;">|</span>
-                                <span style="color: #555;">
-                                    {% if app.guest_name %}
-                                        {{ app.guest_gender }}
-                                    {% elif app.patient.patientregi %}
-                                        {{ app.patient.patientregi.gender }}
-                                    {% else %}
-                                        --
-                                    {% endif %}
+                                <span class="badge-status {% if 'ompleted' in app.status %}badge-completed{% else %}badge-pending{% endif %}">
+                                    {{ app.status }}
                                 </span>
                             </td>
-
                             <td>
-                                <i class="far fa-clock text-muted me-1"></i> 
-                                {{ app.appointment_date|date:"M d, Y" }}
-                            </td>
-
-                            <td>
-                                {% if app.status == "Completed" %}
-                                    <span class="badge-status badge-completed">Completed</span>
+                                {% if 'ompleted' not in app.status %}
+                                <a href="{% url 'app_doctor:complete_appointment' app.id %}" class="btn-action">Mark Done</a>
                                 {% else %}
-                                    <span class="badge-status badge-pending">Pending</span>
-                                {% endif %}
-                            </td>
-
-                            <td>
-                                {% if app.status == "Completed" %}
-                                    <button class="btn btn-sm btn-light" disabled><i class="fas fa-check"></i> Done</button>
-                                {% else %}
-                                    <a href="{% url 'app_doctor:complete_appointment' app.id %}" 
-                                       class="btn-action"
-                                       onclick="return confirm('Mark as Completed?');">
-                                       Mark Done
-                                    </a>
+                                <small class="text-muted"><i class="fas fa-check-circle"></i> Done</small>
                                 {% endif %}
                             </td>
                         </tr>
                         {% empty %}
-                        <tr>
-                            <td colspan="6" class="text-center py-5">
-                                <img src="{% static 'Doctor/assets/img/hero/no-data.svg' %}" alt="" style="width: 50px; opacity: 0.5;">
-                                <p class="text-muted mt-2">No appointments found.</p>
-                            </td>
-                        </tr>
+                        <tr><td colspan="6" class="text-center py-4 text-muted">No doctor appointments found.</td></tr>
                         {% endfor %}
                     </tbody>
                 </table>
@@ -401,23 +176,14 @@
 
         {% if is_therapy_admin %}
         <div class="table-container mt-4" style="border-top: 4px solid var(--ayur-gold);">
-            <div class="table-header">
-                <div class="table-title">
-                    <i class="fas fa-spa text-warning me-2"></i> Therapy Appointments 
-                </div>
-                {% if search_date %}
-                    <span class="badge bg-light text-dark border">Filter: {{ search_date }}</span>
-                {% endif %}
-            </div>
-
+            <div class="table-header"><div class="table-title"><i class="fas fa-spa text-warning me-2"></i> Therapy Queue</div></div>
             <div class="table-responsive">
                 <table class="table custom-table mb-0">
                     <thead>
                         <tr>
                             <th>#</th>
                             <th>Patient</th>
-                            <th>Therapy Name</th>
-                            <th>Date</th>
+                            <th>Therapy Service</th>
                             <th>Status</th>
                             <th>Action</th>
                         </tr>
@@ -426,52 +192,29 @@
                         {% for therapy in therapy_appointments %}
                         <tr>
                             <td>{{ forloop.counter }}</td>
+                            <td style="font-weight: 600;">{{ therapy.patient_name }}</td>
+                            <td class="text-muted">{{ therapy.therapy.servicename }}</td>
                             <td>
-                                <div class="d-flex align-items-center">
-                                    <div style="width: 35px; height: 35px; background: #fff8e1; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 10px; color: #D4A017;">
-                                        <i class="fas fa-user-injured"></i>
-                                    </div>
-                                    <span style="font-weight: 600;">{{ therapy.patient_name }}</span> </div>
+                                <span class="badge-status {% if 'ompleted' in therapy.status %}badge-completed{% else %}badge-pending{% endif %}">
+                                    {{ therapy.status }}
+                                </span>
                             </td>
                             <td>
-                                <span class="text-muted">{{ therapy.therapy.servicename }}</span> 
-                            </td>
-                            <td>
-                                <i class="far fa-clock text-muted me-1"></i> 
-                                {{ therapy.appointment_date|date:"M d, Y" }}
-                            </td>
-                            <td>
-                                {% if therapy.status == "Completed" %}
-                                    <span class="badge-status badge-completed">Completed</span>
+                                {% if 'ompleted' not in therapy.status %}
+                                <a href="{% url 'app_doctor:complete_therapy_appointment' therapy.id %}" class="btn-action btn-therapy">Complete Session</a>
                                 {% else %}
-                                    <span class="badge-status badge-pending">Pending</span>
-                                {% endif %}
-                            </td>
-                            <td>
-                                {% if therapy.status == "Completed" %}
-                                    <button class="btn btn-sm btn-light" disabled><i class="fas fa-check"></i> Done</button>
-                                {% else %}
-                                    <a href="{% url 'app_doctor:complete_therapy_appointment' therapy.id %}" 
-                                       class="btn-action btn-therapy"
-                                       onclick="return confirm('Mark Therapy Session as Completed?');">
-                                       Complete Session
-                                    </a>
+                                <small class="text-muted"><i class="fas fa-check-circle"></i> Done</small>
                                 {% endif %}
                             </td>
                         </tr>
                         {% empty %}
-                        <tr>
-                            <td colspan="6" class="text-center py-4">
-                                <p class="text-muted m-0">No therapy appointments found for this date.</p>
-                            </td>
-                        </tr>
+                        <tr><td colspan="5" class="text-center py-4 text-muted">No therapy appointments found.</td></tr>
                         {% endfor %}
                     </tbody>
                 </table>
             </div>
         </div>
         {% endif %}
-        
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>

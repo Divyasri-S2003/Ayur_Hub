@@ -2,11 +2,15 @@
 from datetime import date
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
+from django.shortcuts import render, get_object_or_404
+from django.contrib.auth.decorators import login_required
 
 from app_core.models import Category, Doctor, Medicine_Category, Product, Therapy
 from app_patient.models import Booking_Master, Booking_details, Cart, DoctorAppointment, Payment, TherapyAppointment
 from app_dashboard.models import Patientregi
-from django.contrib import messages  # Add this line
+from django.contrib import messages
+
+from app_doctor.models import Prescription  # Add this line
 
 # Create your views here.
 def viewcategory(request):
@@ -20,6 +24,11 @@ def viewtherapy(request,id):
 def therapydetail(request,id):
     t=Therapy.objects.get(id=id)
     return render(request, 'therapydetail.html',{"therapy":t})
+
+
+
+
+
 
 # def therapyappoint(request,id):
 #     if request.method=="POST":
@@ -41,69 +50,252 @@ def therapydetail(request,id):
 #     t=Therapy.objects.get(id=id)
 #     return render(request, 'therapyappoint.html',{"therapy":t}) 
 
+
+
+# def therapyappoint(request, id):
+#     therapy = Therapy.objects.get(id=id)
+
+#     if request.method == "POST":
+#         date = request.POST.get("date")
+#         booking_for = request.POST.get("booking_for") # Will be 'self' or 'other'
+
+#         # 1. Availability Check
+#         # Convert total capacity to int to be safe
+#         capacity = int(therapy.count) 
+        
+#         # Check how many appointments exist for this specific therapy on this date
+#         booked_count = TherapyAppointment.objects.filter(appointment_date=date, therapy=therapy).count()
+        
+#         if booked_count >= capacity:
+#              return HttpResponse(f"<script>alert('No slots available on {date}.');window.history.back();</script>")
+
+#         # 2. Determine Patient Details (Snapshot)
+#         p_name = ""
+#         p_age = ""
+#         p_gender = ""
+
+#         if booking_for == "self":
+#             # CASE A: Booking for Self - Fetch from Patientregi
+#             # We use filter().first() to avoid crashes if profile doesn't exist
+#             profile = Patientregi.objects.filter(user=request.user).first()
+            
+#             if profile:
+#                 p_name = profile.name
+#                 p_age = profile.age
+#                 p_gender = profile.gender
+#             else:
+#                 # Fallback if user hasn't completed profile
+#                 p_name = request.user.first_name if request.user.first_name else request.user.username
+#                 p_age = "N/A"
+#                 p_gender = "N/A"
+                
+#         else:
+#             # CASE B: Booking for Guest - Fetch from Form Inputs
+#             p_name = request.POST.get("other_name")
+#             p_age = request.POST.get("other_age")
+#             p_gender = request.POST.get("other_gender")
+
+#         # 3. Duplicate Check (Prevent double booking for same person on same day)
+#         if TherapyAppointment.objects.filter(appointment_date=date, therapy=therapy, patient=request.user, patient_name=p_name).exists():
+#              return HttpResponse(f"<script>alert('You have already booked for {p_name} on this date.');window.location='/dashboard/patientdashboard/';</script>")
+
+#         # 4. Save Appointment
+#         appoint = TherapyAppointment()
+#         appoint.appointment_date = date
+#         appoint.therapy = therapy
+#         appoint.patient = request.user
+        
+#         # Save the snapshot details we determined above
+#         appoint.patient_name = p_name
+#         appoint.patient_age = p_age
+#         appoint.patient_gender = p_gender
+        
+#         appoint.save()
+        
+#         return HttpResponse("<script>alert('Appointment booked successfully');window.location='/dashboard/patientdashboard/';</script>")
+
+#     return render(request, 'therapyappoint.html', {"therapy": therapy})
+
+
+
+
+# def therapy_payment_page(request):
+#     data = request.session.get('pending_therapy')
+#     if not data:
+#         return redirect('app_patient:view_therapies') # Redirect to your therapy list
+
+#     therapy = Therapy.objects.get(id=data['therapy_id'])
+#     return render(request, 'therapy_payment.html', {
+#         'therapy': therapy,
+#         'data': data
+#     })
+
+# def process_therapy_payment(request):
+#     if request.method == "POST":
+#         data = request.session.get('pending_therapy')
+#         if not data:
+#             return redirect('app_patient:view_therapies')
+
+#         therapy = Therapy.objects.get(id=data['therapy_id'])
+
+#         # 1. Create Therapy Appointment
+#         appointment = TherapyAppointment.objects.create(
+#             therapy=therapy,
+#             patient=request.user,
+#             appointment_date=data['date'],
+#             patient_name=data['p_name'],
+#             patient_age=data['p_age'],
+#             patient_gender=data['p_gender'],
+#             status="Paid"
+#         )
+
+#         # 2. Create Payment Record
+#         Payment.objects.create(
+#             therapy=therapy,
+#             amount=data['amount'],
+#             payment_method="Online",
+#         )
+
+#         # 3. Clear Session
+#         del request.session['pending_therapy']
+
+#         # 4. Redirect to final page
+#         return redirect('app_patient:final_page_therapy', appointment_id=appointment.id)
+
+#     return redirect('app_patient:therapy_payment_page')
+
+# # Success View
+# def final_page_therapy(request, appointment_id):
+#     try:
+#         appointment = TherapyAppointment.objects.get(id=appointment_id)
+#     except TherapyAppointment.DoesNotExist:
+#         return HttpResponse("Therapy booking not found")
+
+#     context = {
+#         'appointment': appointment,
+#         'is_therapy': True,
+#         'is_appointment': False,
+#         'payment': None, # Therapy uses 'appointment.id' in your template logic
+#     }
+#     return render(request, 'final_page.html', context)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 def therapyappoint(request, id):
-    therapy = Therapy.objects.get(id=id)
+    therapy = get_object_or_404(Therapy, id=id)
 
-    if request.method == "POST":
+    if request.method == "POST":   
         date = request.POST.get("date")
-        booking_for = request.POST.get("booking_for") # Will be 'self' or 'other'
+        booking_for = request.POST.get("booking_for")
+        print(f"Booking for: {booking_for}, Date: {date}")
 
-        # 1. Availability Check
-        # Convert total capacity to int to be safe
-        capacity = int(therapy.count) 
-        
-        # Check how many appointments exist for this specific therapy on this date
+        # 1. Capacity Check
+        try:
+            capacity = int(therapy.count)
+        except (ValueError, TypeError):
+            capacity = 5 
+            
         booked_count = TherapyAppointment.objects.filter(appointment_date=date, therapy=therapy).count()
-        
         if booked_count >= capacity:
              return HttpResponse(f"<script>alert('No slots available on {date}.');window.history.back();</script>")
 
-        # 2. Determine Patient Details (Snapshot)
-        p_name = ""
-        p_age = ""
-        p_gender = ""
-
+        # 2. Capture Details (Critical fix for missing names)
         if booking_for == "self":
-            # CASE A: Booking for Self - Fetch from Patientregi
-            # We use filter().first() to avoid crashes if profile doesn't exist
-            profile = Patientregi.objects.filter(user=request.user).first()
-            
+            print("Booking for self")
+            profile = Patientregi.objects.get(user=request.user)
+           
             if profile:
-                p_name = profile.name
+                p_name = profile.user.name
                 p_age = profile.age
                 p_gender = profile.gender
             else:
-                # Fallback if user hasn't completed profile
-                p_name = request.user.first_name if request.user.first_name else request.user.username
+                # Fallback to User model details if Patientregi is incomplete
+                p_name = request.user.name if request.user.name else request.user.username
                 p_age = "N/A"
-                p_gender = "N/A"
-                
+                p_gender = "Not specified"
         else:
-            # CASE B: Booking for Guest - Fetch from Form Inputs
+            # Capture from Guest inputs
             p_name = request.POST.get("other_name")
             p_age = request.POST.get("other_age")
             p_gender = request.POST.get("other_gender")
 
-        # 3. Duplicate Check (Prevent double booking for same person on same day)
-        if TherapyAppointment.objects.filter(appointment_date=date, therapy=therapy, patient=request.user, patient_name=p_name).exists():
-             return HttpResponse(f"<script>alert('You have already booked for {p_name} on this date.');window.location='/dashboard/patientdashboard/';</script>")
-
-        # 4. Save Appointment
-        appoint = TherapyAppointment()
-        appoint.appointment_date = date
-        appoint.therapy = therapy
-        appoint.patient = request.user
-        
-        # Save the snapshot details we determined above
-        appoint.patient_name = p_name
-        appoint.patient_age = p_age
-        appoint.patient_gender = p_gender
-        
-        appoint.save()
-        
-        return HttpResponse("<script>alert('Appointment booked successfully');window.location='/dashboard/patientdashboard/';</script>")
+        # 3. Session storage
+        request.session['pending_therapy'] = {
+            'therapy_id': therapy.id,
+            'date': date,
+            'p_name': p_name,
+            'p_age': p_age,
+            'p_gender': p_gender,
+            'amount': str(therapy.price)  # Ensure amount is string-serializable
+        }
+        return redirect('app_patient:therapy_payment_page')
 
     return render(request, 'therapyappoint.html', {"therapy": therapy})
+
+
+
+
+def therapy_payment_page(request):
+    # Retrieve data from session
+    payment_data = request.session.get('pending_therapy')
+    
+    if not payment_data:
+        messages.error(request, "No pending appointment found.")
+        return redirect('app_patient:therapy_list')
+
+    therapy = get_object_or_404(Therapy, id=payment_data['therapy_id'])
+
+    if request.method == "POST":
+        # Create the actual database record
+        TherapyAppointment.objects.create(
+            therapy=therapy,
+            patient=request.user,
+            appointment_date=payment_data['date'],
+            patient_name=payment_data['p_name'],
+            patient_age=payment_data['p_age'],
+            patient_gender=payment_data['p_gender'],
+            status='Paid'
+        )
+
+        # Clear the session after saving
+        del request.session['pending_therapy']
+
+        return redirect('app_patient:appointment_success')
+
+    return render(request, 'therapy_payment.html', {
+        'payment_data': payment_data,
+        'therapy': therapy
+    })
+
+def appointment_success(request):
+    return render(request, 'appointment_success.html')
+
+
+
+
+
+        
+
+
+
+
+
+
+
 
 
 
@@ -116,45 +308,149 @@ def viewdocdetails(request,id):
     return render(request, 'viewdocdetails.html',{"docdetails":vd})
 
 
-def doctorappoint(request, id):
-    # 1. Fetch the specific doctor
-    doc = Doctor.objects.get(id=id)
+# def doctorappoint(request, id):
+#     # 1. Fetch the specific doctor
+#     doc = Doctor.objects.get(id=id)
     
-    # 2. Fetch the patient profile linked to the logged-in user
+#     # 2. Fetch the patient profile linked to the logged-in user
+#     try:
+#         patient_profile = Patientregi.objects.get(user=request.user)
+#     except Patientregi.DoesNotExist:
+#         patient_profile = None
+
+#     if request.method == "POST":
+#         selected_date = request.POST.get("date")
+        
+#         # --- NEW CODE: Fetch Guest Details from the form ---
+#         # If the user selected "Myself", these will be empty (None), which is fine.
+#         guest_name_input = request.POST.get("guest_name")
+#         guest_age_input = request.POST.get("guest_age")
+#         guest_gender_input = request.POST.get("guest_gender")
+
+#         # Create the appointment object including the guest fields
+#         appoint = DoctorAppointment(
+#             doctor=doc,
+#             patient=request.user,
+#             appointment_date=selected_date,
+#             status="Pending",
+            
+#             # --- Save the Guest Data here ---
+#             guest_name=guest_name_input,
+#             guest_age=guest_age_input,
+#             guest_gender=guest_gender_input
+#         )
+        
+#         appoint.save()
+#         return HttpResponse("<script>alert('Booked successfully!');window.location='/dashboard/patientdashboard/';</script>")
+
+#     return render(request, 'doctorappoint.html', {
+#         "doctor": doc, 
+#         "patient": patient_profile
+#     })
+
+
+
+
+from datetime import date
+
+def doctorappoint(request, id):
+    doc = Doctor.objects.get(id=id)
     try:
         patient_profile = Patientregi.objects.get(user=request.user)
     except Patientregi.DoesNotExist:
         patient_profile = None
 
     if request.method == "POST":
-        selected_date = request.POST.get("date")
-        
-        # --- NEW CODE: Fetch Guest Details from the form ---
-        # If the user selected "Myself", these will be empty (None), which is fine.
-        guest_name_input = request.POST.get("guest_name")
-        guest_age_input = request.POST.get("guest_age")
-        guest_gender_input = request.POST.get("guest_gender")
+        # Capture form data
+        appointment_data = {
+            'doctor_id': id,
+            'date': request.POST.get("date"),
+            'guest_name': request.POST.get("guest_name"),
+            'guest_age': request.POST.get("guest_age"),
+            'guest_gender': request.POST.get("guest_gender"),
+            'booking_for': request.POST.get("booking_for"),
+            'amount': str(doc.fee) # Convert Decimal to string for session
+        }
+        # Store in session to persist until payment
+        request.session['pending_appointment'] = appointment_data
+        return redirect('app_patient:doctor_payment_page')
 
-        # Create the appointment object including the guest fields
-        appoint = DoctorAppointment(
+    return render(request, 'doctorappoint.html', {"doctor": doc, "patient": patient_profile})
+
+
+
+def doctor_payment_page(request):
+    appointment_data = request.session.get('pending_appointment')
+    if not appointment_data:
+        return redirect('app_patient:view_doctors') # Redirect if no session exists
+
+    doc = Doctor.objects.get(id=appointment_data['doctor_id'])
+    
+    context = {
+        'doctor': doc,
+        'appointment_date': appointment_data['date'],
+        'total': appointment_data['amount'],
+        'is_guest': appointment_data['booking_for'] == 'guest',
+        'guest_name': appointment_data['guest_name']
+    }
+    return render(request, 'doctor_payment.html', context)
+
+def process_doctor_payment(request):
+    if request.method == "POST":
+        data = request.session.get('pending_appointment')
+        if not data:
+            return redirect('app_patient:view_doctors')
+
+        doc = Doctor.objects.get(id=data['doctor_id'])
+
+        # 1. Create the Doctor Appointment
+        appointment = DoctorAppointment.objects.create(
             doctor=doc,
             patient=request.user,
-            appointment_date=selected_date,
-            status="Pending",
-            
-            # --- Save the Guest Data here ---
-            guest_name=guest_name_input,
-            guest_age=guest_age_input,
-            guest_gender=guest_gender_input
+            appointment_date=data['date'],
+            status="Paid",
+            guest_name=data['guest_name'],
+            guest_age=data['guest_age'] if data['guest_age'] else None,
+            guest_gender=data['guest_gender']
         )
-        
-        appoint.save()
-        return HttpResponse("<script>alert('Booked successfully!');window.location='/dashboard/patientdashboard/';</script>")
 
-    return render(request, 'doctorappoint.html', {
-        "doctor": doc, 
-        "patient": patient_profile
-    })
+        # 2. Create Payment Record
+        Payment.objects.create(
+            doctor=doc,
+            amount=data['amount'],
+            payment_method="Online",
+        )
+
+        # 3. Clear session
+        del request.session['pending_appointment']
+
+        # 4. Redirect to final page (Reuse your existing final_page logic)
+        return redirect('app_patient:final_page_appointment', appointment_id=appointment.id)
+
+    return redirect('app_patient:doctor_payment_page')
+
+
+
+
+
+def final_page_appointment(request, appointment_id):
+    # Fetch the appointment, ensuring it belongs to the logged-in user
+    appointment = get_object_or_404(DoctorAppointment, id=appointment_id, patient=request.user)
+    
+    # Optional: Fetch the associated payment if you have a ForeignKey
+    # payment = Payment.objects.filter(doctor=appointment.doctor).last() 
+
+    context = {
+        'appointment': appointment,
+        'doctor': appointment.doctor,
+    }
+    return render(request, 'final_page_appointment.html', context)
+
+    
+    
+    
+    
+    
     
 def viewmedcategory(request):
     mc=Medicine_Category.objects.all()
@@ -472,29 +768,83 @@ def process_payment(request):
 
 
 def final_page(request, booking_id):
-    # 1. Fetch the booking
     try:
         booking = Booking_Master.objects.get(id=booking_id)
     except Booking_Master.DoesNotExist:
         return HttpResponse("Booking not found")
 
     items = Booking_details.objects.filter(booking_master=booking)
-
-    # --- THE FIX ---
-    # Instead of filtering by user, we just grab the MOST RECENT address added to the database.
-    # This guarantees something will show if your database has data.
-    address = deliveryaddress.objects.last() 
-    # ---------------
-
-    last_doc = DoctorAppointment.objects.filter(patient=request.user).last()
-    last_therapy = TherapyAppointment.objects.filter(patient=request.user).last()
+    address = deliveryaddress.objects.filter(patient=request.user).last() or deliveryaddress.objects.last()
 
     context = {
-        'items': items,       
-        'payment': booking,   
-        'address': address,   
-        'last_doc': last_doc,
-        'last_therapy': last_therapy,
+        'items': items,
+        'payment': booking,
+        'address': address,
+        'is_therapy': False,      # Explicitly set to False
+        'is_appointment': False,  # Explicitly set to False
+        'appointment': None,      # Prevents the VariableDoesNotExist error
     }
-
     return render(request, 'final_page.html', context)
+
+
+def final_page_appointment(request, appointment_id):
+    try:
+        appointment = DoctorAppointment.objects.get(id=appointment_id)
+    except DoctorAppointment.DoesNotExist:
+        return HttpResponse("Appointment not found")
+
+    payment_record = Payment.objects.filter(
+        doctor=appointment.doctor, 
+        amount=appointment.doctor.fee
+    ).last()
+
+    context = {
+        'appointment': appointment,
+        'payment': payment_record,
+        'is_appointment': True,
+        'is_therapy': False,
+    }
+    return render(request, 'final_page.html', context)
+
+
+
+# def view_prescriptions(request):
+#     # Fetch all prescriptions where the patient is the logged-in user
+#     prescriptions = Prescription.objects.filter(patient=request.user).order_by('-created_at')
+    
+#     return render(request, 'patient_view_prescriptions.html', {
+#         'prescriptions': prescriptions
+#     })
+
+# def prescription_detail(request, prescription_id):
+#     # View a single prescription in detail
+#     prescription = get_object_or_404(Prescription, id=prescription_id, patient=request.user)
+#     return render(request, 'prescription_detail.html', {'prescription': prescription})
+
+
+@login_required
+def view_prescriptions(request):
+    # This view lists all prescriptions for the logged-in user
+    prescriptions = Prescription.objects.filter(appointment__patient=request.user).order_by('-created_at')
+    return render(request, 'patient_view_prescriptions.html', {'prescriptions': prescriptions})
+
+@login_required
+def prescription_detail(request, prescription_id):
+    prescription = get_object_or_404(Prescription, id=prescription_id, appointment__patient=request.user)
+    appointment = prescription.appointment
+    
+    # Logic for display name and age
+    if appointment.guest_name:
+        display_name = appointment.guest_name
+        display_age = getattr(appointment, 'guest_age', 'N/A')
+    else:
+        display_name = appointment.patient.get_full_name() or appointment.patient.username
+        display_age = getattr(appointment.patient, 'age', 'N/A')
+
+    return render(request, 'prescription_detail.html', {
+        'prescription': prescription,
+        'appointment': appointment,
+        'display_name': display_name,
+        'display_age': display_age,
+    })
+

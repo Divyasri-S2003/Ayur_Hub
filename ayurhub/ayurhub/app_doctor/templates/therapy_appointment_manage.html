@@ -1,4 +1,6 @@
-{% load static %}
+<!-- {% load static %}
+{% include 'Layout/Partials/Doctor/header.html' %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -18,7 +20,8 @@
             --ayur-red: #bc4749;
         }
     
-        .page-wrapper { background-color: #f9f9f7; flex: 1; padding: 20px; }
+        /* Adjusted Padding for Sidebar alignment */
+        .page-wrapper { background-color: #f9f9f7; flex: 1; padding: 20px 40px; }
         
         .card-ayurveda {
             border: none;
@@ -43,9 +46,13 @@
         .text-white { color: white; }
         .m-0 { margin: 0; }
     
-        /* Table Styles */
+        /* Table Styles - Adjusted for Proper Viewing */
         .table-responsive { overflow-x: auto; }
-        .table-ayurveda { width: 100%; border-collapse: collapse; }
+        .table-ayurveda { 
+            width: 100%; 
+            border-collapse: collapse; 
+            table-layout: fixed; /* Ensures columns stay in their lane */
+        }
         
         .table-ayurveda thead th {
             background-color: #f0f4ef;
@@ -62,7 +69,16 @@
             vertical-align: middle; 
             color: #555; 
             border-bottom: 1px solid #eee;
+            word-wrap: break-word; /* Prevents overflow in long names */
         }
+
+        /* Column Width Definitions */
+        .col-id { width: 50px; }
+        .col-patient { width: 25%; }
+        .col-therapy { width: 30%; }
+        .col-date { width: 15%; }
+        .col-status { width: 110px; }
+        .col-action { width: 140px; }
         
         .text-center { text-align: center !important; }
 
@@ -85,13 +101,12 @@
             font-weight: bold;
             text-decoration: none;
         }
-        .btn-filter:hover { background-color: #c59666; }
 
         /* Action Buttons */
         .btn-complete {
             background-color: #0d6efd;
             color: white;
-            padding: 6px 14px;
+            padding: 8px 14px;
             border-radius: 6px;
             text-decoration: none;
             font-size: 0.85rem;
@@ -103,32 +118,21 @@
         }
         .btn-complete:hover { background-color: #0b5ed7; }
 
-        /* Badges & Text Utilities */
-        .fw-bold { font-weight: 700; }
-        .text-success { color: #198754; }
-        .text-muted { color: #6c757d; }
-        .small { font-size: 0.875em; }
-        .d-flex { display: flex; }
-        .flex-column { flex-direction: column; }
-        .gap-2 { gap: 0.5rem; }
-        
         /* Status Badges */
         .badge-status { padding: 6px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; text-transform: uppercase; }
         .badge-completed { background-color: #d1e7dd; color: #0f5132; border: 1px solid #badbcc; }
         .badge-pending { background-color: #fff3cd; color: #664d03; border: 1px solid #ffecb5; }
-        .badge-cancelled { background-color: #f8d7da; color: #842029; border: 1px solid #f5c2c7; }
-
-        .patient-meta { font-size: 0.85rem; color: #777; margin-top: 4px; }
+        
         .therapy-tag { 
             background-color: #e8f5e9; 
             color: var(--ayur-dark-green); 
-            padding: 4px 8px; 
+            padding: 4px 10px; 
             border-radius: 4px; 
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             border: 1px solid #c8e6c9;
             display: inline-block;
-            margin-bottom: 4px;
         }
+        .patient-meta { font-size: 0.85rem; color: #777; margin-top: 4px; }
     </style>
 </head>
 <body>
@@ -151,7 +155,7 @@
                                 <i class="fas fa-filter"></i> Filter
                             </button>
                             {% if search_date %}
-                                <a href="." class="text-white small" style="text-decoration: underline;">Clear</a>
+                                <a href="." class="text-white small" style="text-decoration: underline; margin-left: 5px;">Clear</a>
                             {% endif %}
                         </form>
                     </div>
@@ -161,12 +165,12 @@
                             <table class="table table-ayurveda mb-0">
                                 <thead>
                                     <tr>
-                                        <th>#</th>
-                                        <th>Patient Details</th>
-                                        <th>Therapy Name</th>
-                                        <th>Schedule</th>
-                                        <th class="text-center">Status</th>
-                                        <th class="text-center">Action</th>
+                                        <th class="col-id">#</th>
+                                        <th class="col-patient">Patient Details</th>
+                                        <th class="col-therapy">Therapy Name</th>
+                                        <th class="col-date">Schedule</th>
+                                        <th class="text-center col-status">Status</th>
+                                        <th class="text-center col-action">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -187,56 +191,27 @@
                                                 </span>
                                                 
                                                 <div class="patient-meta">
-                                                    <span><i class="fas fa-user-clock"></i> Age: 
-                                                        {% if session.guest_name %}
-                                                            {{ session.guest_age|default:"N/A" }}
-                                                        {% elif session.patient_age %}
-                                                            {{ session.patient_age|default:"N/A" }}
-                                                        {% elif session.patient and session.patient.patientregi %}
-                                                            {{ session.patient.patientregi.age|default:"N/A" }}
-                                                        {% else %}
-                                                            N/A
-                                                        {% endif %}
-                                                    </span> 
-                                                    | 
-                                                    <span>
-                                                        {% if session.guest_name %}
-                                                            {{ session.guest_gender|default:"N/A" }}
-                                                        {% elif session.patient_gender %}
-                                                            {{ session.patient_gender|default:"N/A" }}
-                                                        {% elif session.patient and session.patient.patientregi %}
-                                                            {{ session.patient.patientregi.gender|default:"N/A" }}
-                                                        {% else %}
-                                                            N/A
-                                                        {% endif %}
-                                                    </span>
+                                                    <span><i class="fas fa-user-clock"></i> Age: {{ session.guest_age|default:session.patient_age|default:"N/A" }}</span> | 
+                                                    <span>{{ session.guest_gender|default:session.patient_gender|default:"N/A" }}</span>
                                                 </div>
                                             </div>
                                         </td>
 
                                         <td>
-                                            <div class="d-flex flex-column">
-                                                <div>
-                                                    <span class="therapy-tag">
-                                                        <i class="fas fa-spa"></i> {{ session.therapy.servicename }}
-                                                    </span>
-                                                </div>
-                                            </div>
+                                            <span class="therapy-tag">
+                                                <i class="fas fa-spa me-1"></i> {{ session.therapy.servicename }}
+                                            </span>
                                         </td>
 
                                         <td>
-                                            <div class="d-flex flex-column">
-                                                <span class="fw-bold">
-                                                    <i class="far fa-calendar-alt"></i> {{ session.appointment_date|date:"M d, Y" }}
-                                                </span>
-                                            </div>
+                                            <span class="fw-bold text-muted">
+                                                <i class="far fa-calendar-alt me-1"></i> {{ session.appointment_date|date:"M d, Y" }}
+                                            </span>
                                         </td>
 
                                         <td class="text-center">
                                             {% if session.status == "Completed" %}
                                                 <span class="badge-status badge-completed">Completed</span>
-                                            {% elif session.status == "Cancelled" %}
-                                                <span class="badge-status badge-cancelled">Cancelled</span>
                                             {% else %}
                                                 <span class="badge-status badge-pending">Booked</span>
                                             {% endif %}
@@ -244,24 +219,24 @@
 
                                         <td class="text-center">
                                             {% if session.status == "Completed" %}
-                                                <span class="text-muted" style="font-style: italic;">
+                                                <span class="text-success small fw-bold">
                                                     <i class="fas fa-check-circle"></i> Done
                                                 </span>
                                             {% else %}
                                                 <a href="{% url 'app_doctor:complete_therapy_appointment' session.id %}" 
                                                    class="btn-complete"
-                                                   onclick="return confirm('Mark {{ session.therapy.servicename }} for this patient as Completed?');">
-                                                   Finish Session
+                                                   onclick="return confirm('Mark {{ session.therapy.servicename }} as Completed?');">
+                                                    Finish Session
                                                 </a>
                                             {% endif %}
                                         </td>
                                     </tr>
                                     {% empty %}
                                     <tr>
-                                        <td colspan="6" class="text-center" style="padding: 40px;">
+                                        <td colspan="6" class="text-center" style="padding: 60px;">
                                             <div class="text-muted">
-                                                <i class="fas fa-leaf fa-2x mb-3" style="color: #d4a373;"></i><br>
-                                                No therapy sessions scheduled for this date.
+                                                <i class="fas fa-leaf fa-3x mb-3" style="color: #d4a373;"></i><br>
+                                                <strong>No therapy sessions found.</strong>
                                             </div>
                                         </td>
                                     </tr>
@@ -277,4 +252,165 @@
 </div>
 
 </body>
-</html>
+</html> -->
+
+<style>
+    :root {
+        --ayur-dark-green: #1a4d2e;
+        --ayur-sage: #4f772d;
+        --ayur-gold: #d4a373;
+        --ayur-red: #bc4749;
+        /* Adjust this to match your sidebar's actual width */
+        --sidebar-width: 250px; 
+    }
+
+    body { 
+        margin: 0; 
+        background-color: #f9f9f7;
+        font-family: 'Segoe UI', Tahoma, sans-serif;
+    }
+
+    /* This moves the content to the right of your fixed sidebar */
+    .page-wrapper { 
+        margin-left: var(--sidebar-width);
+        padding: 20px;
+        width: calc(100% - var(--sidebar-width));
+        box-sizing: border-box;
+    }
+
+    .card-ayurveda {
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        background: #fff;
+        overflow: hidden;
+    }
+
+    .card-header-ayurveda {
+        background-color: var(--ayur-dark-green);
+        padding: 10px 20px; /* Reduced padding */
+        border-bottom: 3px solid var(--ayur-gold);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    /* Tighten the table size */
+    .table-ayurveda { 
+        width: 100%; 
+        border-collapse: collapse;
+        table-layout: auto; /* Changed from fixed to auto for better fit */
+    }
+
+    .table-ayurveda thead th {
+        background-color: #f8f9fa;
+        color: var(--ayur-dark-green);
+        padding: 10px; /* Smaller padding */
+        font-size: 0.85rem;
+        text-align: left;
+        border-bottom: 1px solid #dee2e6;
+    }
+
+    .table-ayurveda tbody td { 
+        padding: 8px 10px; /* Compact rows */
+        border-bottom: 1px solid #eee;
+        font-size: 0.9rem;
+        vertical-align: middle;
+    }
+
+    /* Shrink tags and buttons */
+    .therapy-tag { 
+        font-size: 0.8rem;
+        padding: 2px 8px;
+        border-radius: 4px;
+        background: #eef5ee;
+        color: #2d5a27;
+        border: 1px solid #dceada;
+    }
+
+    .btn-complete {
+        padding: 4px 12px;
+        font-size: 0.75rem;
+        background: #0d6efd;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+    }
+
+    /* Responsive adjustment */
+    @media (max-width: 1100px) {
+        .page-wrapper { margin-left: 70px; width: calc(100% - 70px); }
+    }
+</style>
+
+{% include 'Layout/Partials/Doctor/header.html' %}
+
+<div class="page-wrapper">
+    <div class="card card-ayurveda">
+        <div class="card-header-ayurveda">
+            <div>
+                <h4 class="text-white m-0">Therapy Management Panel</h4>
+                <small class="text-white" style="opacity: 0.8;">Dr. Mallikaa S Gowda</small>
+            </div>
+            
+            <form method="GET" class="filter-form" style="display:flex; gap:10px;">
+                <input type="date" name="search_date" class="date-input" value="{{ search_date }}" 
+                       style="border-radius:4px; border:1px solid #ddd; padding:5px;">
+                <button type="submit" class="btn-filter" style="padding: 5px 15px; background: var(--ayur-gold); border:none; border-radius:4px; cursor:pointer;">
+                    <i class="fas fa-filter"></i> Filter
+                </button>
+            </form>
+        </div>
+
+        <div class="table-responsive">
+            <table class="table-ayurveda">
+                <thead>
+                    <tr>
+                        <th class="col-id">#</th>
+                        <th class="col-patient">Patient</th>
+                        <th class="col-therapy">Therapy</th>
+                        <th class="col-date">Date</th>
+                        <th class="text-center col-status">Status</th>
+                        <th class="text-center col-action">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for session in therapy_appointments %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>
+                            <div style="display:flex; flex-direction:column;">
+                                <strong class="text-success">
+                                    {% if session.guest_name %}{{ session.guest_name }} (G){% else %}{{ session.patient_name|default:session.patient.name }}{% endif %}
+                                </strong>
+                                <span class="patient-meta text-muted">Age: {{ session.guest_age|default:session.patient_age }} | {{ session.guest_gender|default:session.patient_gender }}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="therapy-tag" style="background:#e8f5e9; border:1px solid #c8e6c9; border-radius:4px; padding:2px 6px;">
+                                {{ session.therapy.servicename }}
+                            </span>
+                        </td>
+                        <td>{{ session.appointment_date|date:"M d, Y" }}</td>
+                        <td class="text-center">
+                            {% if session.status == "Completed" %}
+                                <span class="badge-status badge-completed" style="background:#d1e7dd; padding:4px 8px; border-radius:12px; font-size:11px;">Completed</span>
+                            {% else %}
+                                <span class="badge-status badge-pending" style="background:#fff3cd; padding:4px 8px; border-radius:12px; font-size:11px;">Booked</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-center">
+                            {% if session.status != "Completed" %}
+                                <a href="{% url 'app_doctor:complete_therapy_appointment' session.id %}" class="btn-complete" style="background:#0d6efd; color:white; text-decoration:none; border-radius:4px; padding:5px 10px;">Finish</a>
+                            {% else %}
+                                <i class="fas fa-check-circle text-success"></i>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="6" style="text-align:center; padding:40px;">No sessions found.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -27,5 +27,23 @@ urlpatterns = [
     path('process-payment/', views.process_payment, name='process_payment'),
     
     path('final-page/<int:booking_id>/', views.final_page, name='final_page'),
+    
+    path('doctor-payment/', views.doctor_payment_page, name='doctor_payment_page'),
+    path('process-doctor-payment/', views.process_doctor_payment, name='process_doctor_payment'),
+    path('appointment-success/<int:appointment_id>/', views.final_page_appointment, name='final_page_appointment'),
+    
+    path('therapyappoint/<int:id>/', views.therapyappoint, name='therapyappoint'),
+    # path('therapy-payment/', views.therapy_payment_page, name='therapy_payment_page'),
+    # path('process-therapy-payment/', views.process_therapy_payment, name='process_therapy_payment'),
+    # path('therapy-success/<int:appointment_id>/', views.final_page_therapy, name='final_page_therapy'),
+    path('therapy/payment/', views.therapy_payment_page, name='therapy_payment_page'),
+    path('therapy/success/', views.appointment_success, name='appointment_success'),
+   
+    
+    path('my-prescriptions/', views.view_prescriptions, name='view_prescriptions'),
+    path('prescription/<int:prescription_id>/', views.prescription_detail, name='prescription_detail'),
+
+    
 ]
+
 

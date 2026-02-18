@@ -90,33 +90,48 @@ def doctordashboard(request):
     except AttributeError:
         return redirect('index') 
 
-    # 1. Standard Appointments (For Everyone)
+    # 1. Fetch Doctor Appointments
     appointments = DoctorAppointment.objects.filter(doctor=doctor_profile).order_by('-appointment_date')
     
+    # 2. Apply Date Filter if present
     search_date = request.GET.get('search_date')
     if search_date:
         appointments = appointments.filter(appointment_date=search_date)
 
-    # ---------------------------------------------------------
-    # 2. THERAPY LOGIC (UPDATED FOR BPT QUALIFICATION)
-    # ---------------------------------------------------------
-    # Default: Create an empty QuerySet for doctors without a BPT qualification
+    # 3. Therapy Logic (BPT Qualification Check)
     therapy_appointments = TherapyAppointment.objects.none() 
     is_therapy_admin = False 
 
-    # Check if the logged-in doctor has the 'BPT' qualification
     if doctor_profile.qualification == 'BPT':
         is_therapy_admin = True
-        
-        # Fetch all therapy appointments for BPT doctors
         therapy_appointments = TherapyAppointment.objects.all().order_by('-appointment_date')
-        
         if search_date:
             therapy_appointments = therapy_appointments.filter(appointment_date=search_date)
 
-    # 3. Stats
-    total_appointments = appointments.count()
-    pending_appointments = appointments.filter(status="Pending").count()
+    # ---------------------------------------------------------
+    # 4. STATS LOGIC (THE FIX)
+    # ---------------------------------------------------------
+    
+    # We use __icontains to be extra safe against hidden spaces or case issues
+    pending_doc = appointments.filter(status__icontains="Pending").count()
+    
+    pending_therapy = 0
+    if is_therapy_admin:
+        pending_therapy = therapy_appointments.filter(status__icontains="Pending").count()
+
+    # Red Card: Total Pending Actions (Doctor + Therapy)
+    pending_count = pending_doc + pending_therapy
+
+    # Middle Card: Total Visits (Completed Appointments)
+    completed_doc = appointments.filter(status__icontains="Completed").count()
+    completed_therapy = 0
+    if is_therapy_admin:
+        completed_therapy = therapy_appointments.filter(status__icontains="Completed").count()
+    
+    completed_count = completed_doc + completed_therapy
+
+    # First Card: Appointments List (Total count shown in the table)
+    list_count = appointments.count()
 
     context = {
         'doctor': doctor_profile,
@@ -124,8 +139,11 @@ def doctordashboard(request):
         'therapy_appointments': therapy_appointments, 
         'is_therapy_admin': is_therapy_admin,         
         'search_date': search_date,
-        'total_count': total_appointments,
-        'pending_count': pending_appointments,
+        'total_count': completed_count, # Matches "Total Visits" label
+        'pending_count': pending_count, # Matches "Pending Actions" label
+        'list_count': list_count,       # Matches "Appointments List" label
     }
 
     return render(request, "Doctortemplate.html", context)
+
+

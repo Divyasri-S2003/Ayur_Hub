@@ -4,17 +4,30 @@ from app_core.models import Doctor, Therapy
 from ayurhub.users.models import User
 
 # Create your models here.
+# class TherapyAppointment(models.Model):
+#     therapy=models.ForeignKey(Therapy, on_delete=models.CASCADE,related_name='appointments_therapy')
+#     patient=models.ForeignKey(User, on_delete=models.CASCADE,related_name='appointments_patient')
+#     appointment_date=models.DateField()
+#     created_at=models.DateTimeField(auto_now_add=True)
+#     patient_name = models.CharField(max_length=100, null=True, blank=True)
+#     patient_age = models.IntegerField(null=True, blank=True)
+#     patient_gender = models.CharField(max_length=20, null=True, blank=True)
+#     guest_name = models.CharField(max_length=100, blank=True, null=True)
+#     guest_age = models.IntegerField(blank=True, null=True)
+#     guest_gender = models.CharField(max_length=20, blank=True, null=True)
+#     status = models.CharField(max_length=20, default='Pending')
+#     capacity = models.PositiveIntegerField(default=5, help_text="Max appointments per day")
+
 class TherapyAppointment(models.Model):
-    therapy=models.ForeignKey(Therapy, on_delete=models.CASCADE,related_name='appointments_therapy')
-    patient=models.ForeignKey(User, on_delete=models.CASCADE,related_name='appointments_patient')
-    appointment_date=models.DateField()
-    created_at=models.DateTimeField(auto_now_add=True)
+    therapy = models.ForeignKey(Therapy, on_delete=models.CASCADE, related_name='appointments_therapy')
+    patient = models.ForeignKey(User, on_delete=models.CASCADE, related_name='appointments_patient')
+    appointment_date = models.DateField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    # Use CharField for age to match your Patientregi model type
     patient_name = models.CharField(max_length=100, null=True, blank=True)
-    patient_age = models.IntegerField(null=True, blank=True)
+    patient_age = models.CharField(max_length=10, null=True, blank=True) 
     patient_gender = models.CharField(max_length=20, null=True, blank=True)
-    guest_name = models.CharField(max_length=100, blank=True, null=True)
-    guest_age = models.IntegerField(blank=True, null=True)
-    guest_gender = models.CharField(max_length=20, blank=True, null=True)
     status = models.CharField(max_length=20, default='Pending')
 
 class DoctorAppointment(models.Model):
@@ -28,7 +41,8 @@ class DoctorAppointment(models.Model):
     guest_name = models.CharField(max_length=100, blank=True, null=True)
     guest_age = models.IntegerField(blank=True, null=True)
     guest_gender = models.CharField(max_length=20, blank=True, null=True)
-    # Add other fields like created_at, symptoms, etc.
+    capacity = models.PositiveIntegerField(default=5, help_text="Max appointments per day")
+    
     
 class Cart(models.Model):
     patient = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -55,6 +69,7 @@ class Payment(models.Model):
     payment_date = models.DateField(auto_now_add=True)
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     payment_method = models.CharField(max_length=50)
+    created_at = models.DateTimeField(auto_now_add=True)
     
 class deliveryaddress(models.Model):
     patient = models.ForeignKey(User, on_delete=models.CASCADE)

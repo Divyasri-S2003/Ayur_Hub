@@ -15,7 +15,7 @@
 
           <div class="card-body" style="padding: 40px;">
             
-            <form action="" method="post" id="bookingForm">
+            <form action="{% url 'app_patient:therapyappoint' therapy.id %}" method="post" id="bookingForm">
               {% csrf_token %}
               <input type="hidden" name="therapy_id" value="{{ therapy.id }}">
 
