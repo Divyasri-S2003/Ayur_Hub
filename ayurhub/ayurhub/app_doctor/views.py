@@ -88,26 +88,76 @@ def complete_therapy_appointment(request, id):
 
 
 
-def appointment_details(request, app_id):
-    # Fetch the current appointment
-    appointment = get_object_or_404(DoctorAppointment, id=app_id)
-    doctor = get_object_or_404(Doctor, user=request.user) 
+# def appointment_details(request, app_id):
+#     # Fetch the current appointment
+#     appointment = get_object_or_404(DoctorAppointment, id=app_id)
+#     doctor = get_object_or_404(Doctor, user=request.user) 
 
-    # Filter previous prescriptions based on whether it is a guest or registered patient
+#     # Filter previous prescriptions based on whether it is a guest or registered patient
+#     if appointment.guest_name:
+#         # Filter by the same user account AND the same guest name
+#         previous_prescriptions = Prescription.objects.filter(
+#             patient=appointment.patient,
+#             appointment__guest_name=appointment.guest_name
+#         ).exclude(appointment=appointment).order_by('-created_at')
+#     else:
+#         # Filter by the registered patient account and ensure guest_name is null/empty
+#         previous_prescriptions = Prescription.objects.filter(
+#             patient=appointment.patient,
+#             appointment__guest_name__isnull=True
+#         ).exclude(appointment=appointment).order_by('-created_at')
+
+#     # Handle form submission for new prescription
+#     if request.method == 'POST':
+#         prescription_text = request.POST.get('prescription_text')
+#         if prescription_text:
+#             Prescription.objects.create(
+#                 appointment=appointment,
+#                 doctor=doctor,
+#                 patient=appointment.patient,
+#                 prescription_text=prescription_text
+#             )
+#             messages.success(request, "Prescription saved successfully.")
+#             return redirect('app_doctor:appointment_details', app_id=app_id)
+
+#     context = {
+#         'appointment': appointment,
+#         'previous_prescriptions': previous_prescriptions,
+#     }
+#     return render(request, 'appointment_details.html', context)
+
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def appointment_details(request, app_id):
+    # 1. Fetch the current appointment
+    appointment = get_object_or_404(DoctorAppointment, id=app_id)
+    
+    # 2. Fetch the current doctor and check for therapy admin status
+    try:
+        doctor = request.user.doctor 
+        # This ensures the 'Therapy' link stays visible in your sidebar
+        is_therapy_admin = getattr(doctor, 'is_therapy_admin', False)
+    except AttributeError:
+        # If the user isn't a doctor, prevent them from prescribing
+        messages.error(request, "Access Denied.")
+        return redirect('app_doctor:manage_appointments')
+
+    # 3. Filter previous prescriptions
     if appointment.guest_name:
-        # Filter by the same user account AND the same guest name
         previous_prescriptions = Prescription.objects.filter(
             patient=appointment.patient,
             appointment__guest_name=appointment.guest_name
         ).exclude(appointment=appointment).order_by('-created_at')
     else:
-        # Filter by the registered patient account and ensure guest_name is null/empty
         previous_prescriptions = Prescription.objects.filter(
             patient=appointment.patient,
             appointment__guest_name__isnull=True
         ).exclude(appointment=appointment).order_by('-created_at')
 
-    # Handle form submission for new prescription
+    # 4. Handle Prescription Submission
     if request.method == 'POST':
         prescription_text = request.POST.get('prescription_text')
         if prescription_text:
@@ -117,11 +167,16 @@ def appointment_details(request, app_id):
                 patient=appointment.patient,
                 prescription_text=prescription_text
             )
+            # Update appointment status to Completed once prescribed
+            appointment.status = "Completed"
+            appointment.save()
+            
             messages.success(request, "Prescription saved successfully.")
             return redirect('app_doctor:appointment_details', app_id=app_id)
 
     context = {
         'appointment': appointment,
         'previous_prescriptions': previous_prescriptions,
+        'is_therapy_admin': is_therapy_admin, # Added for sidebar consistency
     }
     return render(request, 'appointment_details.html', context)

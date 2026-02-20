@@ -7,7 +7,7 @@ from django.views import defaults as default_views
 from django.views.generic import TemplateView
 
 urlpatterns = [
-    path("dashboard/", include("ayurhub.app_dashboard.urls", namespace="app_dashboard")),
+    path("", include("ayurhub.app_dashboard.urls", namespace="app_dashboard")),
     path("core/", include("ayurhub.app_core.urls",namespace="core")),
 
     path("patient/", include("ayurhub.app_patient.urls", namespace="app_patient")),

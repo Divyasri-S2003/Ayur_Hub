@@ -110,7 +110,10 @@ body.my-login-page {
 											Forgot Password?
 										</a>
 									</label>
-									<input id="password" type="password" class="form-control" name="password" required data-eye>
+									<input class="form-control" name="password" type="password"
+placeholder="Enter Password" required minlength="8"
+title="Password must be at least 8 characters long.">
+
 								    <div class="invalid-feedback">
 								    	Password is required
 							    	</div>
@@ -129,7 +132,7 @@ body.my-login-page {
 									</button>
 								</div>
 								<div class="mt-4 text-center">
-									Don't have an account? <a href="/dashboard/patientregist">Sign up</a>
+									Don't have an account? <a href="/patientregist/">Sign up</a>
 								</div>
 							</form>
 						</div>

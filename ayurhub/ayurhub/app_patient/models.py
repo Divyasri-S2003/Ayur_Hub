@@ -29,6 +29,7 @@ class TherapyAppointment(models.Model):
     patient_age = models.CharField(max_length=10, null=True, blank=True) 
     patient_gender = models.CharField(max_length=20, null=True, blank=True)
     status = models.CharField(max_length=20, default='Pending')
+    appointment_time = models.TimeField(null=True, blank=True)  # Optional time field
 
 class DoctorAppointment(models.Model):
     doctor = models.ForeignKey(Doctor, on_delete=models.CASCADE)
@@ -42,6 +43,7 @@ class DoctorAppointment(models.Model):
     guest_age = models.IntegerField(blank=True, null=True)
     guest_gender = models.CharField(max_length=20, blank=True, null=True)
     capacity = models.PositiveIntegerField(default=5, help_text="Max appointments per day")
+    patient_problems = models.TextField(blank=True, null=True)
     
     
 class Cart(models.Model):

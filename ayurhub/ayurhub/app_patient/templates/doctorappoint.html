@@ -53,12 +53,18 @@
                             </div>
                         </div>
 
+
                         <div class="mb-4">
                             <label class="form-label" style="font-weight: 600;">Choose Date</label>
                             <input type="date" name="date" id="dateInput" class="form-control" required 
                                    style="padding: 15px; border-radius: 10px; border: 2px solid #e8f2fd;">
                         </div>
 
+                         <div class="mb-4">
+                            <label class="form-label" style="font-weight: 600;">What are your health concerns?</label>
+                            <textarea name="patient_problems" id="problemInput" class="form-control" rows="3" placeholder="Briefly describe your symptoms or problems..." style="border-radius: 10px; border: 2px solid #e8f2fd;" oninput="updateSummary()"></textarea>
+                        </div>
+                        
                         <div style="background: #f8f9fa; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
                             <h5 style="font-size: 1rem; color: #2c4964; font-weight: 700;">Doctor Availability</h5>
                             <p class="mb-0 text-muted" style="font-size: 0.9rem;">Schedule: {{ doctor.schedule }}</p>
@@ -187,4 +193,5 @@
     });
 </script>
 
-{% include 'Layout/Partials/Patients/footer.html' %}
+{% include 'Layout/Partials/Patients/footer.html' %}  
+

@@ -2,12 +2,17 @@ from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.contrib.auth import authenticate,login
 from django.core.mail import send_mail
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.cache import never_cache
+from django.contrib.auth import logout
 
 
 from app_dashboard.models import Patientregi
 from ayurhub.users.models import User
 
 # Create your views here.
+@never_cache
+@login_required(login_url='/loginf/')
 def admindashboard(request):
     return render(request, "Admintemplate.html")
 
@@ -24,11 +29,11 @@ def loginf (request):
         if user is not None:
             login(request, user)
             if user.role=='Patient':
-                return HttpResponse("<script>alert('Login Successful');window.location='/dashboard/patientdashboard/';</script>")
+                return HttpResponse("<script>alert('Login Successful');window.location='/patientdashboard/';</script>")
             elif user.role=='Doctor':
-                return HttpResponse("<script>alert('Login Successful');window.location='/dashboard/doctordashboard/';</script>")
+                return HttpResponse("<script>alert('Login Successful');window.location='/doctordashboard/';</script>")
             elif user.role == 'Admin':
-                return HttpResponse("<script>alert('Login Successful');window.location='/dashboard/admindashboard/';</script>")
+                return HttpResponse("<script>alert('Login Successful');window.location='/admindashboard/';</script>")
         else:
             return HttpResponse("<script>alert('Login Failed');window.location='/dashboard/loginf/';</script>")        
 
@@ -38,7 +43,8 @@ def loginf (request):
 
 
 
-
+@never_cache
+@login_required(login_url='/loginf/')
 def patientdashboard(request):
     return render(request, "Patienttemplate.html")
     
@@ -84,6 +90,8 @@ from app_patient.models import DoctorAppointment, TherapyAppointment
 from app_core.models import Doctor
 
 @login_required(login_url='login')
+@never_cache
+@login_required(login_url='/loginf/')
 def doctordashboard(request):
     try:
         doctor_profile = request.user.doctor
@@ -147,3 +155,10 @@ def doctordashboard(request):
     return render(request, "Doctortemplate.html", context)
 
 
+def logout_view(request):
+    logout(request)
+    return HttpResponse(
+        "<script>alert('Logged out successfully');window.location='/loginf/';</script>"
+    )
+    
+    

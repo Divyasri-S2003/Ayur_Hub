@@ -123,13 +123,13 @@
 
       <nav id="navmenu" class="navmenu">
         <ul>
-          <li><a href="/dashboard/patientdashboard/" class="active" style="color: #2d6a4f;">Home</a></li>
+          <li><a href="/patientdashboard/" class="active" style="color: #2d6a4f;">Home</a></li>
           <li><a href="#about">About</a></li>
           <li><a href="{% url 'app_patient:viewcategory' %}">Therapies</a></li>
           <li><a href="/patient/viewdoctor/">Doctors</a></li>
           <li><a href="/patient/viewmedcategory/">Products</a></li>
           <li><a href="/patient/my-prescriptions/">Prescriptions</a></li>
-          <li><a href="/dashboard/loginf/">Login</a></li>
+          <li><a href="/logout/">Logout</a></li>
           
           <li style="display: flex; align-items: center;">
             <a href="{% url 'app_patient:viewcart' %}" style="position: relative; display: inline-block;">

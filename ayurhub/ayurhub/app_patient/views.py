@@ -1,15 +1,16 @@
 
-from datetime import date
+from datetime import date, timedelta
+from urllib import request
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
-
+from  django.core.mail import send_mail
 from app_core.models import Category, Doctor, Medicine_Category, Product, Therapy
 from app_patient.models import Booking_Master, Booking_details, Cart, DoctorAppointment, Payment, TherapyAppointment
 from app_dashboard.models import Patientregi
 from django.contrib import messages
-
+from datetime import datetime, timedelta
 from app_doctor.models import Prescription  # Add this line
 
 # Create your views here.
@@ -250,28 +251,68 @@ def therapyappoint(request, id):
 
 
 def therapy_payment_page(request):
-    # Retrieve data from session
+
     payment_data = request.session.get('pending_therapy')
-    
+
     if not payment_data:
         messages.error(request, "No pending appointment found.")
         return redirect('app_patient:therapy_list')
 
     therapy = get_object_or_404(Therapy, id=payment_data['therapy_id'])
+    therapy_date = payment_data['date']
+
+    # Count existing appointments
+    therapy_count = TherapyAppointment.objects.filter(
+        appointment_date=therapy_date,
+        therapy=therapy
+    ).count()
+
+    # Start time
+    start_time = datetime.strptime("09:00", "%H:%M")
+
+    # ✅ Convert duration safely
+    duration_value = therapy.duration
+
+    if isinstance(duration_value, int):
+        duration_minutes = duration_value
+
+    elif isinstance(duration_value, str):
+        # Extract only numbers from string like "45 Minutes"
+        duration_minutes = int(''.join(filter(str.isdigit, duration_value)))
+
+    else:  # TimeField
+        duration_minutes = duration_value.hour * 60 + duration_value.minute
+
+    # Calculate total minutes
+    total_minutes = therapy_count * duration_minutes
+
+    # Calculate appointment time
+    appointment_time = start_time + timedelta(minutes=total_minutes)
+    appointment_time = appointment_time.time()
 
     if request.method == "POST":
-        # Create the actual database record
+
         TherapyAppointment.objects.create(
             therapy=therapy,
             patient=request.user,
-            appointment_date=payment_data['date'],
+            appointment_date=therapy_date,
             patient_name=payment_data['p_name'],
             patient_age=payment_data['p_age'],
             patient_gender=payment_data['p_gender'],
-            status='Paid'
+            status='Paid',
+            appointment_time=appointment_time,
         )
 
-        # Clear the session after saving
+        request.session['appointment'] = {
+            'date': therapy_date,
+            'time': appointment_time.strftime("%H:%M"),
+        }
+        send_mail(
+        subject="Booking Confirmed!",
+        message=f"Hi {payment_data['p_name']},\n\nYour therapy session has been successfully scheduled for {therapy_date} at {appointment_time.strftime('%H:%M')}.Please arrive 15 minutes early. It is recommended to have a light meal 1 hour before the session.\n\nThank you for choosing AyurHub!",
+        from_email=None,  
+        recipient_list=[request.user.email],
+    )
         del request.session['pending_therapy']
 
         return redirect('app_patient:appointment_success')
@@ -280,9 +321,12 @@ def therapy_payment_page(request):
         'payment_data': payment_data,
         'therapy': therapy
     })
-
+    
+    
+    
 def appointment_success(request):
-    return render(request, 'appointment_success.html')
+    appointment = request.session.get('appointment')
+    return render(request, 'appointment_success.html', {'appointment': appointment})
 
 
 
@@ -369,6 +413,8 @@ def doctorappoint(request, id):
             'guest_age': request.POST.get("guest_age"),
             'guest_gender': request.POST.get("guest_gender"),
             'booking_for': request.POST.get("booking_for"),
+            # ADDED: Capture the health concerns from the textarea
+            'patient_problems': request.POST.get("patient_problems"),
             'amount': str(doc.fee) # Convert Decimal to string for session
         }
         # Store in session to persist until payment
@@ -402,6 +448,27 @@ def process_doctor_payment(request):
             return redirect('app_patient:view_doctors')
 
         doc = Doctor.objects.get(id=data['doctor_id'])
+        appointment_date = data['date']
+        
+        
+        # Count existing appointments for doctor on that date
+        appointment_count = DoctorAppointment.objects.filter(
+            doctor=doc,
+            appointment_date=appointment_date
+        ).count()
+        
+        # Start time
+        start_time = datetime.strptime("09:00", "%H:%M")
+
+        # Doctor consultation duration (example 15 mins)
+        duration_minutes = 15
+
+        # Calculate total minutes
+        total_minutes = appointment_count * duration_minutes
+
+        # Calculate appointment time
+        appointment_time = start_time + timedelta(minutes=total_minutes)
+        appointment_time = appointment_time.time()
 
         # 1. Create the Doctor Appointment
         appointment = DoctorAppointment.objects.create(
@@ -411,7 +478,23 @@ def process_doctor_payment(request):
             status="Paid",
             guest_name=data['guest_name'],
             guest_age=data['guest_age'] if data['guest_age'] else None,
-            guest_gender=data['guest_gender']
+            guest_gender=data['guest_gender'],
+            patient_problems=data.get('patient_problems')
+        )
+
+
+        # ✅ Send confirmation email
+        send_mail(
+            subject="Doctor Appointment Confirmed!",
+            message=(
+                f"Hi {data['guest_name'] if data['guest_name'] else request.user.username},\n\n"
+                f"Your consultation with Dr. {doc.name} is scheduled for "
+                f"{appointment_date} at {appointment_time.strftime('%H:%M')}.\n"
+                f"Please arrive 10 minutes early.\n\n"
+                f"Thank you for choosing AyurHub!"
+            ),
+            from_email=None,
+            recipient_list=[request.user.email],
         )
 
         # 2. Create Payment Record
