@@ -110,6 +110,9 @@
                                     {{ appointment.patient.name }} {{ appointment.patient.last_name }}
                                 {% endif %}
                             </p>
+                            {% if appointment.meeting_link %}
+                                <p class="mt-2 mb-0"><strong>Join Online Consultation:</strong> <a href="{{ appointment.meeting_link }}" target="_blank" class="text-primary">{{ appointment.meeting_link }}</a></p>
+                            {% endif %}
                         </div>
                     </div>
                 </div>

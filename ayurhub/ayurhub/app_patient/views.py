@@ -1,5 +1,6 @@
 
 from datetime import date, timedelta
+import uuid
 from urllib import request
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
@@ -471,6 +472,11 @@ def process_doctor_payment(request):
         appointment_time = appointment_time.time()
 
         # 1. Create the Doctor Appointment
+        meeting_link = None
+        if doc.mode and doc.mode.lower() == 'online':
+            meeting_id = uuid.uuid4().hex[:10]
+            meeting_link = f"https://meet.jit.si/AyurHub-{meeting_id}"
+
         appointment = DoctorAppointment.objects.create(
             doctor=doc,
             patient=request.user,
@@ -479,20 +485,27 @@ def process_doctor_payment(request):
             guest_name=data['guest_name'],
             guest_age=data['guest_age'] if data['guest_age'] else None,
             guest_gender=data['guest_gender'],
-            patient_problems=data.get('patient_problems')
+            patient_problems=data.get('patient_problems'),
+            meeting_link=meeting_link
         )
 
 
         # ✅ Send confirmation email
+        email_message = (
+            f"Hi {data['guest_name'] if data['guest_name'] else request.user.username},\n\n"
+            f"Your consultation with Dr. {doc.name} is scheduled for "
+            f"{appointment_date} at {appointment_time.strftime('%H:%M')}.\n"
+        )
+        if meeting_link:
+            email_message += f"Since this is an online consultation, please join the meeting using this link: {meeting_link}\n\n"
+        else:
+            email_message += "Please arrive 10 minutes early.\n\n"
+        
+        email_message += "Thank you for choosing AyurHub!"
+
         send_mail(
             subject="Doctor Appointment Confirmed!",
-            message=(
-                f"Hi {data['guest_name'] if data['guest_name'] else request.user.username},\n\n"
-                f"Your consultation with Dr. {doc.name} is scheduled for "
-                f"{appointment_date} at {appointment_time.strftime('%H:%M')}.\n"
-                f"Please arrive 10 minutes early.\n\n"
-                f"Thank you for choosing AyurHub!"
-            ),
+            message=email_message,
             from_email=None,
             recipient_list=[request.user.email],
         )
