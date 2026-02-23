@@ -35,7 +35,7 @@ def loginf (request):
             elif user.role == 'Admin':
                 return HttpResponse("<script>alert('Login Successful');window.location='/admindashboard/';</script>")
         else:
-            return HttpResponse("<script>alert('Login Failed');window.location='/dashboard/loginf/';</script>")        
+            return HttpResponse("<script>alert('Login Failed');window.location='/loginf/';</script>")        
 
     else:
         return render(request,"login.html")
@@ -60,9 +60,9 @@ def patientregist(request):
         password=request.POST.get('password')
 
         if not username or not password:
-            return HttpResponse("<script>alert('Welcome to AyurHub');window.location='/dashboard/patientdashboard/';</script>")
+            return HttpResponse("<script>alert('Welcome to AyurHub');window.location='/patientdashboard/';</script>")
         if User.objects.filter(username = username,email=email ).exists():
-            return HttpResponse("<script>alert('User Already Exist');window.location='/dashboard/patientregist/';</script>")
+            return HttpResponse("<script>alert('User Already Exist');window.location='/patientregist/';</script>")
         user=User()
         user.name=name
         user.email=email
@@ -78,7 +78,7 @@ def patientregist(request):
         from_email=None,  
         recipient_list=[email],
     )
-        return HttpResponse("<script>alert('Patient Registered Successfully');window.location='/dashboard/loginf/';</script>")
+        return HttpResponse("<script>alert('Patient Registered Successfully');window.location='/loginf/';</script>")
     else:   
         return render(request,"PatientRegistration.html")
 

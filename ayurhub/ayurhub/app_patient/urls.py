@@ -30,7 +30,9 @@ urlpatterns = [
     
     path('doctor-payment/', views.doctor_payment_page, name='doctor_payment_page'),
     path('process-doctor-payment/', views.process_doctor_payment, name='process_doctor_payment'),
-    path('appointment-success/<int:appointment_id>/', views.final_page_appointment, name='final_page_appointment'),
+    
+    
+    path('appointment/final/<int:appointment_id>/',views.final_page_appointment,name='final_page_appointment'),
     
     path('therapyappoint/<int:id>/', views.therapyappoint, name='therapyappoint'),
     # path('therapy-payment/', views.therapy_payment_page, name='therapy_payment_page'),

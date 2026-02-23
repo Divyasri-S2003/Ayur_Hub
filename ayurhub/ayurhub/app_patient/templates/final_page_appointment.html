@@ -1,13 +1,14 @@
-{% extends "base.html" %}
+{% include 'Layout/Partials/Patients/header.html' %}
 
-{% block content %}
+<!-- Spacer to prevent content going under fixed header -->
+<div style="margin-top: 120px;"></div>
 
 <div class="container mt-5">
 
     <!-- Success Message -->
     <div class="alert alert-success text-center shadow-sm p-4">
         <h2 class="mb-2">Booking Confirmed!</h2>
-        <p>Your appointment with Dr. {{ doctor.name }} has been scheduled successfully.</p>
+        <p>Your appointment with {{ appointment.doctor.user.name }} has been successfully scheduled for {{ appointment.appointment_date }} at {{ appointment.appointment_time }}.</p>
     </div>
 
     <!-- Appointment Summary -->
@@ -20,17 +21,28 @@
 
         <div class="card-body">
 
-            <p><strong>👨‍⚕️ Doctor:</strong> Dr. {{ doctor.name }}</p>
+            <p><strong>Doctor:</strong>  {{ appointment.doctor.user.name }}</p>
+            
+            <!-- <p><strong>Patient Name:</strong> 
+                {{ appointment.patient.name|default:appointment.patient.username }}
+            </p> -->
 
-            <p><strong>📅 Date:</strong> {{ appointment.appointment_date }}</p>
+            <p><strong>Date:</strong> {{ appointment.appointment_date }}</p>
 
-            <p><strong>⏰ Time:</strong> {{ appointment.appointment_time|time:"H:i" }}</p>
+            <p><strong>Time:</strong> 
+                {% if appointment.appointment_time %}
+                    {{ appointment.appointment_time|time:"H:i" }}
+                {% else %}
+                    Not assigned
+                {% endif %}
+            </p>
 
-            <p><strong>📌 Status:</strong> {{ appointment.status }}</p>
+            <p><strong>Status:</strong> {{ appointment.status }}</p>
 
-            {% if appointment.patient_problems %}
-            <p><strong>🩺 Health Concerns:</strong> {{ appointment.patient_problems }}</p>
-            {% endif %}
+            <!-- Optional Health Concerns -->
+            <!-- {% if appointment.patient_problems %}
+            <p><strong>Health Concerns:</strong> {{ appointment.patient_problems }}</p>
+            {% endif %} -->
 
         </div>
 
@@ -38,11 +50,11 @@
 
     <!-- Back Button -->
     <div class="text-center mt-4">
-        <a href="{% url 'app_patient:view_doctors' %}" class="btn btn-success">
+        <a href="{% url 'app_patient:viewdoctor' %}" class="btn btn-success">
             Book Another Appointment
         </a>
     </div>
 
 </div>
 
-{% endblock %}
+{% include 'Layout/Partials/Patients/footer.html' %}

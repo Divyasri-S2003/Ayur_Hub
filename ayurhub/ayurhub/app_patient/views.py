@@ -1,5 +1,7 @@
 
 from datetime import date, timedelta
+from multiprocessing import context
+from multiprocessing import context
 from urllib import request
 from django.http import HttpResponse
 from django.shortcuts import redirect, render
@@ -475,6 +477,7 @@ def process_doctor_payment(request):
             doctor=doc,
             patient=request.user,
             appointment_date=data['date'],
+            appointment_time=appointment_time,
             status="Paid",
             guest_name=data['guest_name'],
             guest_age=data['guest_age'] if data['guest_age'] else None,
@@ -488,7 +491,7 @@ def process_doctor_payment(request):
             subject="Doctor Appointment Confirmed!",
             message=(
                 f"Hi {data['guest_name'] if data['guest_name'] else request.user.username},\n\n"
-                f"Your consultation with Dr. {doc.name} is scheduled for "
+                f"Your consultation with {doc.user.name} is scheduled for "
                 f"{appointment_date} at {appointment_time.strftime('%H:%M')}.\n"
                 f"Please arrive 10 minutes early.\n\n"
                 f"Thank you for choosing AyurHub!"
@@ -512,22 +515,40 @@ def process_doctor_payment(request):
 
     return redirect('app_patient:doctor_payment_page')
 
-
-
-
-
 def final_page_appointment(request, appointment_id):
-    # Fetch the appointment, ensuring it belongs to the logged-in user
-    appointment = get_object_or_404(DoctorAppointment, id=appointment_id, patient=request.user)
-    
-    # Optional: Fetch the associated payment if you have a ForeignKey
-    # payment = Payment.objects.filter(doctor=appointment.doctor).last() 
+    try:
+        appointment = DoctorAppointment.objects.get(id=appointment_id)
+    except DoctorAppointment.DoesNotExist:
+        return HttpResponse("Appointment not found")
+
+    payment_record = Payment.objects.filter(
+        doctor=appointment.doctor, 
+        amount=appointment.doctor.fee
+    ).last()
 
     context = {
         'appointment': appointment,
-        'doctor': appointment.doctor,
+        'payment': payment_record,
+        'is_appointment': True,
+        'is_therapy': False,
     }
     return render(request, 'final_page_appointment.html', context)
+
+
+
+# def final_page_appointment(request, appointment_id):
+#     # Fetch the appointment, ensuring it belongs to the logged-in user
+#     appointment = get_object_or_404(DoctorAppointment, id=appointment_id, patient=request.user)
+    
+#     # Optional: Fetch the associated payment if you have a ForeignKey
+#     # payment = Payment.objects.filter(doctor=appointment.doctor).last() 
+
+#     context = {
+#         'appointment': appointment,
+#         'doctor': appointment.doctor,
+#     }
+#     return render(request, 'final_page_appointment.html', context)
+   
 
     
     
@@ -870,39 +891,11 @@ def final_page(request, booking_id):
     return render(request, 'final_page.html', context)
 
 
-def final_page_appointment(request, appointment_id):
-    try:
-        appointment = DoctorAppointment.objects.get(id=appointment_id)
-    except DoctorAppointment.DoesNotExist:
-        return HttpResponse("Appointment not found")
-
-    payment_record = Payment.objects.filter(
-        doctor=appointment.doctor, 
-        amount=appointment.doctor.fee
-    ).last()
-
-    context = {
-        'appointment': appointment,
-        'payment': payment_record,
-        'is_appointment': True,
-        'is_therapy': False,
-    }
-    return render(request, 'final_page.html', context)
 
 
 
-# def view_prescriptions(request):
-#     # Fetch all prescriptions where the patient is the logged-in user
-#     prescriptions = Prescription.objects.filter(patient=request.user).order_by('-created_at')
-    
-#     return render(request, 'patient_view_prescriptions.html', {
-#         'prescriptions': prescriptions
-#     })
 
-# def prescription_detail(request, prescription_id):
-#     # View a single prescription in detail
-#     prescription = get_object_or_404(Prescription, id=prescription_id, patient=request.user)
-#     return render(request, 'prescription_detail.html', {'prescription': prescription})
+
 
 
 @login_required

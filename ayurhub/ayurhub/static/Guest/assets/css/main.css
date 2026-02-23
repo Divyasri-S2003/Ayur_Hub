@@ -6209,11 +6209,409 @@ section,
   }
 }
 
-/*--------------------------------------------------------------
-# Starter Section Section
---------------------------------------------------------------*/
-.starter-section {
-  padding-top: 60px;
-  padding-bottom: 60px;
-  /* Add your styles here */
+/* --- REFINED PREMIUM AYURVEDIC THEME --- */
+
+:root {
+  --ayur-bg: #F5F0E6 !important;       /* Warm Sand Background */
+  --ayur-dark: #2D332C !important;     /* Soft Black-Green for text */
+  --ayur-accent: #BC6C25 !important;   /* Warm Terracotta for buttons/calls to action */
+  --ayur-leaf: #606C38 !important;     /* Muted Olive for secondary elements */
+}
+
+/* 1. Body & Section Backgrounds */
+body, #hero {
+  background-color: var(--ayur-bg) !important;
+  color: var(--ayur-dark) !important;
+}
+
+/* 2. Heading: Let's use the dark color instead of green for better readability */
+#hero h1 {
+  color: var(--ayur-dark) !important;
+  font-weight: 700 !important;
+}
+
+#hero h1 .highlight {
+  color: var(--ayur-accent) !important; /* This makes "Vedic Wellness" pop in Terracotta */
+}
+
+/* 3. The Button: Terracotta looks more premium and energetic than green on this BG */
+.btn-primary {
+  background-color: var(--ayur-accent) !important;
+  border-color: var(--ayur-accent) !important;
+  color: #fff !important;
+  padding: 14px 35px !important;
+  box-shadow: 0 4px 15px rgba(188, 108, 37, 0.3) !important;
+}
+
+.btn-primary:hover {
+  background-color: var(--ayur-leaf) !important; /* Transitions to Olive on hover */
+  transform: translateY(-2px);
+}
+
+/* 4. Stats: Use Muted Olive for numbers to keep them calm */
+.stat-item h3 {
+  color: var(--ayur-leaf) !important;
+}
+
+/* 5. Nav Bar Adjustment: Make the top contact bar softer */
+.topbar {
+  background-color: var(--ayur-dark) !important; /* Keep it dark but matching our forest tone */
+}
+
+/* --- ABOUT SECTION AYURVEDIC TOUCH --- */
+
+.home-about .main-image img {
+    /* Different blob shape from the Hero to add variety */
+    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70% !important;
+    border: 12px solid #fff !important;
+}
+
+.experience-badge {
+    animation: float-badge 3s ease-in-out infinite;
+    z-index: 2;
+}
+
+@keyframes float-badge {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-10px); }
+    100% { transform: translateY(0px); }
+}
+
+.stats-grid .stat-item {
+    border-right: 1px solid rgba(96, 108, 56, 0.2);
+}
+
+.stats-grid .stat-item:last-child {
+    border-right: none;
+}
+
+/* --- ABOUT SECTION AYURVEDIC STYLES --- */
+
+.ayur-blob {
+  border-radius: 30% 70% 70% 30% / 30% 30% 70% 70% !important;
+  border: 10px solid #fff !important;
+  box-shadow: 0 20px 40px rgba(45, 51, 44, 0.1) !important;
+}
+
+.therapy-card {
+  position: absolute;
+  bottom: 20px;
+  left: -30px;
+  background: white;
+  padding: 15px 25px;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+  display: flex;
+  align-items: center;
+  z-index: 2;
+}
+
+.therapy-card .icon-box {
+  background: #F5F0E6;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+  color: #BC6C25;
+  font-size: 1.2rem;
+}
+
+.experience-badge-circle {
+  position: absolute;
+  top: -20px;
+  right: 20px;
+  background: #606C38;
+  color: white;
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border: 4px solid white;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  animation: float-slow 4s ease-in-out infinite;
+}
+
+.experience-badge-circle .years { font-size: 1.5rem; font-weight: 700; line-height: 1; }
+.experience-badge-circle .text { font-size: 0.65rem; text-transform: uppercase; margin-top: 5px; }
+
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+/* --- PILLAR SECTION STYLES --- */
+
+.pillar-card {
+  background: #ffffff;
+  padding: 50px 30px;
+  border-radius: 30px;
+  text-align: center;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border: 1px solid rgba(188, 108, 37, 0.1);
+  box-shadow: 0 10px 30px rgba(45, 51, 44, 0.03);
+}
+
+.pillar-card h3 {
+  font-family: 'Lora', serif;
+  color: #2D332C;
+  font-size: 1.6rem;
+  margin-bottom: 15px;
+}
+
+.pillar-card p {
+  color: #5a6355;
+  font-size: 0.95rem;
+  margin-bottom: 25px;
+  line-height: 1.7;
+}
+
+.pillar-icon {
+  width: 80px;
+  height: 80px;
+  background: #F5F0E6;
+  color: #BC6C25;
+  font-size: 2.2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px; /* Squircle shape */
+  margin: 0 auto 30px auto;
+  transform: rotate(-5deg); /* Slight organic tilt */
+  transition: 0.3s;
+}
+
+.pillar-card:hover {
+  transform: translateY(-15px);
+  background: #fff;
+  border-color: #BC6C25;
+  box-shadow: 0 25px 50px rgba(188, 108, 37, 0.1);
+}
+
+.pillar-card:hover .pillar-icon {
+  transform: rotate(0deg) scale(1.1);
+  background: #BC6C25;
+  color: #fff;
+}
+
+/* Active Highlight for the middle card */
+.active-pillar {
+  border: 2px solid #606C38;
+  position: relative;
+}
+
+.active-pillar::after {
+  content: "Most Popular";
+  position: absolute;
+  top: -15px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #606C38;
+  color: white;
+  padding: 4px 15px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.pill-link {
+  color: #BC6C25;
+  text-decoration: none;
+  font-weight: 700;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  border-bottom: 2px solid transparent;
+  transition: 0.3s;
+}
+
+.pill-link:hover {
+  border-bottom: 2px solid #BC6C25;
+  color: #2D332C;
+}
+
+/* --- VAIDYA DIRECTORY AYURVEDIC UI --- */
+
+.ayur-search-box {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 25px;
+    box-shadow: 0 15px 40px rgba(45, 51, 44, 0.05);
+    border: 1px solid rgba(188, 108, 37, 0.1);
+}
+
+.ayur-card {
+    background: #ffffff !important;
+    border-radius: 25px !important;
+    padding: 25px !important;
+    transition: 0.4s !important;
+    border: 1px solid rgba(163, 177, 138, 0.1) !important;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.02) !important;
+}
+
+.ayur-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(188, 108, 37, 0.1) !important;
+    border-color: #BC6C25 !important;
+}
+
+.ayur-img-shape {
+    border-radius: 20px 50px 20px 50px !important; /* Organic leaf-like shape */
+    border: 4px solid #F5F0E6;
+}
+
+.specialty-tag {
+    font-size: 0.75rem;
+    padding: 4px 12px;
+    border-radius: 50px;
+    font-weight: 600;
+    display: inline-block;
+    margin-top: 5px;
+}
+
+/* Custom Buttons */
+.btn-primary-ayur {
+    background: #BC6C25;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.btn-secondary-ayur {
+    color: #606C38;
+    background: #F5F0E6;
+    padding: 10px 20px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-right: 10px;
+}
+
+.btn-primary-ayur:hover { background: #606C38; color: #fff; }
+
+/* --- AYURVEDIC CALL TO ACTION STYLES --- */
+
+/* Image Styling */
+.ayur-blob-frame {
+    border-radius: 68% 32% 45% 55% / 37% 58% 42% 63% !important;
+    border: 15px solid #fff;
+    box-shadow: 20px 20px 60px rgba(52, 78, 65, 0.05);
+}
+
+/* Feature Blocks */
+.feature-block-ayur {
+    background: #ffffff;
+    padding: 50px 40px;
+    border-right: 1px solid #f5f0e6;
+    text-align: center;
+    height: 100%;
+    transition: 0.3s;
+}
+
+.feature-block-ayur:hover {
+    background: #fdfbf7;
+    z-index: 1;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+.feature-icon-ayur {
+    font-size: 2.5rem;
+    color: #606C38;
+    margin-bottom: 20px;
+}
+
+.feature-block-ayur h3 {
+    font-family: 'Lora', serif;
+    color: #2D332C;
+    font-size: 1.4rem;
+}
+
+/* Custom Buttons */
+.primary-cta-ayur {
+    background: #BC6C25;
+    color: white !important;
+    padding: 15px 35px;
+    border-radius: 50px;
+    display: inline-block;
+    text-decoration: none;
+    font-weight: 700;
+    margin-right: 15px;
+    box-shadow: 0 10px 20px rgba(188, 108, 37, 0.2);
+}
+
+.secondary-cta-ayur {
+    color: #606C38 !important;
+    font-weight: 700;
+    text-decoration: none;
+    border-bottom: 2px solid #606C38;
+}
+
+/* Contact Block */
+.contact-block-ayur {
+    background: #344E41; /* Dark Forest Green */
+    padding: 40px 60px;
+    border-radius: 30px;
+    margin-top: -30px;
+    position: relative;
+    z-index: 5;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+.ayur-phone-btn {
+    background: #BC6C25;
+    color: white !important;
+    padding: 15px 30px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* --- GLOBAL AYURVEDIC THEME ENHANCEMENTS --- */
+
+:root {
+  --ayur-bg-warm: #F9F6F0;    /* Softer, warmer sand */
+  --ayur-forest: #2D332C;     /* Deep forest for headings */
+  --ayur-moss: #606C38;       /* Muted moss for subtext */
+  --ayur-terracotta: #BC6C25; /* Earthy orange for highlights */
+}
+
+/* Fix the pale background */
+#hero, .home-about, .call-to-action {
+  background: linear-gradient(135deg, #F9F6F0 0%, #F1EDE2 100%) !important;
+}
+
+/* Heading Typography */
+h1, h2, h3 {
+  color: var(--ayur-forest) !important;
+  font-family: 'Lora', serif; /* Ensure you have a serif font linked */
+}
+
+/* Make the highlight pop */
+.highlight, span[style*="color: #BC6C25"] {
+  color: var(--ayur-terracotta) !important;
+}
+
+/* Soften the secondary text */
+p, .lead-text {
+  color: #5A6355 !important;
+}
+
+/* Hero Image Mask - This makes the photo look more 'designed' */
+.ayur-mask {
+  border-radius: 60% 40% 70% 30% / 40% 50% 60% 70% !important;
+  border: 12px solid #fff;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.05);
 }

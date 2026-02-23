@@ -44,6 +44,7 @@ class DoctorAppointment(models.Model):
     guest_gender = models.CharField(max_length=20, blank=True, null=True)
     capacity = models.PositiveIntegerField(default=5, help_text="Max appointments per day")
     patient_problems = models.TextField(blank=True, null=True)
+    appointment_time = models.TimeField(null=True, blank=True)
     
     
 class Cart(models.Model):
