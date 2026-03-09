@@ -1,0 +1,113 @@
+{% include 'Layout/Partials/Admin/header.html' %}
+
+
+<div class="container">
+<div class="page-inner">
+
+<div class="page-header">
+<h3 class="fw-bold mb-3">Appointment Report</h3>
+</div>
+
+<div class="card">
+<div class="card-header">
+
+<form method="get" class="row align-items-end">
+
+<div class="col-md-4">
+<label class="form-label">Start Date</label>
+<input type="date" name="start_date" class="form-control" value="{{ start_date }}">
+</div>
+
+<div class="col-md-4">
+<label class="form-label">End Date</label>
+<input type="date" name="end_date" class="form-control" value="{{ end_date }}">
+</div>
+
+<div class="col-md-2">
+<button type="submit" class="btn btn-primary w-100">Filter</button>
+</div>
+
+<div class="col-md-2">
+<a href="{% url 'core:appointment_report' %}" class="btn btn-secondary w-100">Reset</a>
+</div>
+
+</form>
+
+</div>
+
+<div class="card-body">
+<div class="table-responsive">
+
+<table class="table table-hover">
+
+<thead>
+<tr>
+<th>#</th>
+<th>Date</th>
+<th>Time</th>
+<th>Patient</th>
+<th>Gender</th>
+<th>Type</th>
+<th>Doctor / Therapy</th>
+<th>Status</th>
+</tr>
+</thead>
+
+<tbody>
+
+<!-- Doctor Appointments -->
+{% for d in doctor_data %}
+<tr>
+<td>{{ forloop.counter }}</td>
+<td>{{ d.appointment_date }}</td>
+<td>{{ d.appointment_time }}</td>
+<td>{{ d.patient_name }}</td>
+<td>{{ d.patient_gender }}</td>
+<td>Doctor</td>
+<td>{{ d.doctor.name }}</td>
+<td>
+<span class="badge {% if d.status == 'Approved' %} bg-success {% elif d.status == 'Pending' %} bg-warning {% else %} bg-secondary {% endif %}">
+{{ d.status }}
+</span>
+</td>
+</tr>
+{% endfor %}
+
+<!-- Therapy Appointments -->
+{% for t in therapy_data %}
+<tr>
+<td>{{ forloop.counter }}</td>
+<td>{{ t.appointment_date }}</td>
+<td>{{ t.appointment_time }}</td>
+<td>{{ t.patient_name }}</td>
+<td>{{ t.patient_gender }}</td>
+<td>Therapy</td>
+<td>{{ t.therapy.servicename }}</td>
+<td>
+<span class="badge {% if t.status == 'Approved' %} bg-success {% elif t.status == 'Pending' %} bg-warning {% else %} bg-secondary {% endif %}">
+{{ t.status }}
+</span>
+</td>
+</tr>
+{% endfor %}
+
+{% if not doctor_data and not therapy_data %}
+<tr>
+<td colspan="8" class="text-center">No appointments found for selected dates</td>
+</tr>
+{% endif %}
+
+</tbody>
+
+</table>
+
+</div>
+</div>
+
+</div>
+</div>
+</div>
+
+
+
+{% include 'Layout/Partials/Admin/footer.html' %}

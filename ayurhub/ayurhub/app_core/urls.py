@@ -42,6 +42,10 @@ urlpatterns = [
     
     path('viewappointments/', views.view_appointments, name='view_appointments'),
     path('doctorschedule/', views.view_doctor_schedule, name='view_doctor_schedule'),
+    
+    
+    path('admin_product_report/', views.admin_product_pie_chart, name='admin_product_report'),
+    path('appointment_report/', views.appointment_report, name='appointment_report'),
 
 
    

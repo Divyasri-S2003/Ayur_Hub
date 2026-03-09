@@ -1,0 +1,112 @@
+{% include 'Layout/Partials/Admin/header.html' %}
+{% load static %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+    /* 1. Flex container that accounts for the top navbar */
+    .viewport-center-wrapper {
+        display: flex;
+        justify-content: center;   /* Center horizontally */
+        align-items: center;       /* Center vertically */
+        min-height: 85vh;          /* Height of the viewable area */
+        padding-top: 60px;         /* Specific push to move it "little more below" the AyurHub bar */
+        padding-bottom: 40px;
+    }
+
+    .chart-card {
+        border-radius: 12px;
+        border: none;
+        width: 100%;
+        max-width: 850px;          /* Clean width for a dashboard look */
+        margin: auto;              /* Safety center */
+    }
+
+    .chart-header {
+        font-weight: 600;
+        font-size: 18px;
+        background: #198754;
+        color: white;
+        text-align: center;
+        padding: 15px;
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+    }
+
+    .chart-container {
+        padding: 30px;
+        height: 480px;             /* Fixed height to keep it consistent */
+        background: #ffffff;
+        border-bottom-left-radius: 12px;
+        border-bottom-right-radius: 12px;
+    }
+</style>
+
+<div class="viewport-center-wrapper">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-md-10 col-lg-8">
+                <div class="card shadow-lg chart-card">
+                    <div class="chart-header">
+                        Most Purchased Products
+                    </div>
+                    <div class="chart-container">
+                        <canvas id="productPieChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{ labels|json_script:"chart-labels" }}
+{{ data|json_script:"chart-data" }}
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const labels = JSON.parse(document.getElementById('chart-labels').textContent);
+    const data = JSON.parse(document.getElementById('chart-data').textContent);
+    const ctx = document.getElementById('productPieChart').getContext('2d');
+
+    new Chart(ctx, {
+        type: 'pie',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: "Total Purchased",
+                data: data,
+                backgroundColor: [
+                    '#28a745', '#17a2b8', '#ffc107', '#dc3545', '#6f42c1',
+                    '#fd7e14', '#20c997', '#007bff', '#6610f2', '#e83e8c'
+                ],
+                borderWidth: 2,
+                borderColor: '#ffffff'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: {
+                    position: 'top',
+                    labels: {
+                        padding: 25,
+                        font: { size: 13 },
+                        usePointStyle: true /* Makes legend icons circular for a cleaner look */
+                    }
+                },
+                tooltip: {
+                    padding: 12,
+                    callbacks: {
+                        label: function(context) {
+                            return " " + context.label + ": " + context.raw;
+                        }
+                    }
+                }
+            }
+        }
+    });
+});
+</script>
+
+{% include 'Layout/Partials/Admin/footer.html' %}

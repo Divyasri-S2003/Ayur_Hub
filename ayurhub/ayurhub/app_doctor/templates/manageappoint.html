@@ -51,6 +51,7 @@
                         <th>Patient Details</th>
                         <th>Doctor / Date</th>
                         <th class="text-center">Status</th>
+                        <th>Meeting Link</th>
                         <th class="text-center">Action</th>
                     </tr>
                 </thead>
@@ -67,6 +68,8 @@
                             <span class="d-block">Dr. {{ app.doctor.user.name }}</span>
                             <small class="text-muted">{{ app.appointment_date|date:"M d, Y" }}</small>
                         </td>
+
+                        <td class="text-center"><a href="{{app.meeting_link}}" target="_blank">Join Meeting</a></td>
                         <td class="text-center">
                             <span class="badge-base {% if app.status == 'Completed' %}badge-completed{% else %}badge-pending{% endif %}">
                                 {{ app.status }}

@@ -1,6 +1,7 @@
 
 from datetime import date, timedelta
 from multiprocessing import context
+from pydoc import doc
 import uuid
 from urllib import request
 from django.http import HttpResponse
@@ -345,9 +346,21 @@ def appointment_success(request):
 
 
 
+# def viewdoctor(request):
+#     d=Doctor.objects.all()
+#     return render(request, 'viewdoctor.html',{"vdoc":d})
+
 def viewdoctor(request):
-    d=Doctor.objects.all()
-    return render(request, 'viewdoctor.html',{"vdoc":d})
+    mode = request.GET.get('mode')
+
+    if mode:
+        d = Doctor.objects.filter(mode__iexact=mode)
+    else:
+        d = Doctor.objects.all()
+
+    return render(request, 'viewdoctor.html', {"vdoc": d})
+
+
 
 def viewdocdetails(request,id):
     vd=Doctor.objects.get(id=id)
@@ -475,8 +488,8 @@ def process_doctor_payment(request):
         # 1. Create the Doctor Appointment
         meeting_link = None
         if doc.mode and doc.mode.lower() == 'online':
-            meeting_id = uuid.uuid4().hex[:10]
-            meeting_link = f"https://meet.jit.si/AyurHub-{meeting_id}"
+            meeting_id = uuid.uuid4().hex[:8]
+            meeting_link = f"https://meet.jit.si/ayurhub-{meeting_id}"
 
         appointment = DoctorAppointment.objects.create(
             doctor=doc,
@@ -495,7 +508,7 @@ def process_doctor_payment(request):
         # ✅ Send confirmation email
         email_message = (
             f"Hi {data['guest_name'] if data['guest_name'] else request.user.username},\n\n"
-            f"Your consultation with Dr. {doc.name} is scheduled for "
+            f"Your consultation with {doc.user.name} is scheduled for "
             f"{appointment_date} at {appointment_time.strftime('%H:%M')}.\n"
         )
         if meeting_link:
@@ -507,13 +520,7 @@ def process_doctor_payment(request):
 
         send_mail(
             subject="Doctor Appointment Confirmed!",
-            message=(
-                f"Hi {data['guest_name'] if data['guest_name'] else request.user.username},\n\n"
-                f"Your consultation with {doc.user.name} is scheduled for "
-                f"{appointment_date} at {appointment_time.strftime('%H:%M')}.\n"
-                f"Please arrive 10 minutes early.\n\n"
-                f"Thank you for choosing AyurHub!"
-            ),
+            
             message=email_message,
             from_email=None,
             recipient_list=[request.user.email],

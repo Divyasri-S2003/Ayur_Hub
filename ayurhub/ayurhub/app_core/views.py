@@ -422,3 +422,70 @@ def view_doctor_schedule(request):
         'doctors': doctors
     }
     return render(request, 'view_doctor_schedule.html', context)
+
+
+from django.shortcuts import render
+from django.db.models import Sum
+from app_patient.models import Booking_details   # ✅ correct model name
+
+
+def admin_product_pie_chart(request):
+
+    # Aggregate total quantity purchased per product
+    product_data = (
+        Booking_details.objects
+        .values('product__productname')   # ✅ correct field name
+        .annotate(total_purchased=Sum('quantity'))
+        .order_by('-total_purchased')
+    )
+
+    # Prepare labels
+    labels = [
+        item['product__productname']
+        for item in product_data
+        if item['product__productname']
+    ]
+
+    # Prepare data
+    data = [
+        item['total_purchased']
+        for item in product_data
+    ]
+
+    context = {
+        'labels': labels,
+        'data': data,
+    }
+
+    return render(request, 'booking_report.html', context)
+
+
+from django.shortcuts import render
+from app_patient.models import DoctorAppointment, TherapyAppointment
+
+def appointment_report(request):
+
+    start_date = request.GET.get('start_date')
+    end_date = request.GET.get('end_date')
+
+    doctor_appointments = DoctorAppointment.objects.all().order_by('-appointment_date')
+    therapy_appointments = TherapyAppointment.objects.all().order_by('-appointment_date')
+
+    # Apply filter
+    if start_date and end_date:
+        doctor_appointments = doctor_appointments.filter(
+            appointment_date__range=[start_date, end_date]
+        )
+
+        therapy_appointments = therapy_appointments.filter(
+            appointment_date__range=[start_date, end_date]
+        )
+
+    context = {
+        'doctor_data': doctor_appointments,
+        'therapy_data': therapy_appointments,
+        'start_date': start_date,
+        'end_date': end_date,
+    }
+
+    return render(request, 'appointment_report.html', context)

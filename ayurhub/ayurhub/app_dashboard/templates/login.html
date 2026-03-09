@@ -98,7 +98,8 @@ body.my-login-page {
       {% csrf_token %}
 								<div class="form-group">
 									<label for="email">Username</label>
-									<input id="email" type="text" class="form-control" name="username" value="" required autofocus>
+									 <input class="form-control" name="username" type="text" placeholder="Enter Username" required>
+        
 									<div class="invalid-feedback">
 										 Invalid Username
 									</div>
@@ -110,9 +111,7 @@ body.my-login-page {
 											Forgot Password?
 										</a>
 									</label>
-									<input class="form-control" name="password" type="password"
-placeholder="Enter Password" required minlength="8"
-title="Password must be at least 8 characters long.">
+									<input class="form-control" name="password" type="password"placeholder="Enter Password" required minlength="8" title="Password must be at least 8 characters long.">
 
 								    <div class="invalid-feedback">
 								    	Password is required
